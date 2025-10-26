@@ -24,5 +24,6 @@ public class IntroSonido : MonoBehaviour
         //Ahora reproduce el segundo
         audioSource.clip = v_two;
         audioSource.Play();
+        
     }
 }

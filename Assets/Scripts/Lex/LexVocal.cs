@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class LexVocal : MonoBehaviour
 {
     public Sprite[] bocas;             // 0=a, 1=i, 2=u, 3=e, 4=o (por ejemplo)
-    public Image personajeImage;
+    public Image personajeImagen;
 
     private Coroutine animacionActual;
 
@@ -22,12 +22,12 @@ public class LexVocal : MonoBehaviour
     {
         foreach (int i in patron)
         {
-            personajeImage.sprite = bocas[i];
+            personajeImagen.sprite = bocas[i];
             yield return new WaitForSeconds(velocidad);
         }
 
         // Al terminar vuelve a boca neutral (ej: índice 0)
-        personajeImage.sprite = bocas[0];
+        personajeImagen.sprite = bocas[0];
         animacionActual = null;
     }
 }

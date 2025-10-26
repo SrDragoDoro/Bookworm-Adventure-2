@@ -529,7 +529,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -5.299988, y: 0}
+  m_AnchoredPosition: {x: -5.300049, y: 0}
   m_SizeDelta: {x: -406.8643, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &304253114
@@ -2574,7 +2574,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: afc01ae0b5bb0f149a3e77b95f27c002, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -2667,7 +2667,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1813034277}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 620a3ff8ea2a0d3419b1fb799a57bbee, type: 3}
   m_Name: 
@@ -3180,7 +3180,7 @@ MonoBehaviour:
   - {fileID: -5515814300821012927, guid: 02ec67f2b0a1ae749be8a8a41a7939fb, type: 3}
   - {fileID: 4368266289319301767, guid: e78b23494aa993f45b0b9e4a7cc9481c, type: 3}
   - {fileID: -2523468657626306859, guid: 68a16231e36574c4f9f58ebdbe40482d, type: 3}
-  personajeImage: {fileID: 2114316676}
+  personajeImagen: {fileID: 2114316676}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
