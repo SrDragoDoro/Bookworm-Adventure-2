@@ -1,10 +1,17 @@
+/*
+Definimos un script llamado "LexVocal" 
+que nos ayudara a definir patrones de 
+animación para la boca del personaje 
+para usarlos en cada boton del menu.
+*/
+
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LexVocal : MonoBehaviour
 {
-    public Sprite[] bocas;             // 0=a, 1=i, 2=u, 3=e, 4=o (por ejemplo)
+    public Sprite[] bocas;             // 0=Normal,1=ah,2=eh,3=ee,4=oo,5=closed
     public Image personajeImagen;
 
     private Coroutine animacionActual;

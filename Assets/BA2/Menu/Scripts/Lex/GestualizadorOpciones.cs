@@ -1,4 +1,13 @@
-﻿using UnityEngine;
+﻿/*
+Este script se adjunta a cada opción del menú. 
+Cuando el cursor entra en el área de la opción, 
+se reproduce un sonido y el personaje cambia su 
+expresión facial para simular que está hablando. 
+Al salir del área, el personaje vuelve a su 
+expresión normal.
+*/
+
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -7,8 +16,8 @@ public class GestualizadorOpciones : MonoBehaviour, IPointerEnterHandler, IPoint
     public AudioSource audioSource;
     public AudioClip hoverSound;
 
-    public Image personaje;       // La imagen del personaje en el Canvas
-    public Sprite spriteNormal;   // Imagen normal
+    public Image personaje;        // La imagen del personaje en el Canvas
+    public Sprite spriteNormal;    // Imagen normal
     public Sprite spriteHablando1; // Imagen “hablando” Gesto oh
     public Sprite spriteHablando2; // Imagen “hablando” Gesto eh
     public Sprite spriteHablando3; // Imagen “hablando” Gesto oh
