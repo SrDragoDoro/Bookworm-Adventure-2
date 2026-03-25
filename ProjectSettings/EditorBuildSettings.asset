@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: "Assets/Scenes/Men\xFA.unity"
     guid: 08e1912d8a4b35e4285d71114990faf3
+  - enabled: 1
+    path: Assets/Scenes/Tutorial.unity
+    guid: e7b06c20bf446a14cb57067db50f4557
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
