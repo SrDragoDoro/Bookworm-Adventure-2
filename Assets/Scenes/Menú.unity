@@ -436,6 +436,7 @@ RectTransform:
   - {fileID: 1945452873}
   - {fileID: 997905680}
   - {fileID: 1431964726}
+  - {fileID: 720500519}
   - {fileID: 1572188467}
   m_Father: {fileID: 1755947920}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -993,7 +994,7 @@ GameObject:
   - component: {fileID: 720500521}
   - component: {fileID: 720500520}
   m_Layer: 8
-  m_Name: Image
+  m_Name: FondoJugar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1006,16 +1007,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 720500518}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1755947920}
+  m_Father: {fileID: 304253113}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -249.3384, y: -30.9047}
+  m_AnchoredPosition: {x: -249.33887, y: -30.9047}
   m_SizeDelta: {x: 346.5933, y: 496.6688}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &720500520
@@ -2669,7 +2670,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 304253113}
-  - {fileID: 720500519}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
