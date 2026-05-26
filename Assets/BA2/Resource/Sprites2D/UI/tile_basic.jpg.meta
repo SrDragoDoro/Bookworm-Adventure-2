@@ -105,7 +105,7 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 100
+        width: 50
         height: 50
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -121,11 +121,33 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: tile_basic_1
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 0
+        width: 50
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80276fc7e54e6f644883ba55ca510572
+      internalID: -1087803554
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 8f2d2ad8fd6aa324a9b8e41982f308d3
     internalID: 0
     vertices: []
     indices: 
@@ -136,6 +158,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       tile_basic_0: -5875506834092678920
+      tile_basic_1: -1087803554
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

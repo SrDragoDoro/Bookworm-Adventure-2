@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &1
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5e6fedc2472449cead18ef23b5cb30d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Library:
+  - m_Name: ShotTile
+    m_Hash: 81464168
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: lexmouth_smile
+      m_Hash: 782379012
+      m_Sprite: {fileID: 6040367452186288010, guid: 76af78e7320272a4f91b7ae5fa73e645, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 6040367452186288010, guid: 76af78e7320272a4f91b7ae5fa73e645, type: 3}
+    - m_Name: lexmouth_pain_0
+      m_Hash: 370224296
+      m_Sprite: {fileID: 5854905638270091195, guid: b117bafde06b97348bbe5507c8a015ee, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 5854905638270091195, guid: b117bafde06b97348bbe5507c8a015ee, type: 3}
+    - m_Name: lexmouth_shoot_0
+      m_Hash: 455533102
+      m_Sprite: {fileID: -7459211423919945512, guid: d3d1228ee4dec9a4d81ff8c4a209abe3, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -7459211423919945512, guid: d3d1228ee4dec9a4d81ff8c4a209abe3, type: 3}
+    - m_Name: lexmouth_puffcheek_0
+      m_Hash: 960220583
+      m_Sprite: {fileID: 4293526856437419250, guid: 3df395336d6ce8544b9c65f184e61be2, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 4293526856437419250, guid: 3df395336d6ce8544b9c65f184e61be2, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 4
+  m_PrimaryLibraryGUID: 
+  m_ModificationHash: 639153534304818987
+  m_Version: 1
