@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class TileEffect : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class TileEffect : MonoBehaviour
 
     [HideInInspector] public Vector3 originalPosition;
     [HideInInspector] public bool isSelected = false;
+    // Variable para controlar si el ratón está encima en este frame
+    private bool isHovered = false;
 
     void Start()
     {
@@ -20,52 +23,74 @@ public class TileEffect : MonoBehaviour
         col = GetComponent<BoxCollider2D>();
     }
 
-    // Efecto cuando el ratón pasa por encima
-    void OnMouseEnter()
+    void Update()
     {
-        if (!isSelected) spriteRenderer.sprite = hoverSprite;
-    }
+        // 1. Verificamos que el ratón exista en el Input System
+        if (Mouse.current == null) return;
 
-    // Efecto cuando el ratón sale
-    void OnMouseExit()
-    {
-        if (!isSelected) spriteRenderer.sprite = normalSprite;
-    }
+        // 2. Obtenemos la posición del ratón en la pantalla y la convertimos al mundo 2D
+        Vector2 mouseScreenPosition = Mouse.current.position.ReadValue();
+        Vector2 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
 
-    // Seleccionar o deseleccionar al hacer clic
-    void OnMouseDown()
-    {
-        if (!isSelected)
+        // 3. Comprobamos si la posición del ratón está dentro de este Collider
+        bool wasHovered = isHovered;
+        isHovered = col.OverlapPoint(mouseWorldPosition);
+
+        // --- LÓGICA DE HOVER (Equivalente a OnMouseEnter / OnMouseExit) ---
+        if (isHovered && !wasHovered)
         {
-            WordManager.Instance.SelectTile(this);
+            if (!isSelected) spriteRenderer.sprite = hoverSprite;
         }
-        else
+        else if (!isHovered && wasHovered)
         {
-            WordManager.Instance.DeselectTile(this);
+            if (!isSelected) spriteRenderer.sprite = normalSprite;
+        }
+
+        // --- LÓGICA DE CLIC (Equivalente a OnMouseDown) ---
+        // wasPressedThisFrame detecta el momento exacto en que se hace clic izquierdo
+        if (isHovered && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            if (!isSelected)
+            {
+                WordManager.Instance.SelectTile(this);
+            }
+            else
+            {
+                WordManager.Instance.DeselectTile(this);
+            }
         }
     }
 
-    // Llamado por el Manager cuando esta ficha va al centro
     public void MoveToWordArea(Vector3 targetPosition)
     {
+        // Solo guardamos la posición original si es la PRIMERA vez que se selecciona.
+        // Esto evita que se sobrescriba cuando el Manager reordena las letras arriba.
+        if (!isSelected)
+        {
+            originalPosition = transform.position;
+        }
+
         isSelected = true;
-        originalPosition = transform.position; // Guardamos su lugar en el tablero
 
-        rb.bodyType = RigidbodyType2D.Kinematic; // Apagamos su gravedad
-        rb.velocity = Vector2.zero;
-        col.enabled = false; // Desactivamos colisiones para que no empuje a otras al subir
+        rb.bodyType = RigidbodyType2D.Kinematic;
+        rb.linearVelocity = Vector2.zero;
 
-        transform.position = targetPosition; // Movemos la ficha al centro
+        col.isTrigger = true;
+
+        transform.position = targetPosition;
     }
 
-    // Llamado por el Manager si el jugador se arrepiente
-    public void ReturnToBoard()
+
+    public void ReturnToBoard() //Al regresar aun está aplicando la gravedad por lo que se sobre escribe uno ensima de otro.
     {
         isSelected = false;
-        transform.position = originalPosition; // Vuelve a su hueco exacto
+        transform.position = originalPosition;
 
-        rb.bodyType = RigidbodyType2D.Dynamic; // Reactivamos su gravedad
-        col.enabled = true; // Reactivamos colisiones
+        rb.bodyType = RigidbodyType2D.Dynamic;
+
+        // Revertimos el Trigger a la normalidad
+        col.isTrigger = false;
+
         spriteRenderer.sprite = normalSprite;
     }
 }

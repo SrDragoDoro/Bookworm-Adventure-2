@@ -13,7 +13,7 @@ public class WordManager : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
+        Instance = this; // Singleton para acceso fácil desde las fichas
     }
 
     public void SelectTile(TileEffect tile)
@@ -30,15 +30,19 @@ public class WordManager : MonoBehaviour
 
     public void DeselectTile(TileEffect tile)
     {
-        // Solo permitimos deseleccionar la última ficha (como en el juego original)
-        // o puedes modificarlo para deseleccionar cualquiera y reordenar
-        if (selectedTiles[selectedTiles.Count - 1] == tile)
+        // 1. Verificamos si la ficha realmente está en la lista de seleccionadas
+        if (selectedTiles.Contains(tile))
         {
+            // 2. La removemos de la lista de la palabra en construcción
             selectedTiles.Remove(tile);
+
+            // 3. Devolvemos la ficha a su posición original en el tablero (vuelve a tener gravedad)
             tile.ReturnToBoard();
+
+            // 4. REORDENAR: Volvemos a calcular las posiciones de las fichas que se quedaron en el centro
             UpdateWordPositions();
 
-            // Si ya no hay fichas seleccionadas, descongelamos el tablero
+            // 5. Si ya no queda ninguna ficha seleccionada, descongelamos las físicas del tablero
             if (selectedTiles.Count == 0)
             {
                 FreezeBoard(false);
