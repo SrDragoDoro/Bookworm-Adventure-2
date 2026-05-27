@@ -4,25 +4,25 @@ using UnityEngine.UI;
 
 public class VoiceLexManager : MonoBehaviour
 {
-    public static VoiceLexManager Instancia { get; private set; }
+    public static VoiceLexManager Instance { get; private set; }
 
     [Header("Referencias Centralizadas")]
-    public Image personajeImagen;
+    public Image characterImage;
 
     [Tooltip("0=Normal, 1=ah, 2=eh, 3=ee, 4=oo, 5=closed")]
-    public Sprite[] bocas;
+    public Sprite[] mouthSprites;
 
     public AudioSource audioSource;
 
     //SEPARAMOS LAS CORRUTINAS
-    private Coroutine secuenciaAudioActual;
-    private Coroutine animacionBocasActual;
+    private Coroutine sequenceCurrentAudio;
+    private Coroutine animationMouthCurrent;
 
     void Awake()
     {
-        if (Instancia == null)
+        if (Instance == null)
         {
-            Instancia = this;
+            Instance = this;
         }
         else
         {
@@ -30,27 +30,27 @@ public class VoiceLexManager : MonoBehaviour
         }
     }
 
-    public void EjecutarDiscurso(AudioClip[] clips, float solapamiento, int[] patron, float velocidad)
+    public void EjecutarDiscurso(AudioClip[] clips, float overlap, int[] pattern, float speed)
     {
         // 1. Detenemos la secuencia de audios anterior
-        if (secuenciaAudioActual != null)
+        if (sequenceCurrentAudio != null)
         {
-            StopCoroutine(secuenciaAudioActual);
+            StopCoroutine(sequenceCurrentAudio);
         }
 
         // 2. DETENEMOS LA ANIMACIÓN DE SPRITES ANTERIOR (Aquí estaba el bug)
-        if (animacionBocasActual != null)
+        if (animationMouthCurrent != null)
         {
-            StopCoroutine(animacionBocasActual);
+            StopCoroutine(animationMouthCurrent);
         }
 
-        secuenciaAudioActual = StartCoroutine(SecuenciaHablarYAnimar(clips, solapamiento, patron, velocidad));
+        sequenceCurrentAudio = StartCoroutine(SecuenciaHablarYAnimar(clips, overlap, pattern, speed));
     }
 
-    private IEnumerator SecuenciaHablarYAnimar(AudioClip[] clips, float solapamiento, int[] patron, float velocidad)
+    private IEnumerator SecuenciaHablarYAnimar(AudioClip[] clips, float overlap, int[] pattern, float speed)
     {
         // Guardamos la referencia de la corrutina de las bocas para poder detenerla si pasas a otro botón
-        animacionBocasActual = StartCoroutine(AnimarBocas(patron, velocidad));
+        animationMouthCurrent = StartCoroutine(AnimarBocas(pattern, speed));
 
         if (clips != null && clips.Length > 0)
         {
@@ -63,32 +63,32 @@ public class VoiceLexManager : MonoBehaviour
 
                     if (i < clips.Length - 1)
                     {
-                        yield return new WaitForSeconds(clips[i].length - solapamiento);
+                        yield return new WaitForSeconds(clips[i].length - overlap);
                     }
                 }
             }
         }
 
         // Esperamos a que termine la animación visual antes de limpiar la variable principal
-        yield return animacionBocasActual;
-        secuenciaAudioActual = null;
+        yield return animationMouthCurrent;
+        sequenceCurrentAudio = null;
     }
 
     private IEnumerator AnimarBocas(int[] patron, float velocidad)
     {
         foreach (int i in patron)
         {
-            if (i >= 0 && i < bocas.Length && personajeImagen != null)
+            if (i >= 0 && i < mouthSprites.Length && characterImage != null)
             {
-                personajeImagen.sprite = bocas[i];
+                characterImage.sprite = mouthSprites[i];
             }
             yield return new WaitForSeconds(velocidad);
         }
 
         // Al terminar de forma natural, vuelve a la boca neutral
-        if (bocas.Length > 0 && personajeImagen != null)
+        if (mouthSprites.Length > 0 && characterImage != null)
         {
-            personajeImagen.sprite = bocas[0];
+            characterImage.sprite = mouthSprites[0];
         }
     }
 }

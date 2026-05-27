@@ -1,28 +1,29 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+public enum ModeActivation { None, AtStart, OnPointerEnter }
 
 public class VoiceTriggerLex : MonoBehaviour, IPointerEnterHandler
 {
-    public enum ModoActivacion { AlInicio, AlPasarCursor }
+    
 
     [Header("Tipo de Activación")]
-    public ModoActivacion modoActivacion = ModoActivacion.AlPasarCursor;
+    public ModeActivation modeActivation = ModeActivation.OnPointerEnter;
 
     [Header("Configuración de Audio")]
     [Tooltip("Pon 1 audio para botones normales, o 2 audios si es la intro de bienvenida.")]
-    public AudioClip[] clipsDeAudio;
+    public AudioClip[] audioClips;
 
     [Tooltip("Tiempo a restar del primer audio antes de reproducir el segundo (Solo si hay más de 1 audio).")]
-    public float solapamientoIntro = 0f;
+    public float introOverlap = 0f;
 
     [Header("Gesto / Frase Específica")]
     [Tooltip("El orden de bocas que hará este botón en específico.")]
-    public int[] patronBocas;
-    public float velocidadCambioBoca = 0.1f;
+    public int[] mouthPattern;
+    public float mouthChangeSpeed = 0.1f;
 
     void Start()
     {
-        if (modoActivacion == ModoActivacion.AlInicio)
+        if (modeActivation == ModeActivation.AtStart)
         {
             Disparar();
         }
@@ -30,7 +31,7 @@ public class VoiceTriggerLex : MonoBehaviour, IPointerEnterHandler
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (modoActivacion == ModoActivacion.AlPasarCursor)
+        if (modeActivation == ModeActivation.OnPointerEnter)
         {
             Disparar();
         }
@@ -39,9 +40,9 @@ public class VoiceTriggerLex : MonoBehaviour, IPointerEnterHandler
     private void Disparar()
     {
         // Validamos que el administrador central exista en la escena antes de llamarlo
-        if (VoiceLexManager.Instancia != null)
+        if (VoiceLexManager.Instance != null)
         {
-            VoiceLexManager.Instancia.EjecutarDiscurso(clipsDeAudio, solapamientoIntro, patronBocas, velocidadCambioBoca);
+            VoiceLexManager.Instance.EjecutarDiscurso(audioClips, introOverlap, mouthPattern, mouthChangeSpeed);
         }
     }
 }

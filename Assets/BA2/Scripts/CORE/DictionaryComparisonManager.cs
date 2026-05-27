@@ -3,20 +3,19 @@ using System.IO;
 using UnityEngine;
 using System.Diagnostics;
 
-public enum ModoAlmacenamiento 
-{ None, UsarHashSet, UsarDictionary }
+public enum ModeToUse 
+{ None, UseHashSet, UseDictionary }
 
 public class DictionaryComparisonManager : MonoBehaviour
 {
-
     [Header("Configuración del Experimento")]
-    [SerializeField] private ModoAlmacenamiento modo = ModoAlmacenamiento.UsarDictionary;
+    [SerializeField] private ModeToUse mode = ModeToUse.UseDictionary;
 
     [Tooltip("Cantidad de palabras para la prueba segura.")]
-    [SerializeField] private int maxPalabrasAClasificar = 500000;
+    [SerializeField] private int maxWords = 500000;
 
     [Tooltip("¡Cuidado! Si activas esto, ignorará el límite e intentará leer las 7 millones de palabras.")]
-    [SerializeField] private bool cargarLas7MillonesDePalabras = false;
+    [SerializeField] private bool loadAll7MillionWords = false;
 
     [Header("Palabras a Verificar (Espacio para probar)")]
     [SerializeField] private string wordToCheck = "palabra";
@@ -50,8 +49,8 @@ public class DictionaryComparisonManager : MonoBehaviour
         hashSetDict.Clear();
         dictionaryDict.Clear();
 
-        int limiteActual = cargarLas7MillonesDePalabras ? 7000000 : maxPalabrasAClasificar;
-        print($"Iniciando prueba en modo [{modo}] cargando un máximo de {limiteActual} palabras...");
+        int currentLimit = loadAll7MillionWords ? 7000000 : maxWords;
+        print($"Iniciando prueba en modo [{mode}] cargando un máximo de {currentLimit} palabras...");
 
         Stopwatch stopwatch = new Stopwatch();
         stopwatch.Start();
@@ -64,13 +63,13 @@ public class DictionaryComparisonManager : MonoBehaviour
             while ((line = reader.ReadLine()) != null)
             {
                 // Freno de mano de seguridad para no petar la PC
-                if (contador >= limiteActual) break;
+                if (contador >= currentLimit) break;
 
                 string word = line.Trim().ToLower();
 
                 if (!string.IsNullOrEmpty(word))
                 {
-                    if (modo == ModoAlmacenamiento.UsarHashSet)
+                    if (mode == ModeToUse.UseHashSet)
                     {
                         hashSetDict.Add(word);
                     }
@@ -89,8 +88,8 @@ public class DictionaryComparisonManager : MonoBehaviour
 
         stopwatch.Stop();
 
-        int totalCargado = (modo == ModoAlmacenamiento.UsarHashSet) ? hashSetDict.Count : dictionaryDict.Count;
-        print($"[RESULTADO {modo}] Palabras cargadas con éxito: {totalCargado}");
+        int totalCargado = (mode == ModeToUse.UseHashSet) ? hashSetDict.Count : dictionaryDict.Count;
+        print($"[RESULTADO {mode}] Palabras cargadas con éxito: {totalCargado}");
         print($"Tiempo transcurrido: {stopwatch.ElapsedMilliseconds} ms ({stopwatch.Elapsed.TotalSeconds:F4} segundos).");
     }
 
@@ -98,31 +97,31 @@ public class DictionaryComparisonManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            VerificarPalabra(wordToCheck);
-            VerificarPalabra(wordToCheck2);
+            VerifyWord(wordToCheck);
+            VerifyWord(wordToCheck2);
         }
     }
 
-    private void VerificarPalabra(string palabra)
+    private void VerifyWord(string palabra)
     {
-        string formateada = palabra.Trim().ToLower();
-        bool existe = false;
+        string formatted = palabra.Trim().ToLower();
+        bool exist = false;
 
         // Medimos la velocidad de respuesta en Ticks (1 tick = 100 nanosegundos)
-        Stopwatch cronometroBusqueda = Stopwatch.StartNew();
+        Stopwatch searchStopwatch = Stopwatch.StartNew();
 
-        if (modo == ModoAlmacenamiento.UsarHashSet)
+        if (mode == ModeToUse.UseHashSet)
         {
-            existe = hashSetDict.Contains(formateada);
+            exist = hashSetDict.Contains(formatted);
         }
         else
         {
-            existe = dictionaryDict.ContainsKey(formateada);
+            exist = dictionaryDict.ContainsKey(formatted);
         }
 
-        cronometroBusqueda.Stop();
+        searchStopwatch.Stop();
 
-        string resultado = existe ? "SÍ existe" : "NO existe";
-        print($"[{modo}] La palabra '{formateada}' {resultado}. Tiempo de búsqueda: {cronometroBusqueda.ElapsedTicks} ticks.");
+        string result = exist ? "SÍ existe" : "NO existe";
+        print($"[{mode}] La palabra '{formatted}' {result}. Tiempo de búsqueda: {searchStopwatch.ElapsedTicks} ticks.");
     }
 }

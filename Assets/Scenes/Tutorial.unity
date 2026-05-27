@@ -1842,10 +1842,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b92321ee4d8b03b4ca8f95c70a770138, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DictionaryComparisonManager
-  modo: 2
-  maxPalabrasAClasificar: 500000
-  cargarLas7MillonesDePalabras: 0
-  wordToCheck: palabra
+  mode: 2
+  maxWords: 500000
+  loadAll7MillionWords: 0
+  wordToCheck: zapato
   wordToCheck2: palabrainventada123
   fileName: 0_palabras_todas.txt
 --- !u!1001 &1022613419
