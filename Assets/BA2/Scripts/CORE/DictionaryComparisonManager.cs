@@ -12,10 +12,10 @@ public class DictionaryComparisonManager : MonoBehaviour
     [SerializeField] private ModeToUse mode = ModeToUse.UseDictionary;
 
     [Tooltip("Cantidad de palabras para la prueba segura.")]
-    [SerializeField] private int maxWords = 500000;
+    [SerializeField] private int maxWords = 100000;
 
-    [Tooltip("¡Cuidado! Si activas esto, ignorará el límite e intentará leer las 7 millones de palabras.")]
-    [SerializeField] private bool loadAll7MillionWords = false;
+    [Tooltip("¡Cuidado! Si activas esto, ignorará el límite e intentará leer las 600 mil palabras.")]
+    [SerializeField] private bool loadAll600ThousandWords = false;
 
     [Header("Palabras a Verificar (Espacio para probar)")]
     [SerializeField] private string wordToCheck = "palabra";
@@ -49,7 +49,7 @@ public class DictionaryComparisonManager : MonoBehaviour
         hashSetDict.Clear();
         dictionaryDict.Clear();
 
-        int currentLimit = loadAll7MillionWords ? 7000000 : maxWords;
+        int currentLimit = loadAll600ThousandWords ? 600000 : maxWords;
         print($"Iniciando prueba en modo [{mode}] cargando un máximo de {currentLimit} palabras...");
 
         Stopwatch stopwatch = new Stopwatch();

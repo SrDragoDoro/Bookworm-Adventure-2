@@ -50,7 +50,7 @@ public class VoiceLexManager : MonoBehaviour
     private IEnumerator SecuenciaHablarYAnimar(AudioClip[] clips, float overlap, int[] pattern, float speed)
     {
         // Guardamos la referencia de la corrutina de las bocas para poder detenerla si pasas a otro botón
-        animationMouthCurrent = StartCoroutine(AnimarBocas(pattern, speed));
+        animationMouthCurrent = StartCoroutine(AnimateMouth(pattern, speed));
 
         if (clips != null && clips.Length > 0)
         {
@@ -74,7 +74,7 @@ public class VoiceLexManager : MonoBehaviour
         sequenceCurrentAudio = null;
     }
 
-    private IEnumerator AnimarBocas(int[] patron, float velocidad)
+    private IEnumerator AnimateMouth(int[] patron, float velocidad)
     {
         foreach (int i in patron)
         {
