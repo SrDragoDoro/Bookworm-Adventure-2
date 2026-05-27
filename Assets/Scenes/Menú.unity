@@ -362,12 +362,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 215745316bad3864aa806e3b033e9431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modoActivacion: 1
-  clipsDeAudio:
+  modeActivation: 2
+  audioClips:
   - {fileID: 8300000, guid: 86498320eff88c447a539cfe48e4b743, type: 3}
-  solapamientoIntro: 0
-  patronBocas: 01000000040000000200000005000000
-  velocidadCambioBoca: 0.1
+  introOverlap: 0
+  mouthPattern: 01000000040000000200000005000000
+  mouthChangeSpeed: 0.1
 --- !u!1 &304253112
 GameObject:
   m_ObjectHideFlags: 0
@@ -696,12 +696,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 215745316bad3864aa806e3b033e9431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modoActivacion: 0
-  clipsDeAudio:
+  modeActivation: 2
+  audioClips:
   - {fileID: 8300000, guid: afc01ae0b5bb0f149a3e77b95f27c002, type: 3}
-  solapamientoIntro: 0
-  patronBocas: 02000000010000000200000003000000020000000100000004000000010000000400000002000000030000000100000002000000040000000100000005000000
-  velocidadCambioBoca: 0.1
+  introOverlap: 0
+  mouthPattern: 02000000010000000200000003000000020000000100000004000000010000000400000002000000030000000100000002000000040000000100000005000000
+  mouthChangeSpeed: 0.1
 --- !u!1 &630320708
 GameObject:
   m_ObjectHideFlags: 0
@@ -831,7 +831,6 @@ MonoBehaviour:
   m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
-  m_Version: 2
   m_TaaSettings:
     m_Quality: 3
     m_FrameInfluence: 0.1
@@ -839,6 +838,7 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+  m_Version: 2
 --- !u!1 &720500518
 GameObject:
   m_ObjectHideFlags: 0
@@ -1462,12 +1462,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 215745316bad3864aa806e3b033e9431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modoActivacion: 1
-  clipsDeAudio:
+  modeActivation: 2
+  audioClips:
   - {fileID: 8300000, guid: dcbd62776b2ee364885a8a610f817773, type: 3}
-  solapamientoIntro: 0
-  patronBocas: 0400000002000000040000000300000005000000
-  velocidadCambioBoca: 0.1
+  introOverlap: 0
+  mouthPattern: 0400000002000000040000000300000005000000
+  mouthChangeSpeed: 0.1
 --- !u!1 &1265250871
 GameObject:
   m_ObjectHideFlags: 0
@@ -1831,12 +1831,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 215745316bad3864aa806e3b033e9431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modoActivacion: 1
-  clipsDeAudio:
+  modeActivation: 2
+  audioClips:
   - {fileID: 8300000, guid: 26a7e6ce30273e84585921a5a627f12e, type: 3}
-  solapamientoIntro: 0
-  patronBocas: 04000000020000000100000004000000030000000200000005000000
-  velocidadCambioBoca: 0.1
+  introOverlap: 0
+  mouthPattern: 04000000020000000100000004000000030000000200000005000000
+  mouthChangeSpeed: 0.1
 --- !u!1 &1572188466
 GameObject:
   m_ObjectHideFlags: 0
@@ -2439,12 +2439,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 215745316bad3864aa806e3b033e9431, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  modoActivacion: 1
-  clipsDeAudio:
+  modeActivation: 2
+  audioClips:
   - {fileID: 8300000, guid: 2157b5ca7951059449844f31ea23e274, type: 3}
-  solapamientoIntro: 0
-  patronBocas: 0300000004000000020000000300000004000000030000000300000002000000030000000400000005000000
-  velocidadCambioBoca: 0.1
+  introOverlap: 0
+  mouthPattern: 0300000004000000020000000300000004000000030000000300000002000000030000000400000005000000
+  mouthChangeSpeed: 0.1
 --- !u!1 &2114316673
 GameObject:
   m_ObjectHideFlags: 0
@@ -2631,8 +2631,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f0f11f7805cc90409f8d8b5b3bd391d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  personajeImagen: {fileID: 2114316676}
-  bocas:
+  characterImage: {fileID: 2114316676}
+  mouthSprites:
   - {fileID: -2911359835670206974, guid: 1b3f2cbf64160f345861aa97dbd0bd87, type: 3}
   - {fileID: 8248481629763344096, guid: a6878445cd393494f8eaad5142c627b8, type: 3}
   - {fileID: 7211887467422666745, guid: 7aa8a30997126e642b5b92ed2dd58fdc, type: 3}
