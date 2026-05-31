@@ -16,6 +16,6 @@ public class PlayController : MonoBehaviour
     public void IniciarJuego(string nombreEscena)
     {
         // Reemplazar "NombreDeTuEscena" con el nombre de la escena que se desea cargar
-        SceneManager.LoadScene(nombreEscena);
+        //SceneManager.LoadScene(nombreEscena);
     }
 }

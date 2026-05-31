@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -8,19 +10,54 @@ incluyendo su interacción con el mouse, su
 movimiento hacia el tablero o hacia su posición
 original, y su estado (seleccionada o no). 
 */
+
+
+public enum TileType
+{
+    Basic,
+    Amethyst,
+    Diamond,
+    Cursed,
+    Plagued,
+    Fire
+}
+
+[System.Serializable]
+public struct TileVisualData
+{
+    public TileType type;
+    public Sprite normalSprite;
+    public Sprite hoverSprite;
+    public int damageMultiplier; // ¡Útil para cuando calcules el daño de las gemas!
+
+
+
+}
+
+
 public class TileController : MonoBehaviour
 {
     private WordBuilderManager wordBuilderManager;
 
     [Header("Sprites")]
-    public Sprite normalSprite;
-    public Sprite hoverSprite;
+    // Mantenemos tus variables de sprite actuales, pero ahora serán dinámicas
+    [HideInInspector] public Sprite normalSprite;
+    [HideInInspector] public Sprite hoverSprite;
+    public int currentDamageMultiplier = 1;
 
     [Header("Eventos")]
     public UnityEvent onTileInteracted;
 
     [Header("Movimiento")]
     public float moveSpeed = 15f;
+
+    [Header("Configuración Visual y Tipos")]
+    public TileType currentTileType = TileType.Basic;
+    public List<TileVisualData> visualDatabase; // Aquí arrastrarás tus sprites en el Inspector
+
+    [Header("Referencias Hijas")]
+    public TextMeshPro textMesh; // Arrastra el TextMeshPro hijo aquí desde el Inspector
+    [HideInInspector] public string currentLetter = "";   
 
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D rb;
@@ -46,6 +83,36 @@ public class TileController : MonoBehaviour
     {
         HandleMouseInput();
         HandleMovement();
+    }
+
+    /// <summary>
+    /// Llama a esta función justo después de instanciar la loseta para definir qué es (Gema, Básica, etc.) y qué letra tiene.
+    /// </summary>
+    public void SetupTile(TileType newType, string letter)
+    {
+        currentTileType = newType;
+        currentLetter = letter;
+
+        if (textMesh != null)
+        {
+            textMesh.text = currentLetter;
+        }
+
+        // Buscar el diseño correspondiente en nuestra base de datos
+        foreach (TileVisualData visual in visualDatabase)
+        {
+            if (visual.type == newType)
+            {
+                // Asignamos los sprites correctos para este tipo
+                normalSprite = visual.normalSprite;
+                hoverSprite = visual.hoverSprite;
+                currentDamageMultiplier = visual.damageMultiplier;
+
+                // Actualizamos el renderizador inmediatamente
+                spriteRenderer.sprite = isHovered ? hoverSprite : normalSprite;
+                break;
+            }
+        }
     }
 
     private void HandleMouseInput()
