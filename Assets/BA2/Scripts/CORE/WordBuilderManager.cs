@@ -9,13 +9,29 @@ al escenario, asegurándose de que las baldosas se muevan
 correctamente y que el juego funcione sin problemas. 
 */
 
-
+[System.Serializable]
+public struct LetterDamageData
+{
+    public string letter;
+    public int baseDamage;
+}
 
 
 public class WordBuilderManager : MonoBehaviour
 {
     public static WordBuilderManager Instance;
     public InputSystem_Actions inputs;
+
+    [Header("Configuración del Botón de Ataque")]
+    public UnityEngine.UI.Button attackButtonUI;  // El botón de la UI de Unity
+    public ParticleSystem validWordParticles;     // Tus partículas de éxito
+
+    [Header("Referencias de Animación")]
+    public Animator lexAnimator;                  // El Animator asignado al GameObject de Lex
+
+    [Header("Balance de Daño por Letra")]
+    public List<LetterDamageData> letterDamageDatabase;
+    public int defaultLetterDamage = 1;           // Daño por defecto si una letra no está en la lista
 
     [Header("Generación de Losetas")]
     public GameObject tilePrefab; // El prefab base de tu loseta
@@ -40,6 +56,7 @@ public class WordBuilderManager : MonoBehaviour
     private List<TileController> selectedTiles = new List<TileController>();
     private TileController[] allTiles;
 
+    #region Unity Methods
     void Awake()
     {
         inputs = new();
@@ -48,14 +65,29 @@ public class WordBuilderManager : MonoBehaviour
 
     void Start()
     {
-        // Busca todas las baldosas al inicio para no gastar recursos haciéndolo cada vez
+        // 1. Buscamos todas las baldosas pre-colocadas en la escena
         allTiles = FindObjectsOfType<TileController>();
+
+        // 2. ¡Las inicializamos con letras aleatorias!
+        foreach (TileController tile in allTiles)
+        {
+            if (tile != null)
+            {
+                // Obtenemos una letra de tu sistema de frecuencias weighted random
+                string randomLetter = letterManager.GetRandomLetter();
+
+                // SetupTile se encarga de guardarla en 'currentLetter' y pintarla en el TextMeshPro
+                tile.SetupTile(TileType.Basic, randomLetter);
+            }
+        }
     }
 
     void Update()
     {
         
     }
+#endregion
+
     #region InputSystem
     private void OnEnable()
     {
@@ -76,6 +108,7 @@ public class WordBuilderManager : MonoBehaviour
 
     #endregion
 
+    #region Tile Management
     /// <summary>
     /// Se llama cuando se ejecuta un ataque exitoso.
     /// Consume las letras usadas y repuebla las columnas afectadas.
@@ -145,7 +178,71 @@ public class WordBuilderManager : MonoBehaviour
         allTiles = FindObjectsOfType<TileController>();
     }
 
+    #endregion
 
+    #region Word Validation and Visual Feedback
+    /// <summary>
+    /// Lee las losetas actuales, valida contra el diccionario y actualiza el estado visual.
+    /// </summary>
+    public void EvaluateCurrentWord()
+    {
+        // 1. Si no hay letras seleccionadas, apagamos todo
+        if (selectedTiles.Count == 0)
+        {
+            isCurrentWordValid = false;
+            glowRenderer.gameObject.SetActive(false);
+
+            // Desactivar botón y apagar partículas
+            attackButtonUI.interactable = false;
+            if (validWordParticles.isPlaying) validWordParticles.Stop();
+            return;
+        }
+
+        // 2. Concatenar la palabra leyendo de izquierda a derecha
+        string currentWord = "";
+        foreach (TileController tile in selectedTiles)
+        {
+            currentWord += tile.currentLetter;
+        }
+
+        // 3. Validar con el DictionaryManager
+        isCurrentWordValid = dictionaryManager.CheckWordIsValid(currentWord);
+
+        // 4. Aplicar Feedback Visual
+        if (isCurrentWordValid)
+        {
+            // Encender el resplandor y el botón de ataque
+            glowRenderer.gameObject.SetActive(true);
+            attackButton.SetActive(true);
+
+            // Control de partículas: Solo play si estaban apagadas para evitar reinicios bruscos
+            if (!validWordParticles.isPlaying) validWordParticles.Play();
+
+            // Calcular el nuevo tamaño del resplandor
+            // Solo modificamos el ancho (X), manteniendo su altura original (Y)
+            float newWidth = selectedTiles.Count * glowWidthPerTile;
+            glowRenderer.size = new Vector2(newWidth, glowRenderer.size.y);
+
+            // Ubicar el resplandor exactamente en el centro geométrico de la palabra formada
+            Vector3 firstTilePos = selectedTiles[0].transform.position;
+            Vector3 lastTilePos = selectedTiles[selectedTiles.Count - 1].transform.position;
+            Vector3 centerPos = (firstTilePos + lastTilePos) / 2f;
+
+            glowRenderer.transform.position = new Vector3(centerPos.x, centerPos.y, glowRenderer.transform.position.z);
+
+            // Aquí también podrías instanciar un sistema de partículas de chispas
+        }
+        else
+        {
+            // La palabra no es válida o está incompleta
+            glowRenderer.gameObject.SetActive(false);
+            attackButton.SetActive(false);
+            if (validWordParticles.isPlaying) validWordParticles.Stop();
+        }
+    }
+    #endregion
+
+    #region Word Building Logic
     public void SelectTile(TileController tile)
     {
         if (selectedTiles.Count == 0)
@@ -155,6 +252,7 @@ public class WordBuilderManager : MonoBehaviour
 
         selectedTiles.Add(tile);
         UpdateWordPositions();
+        EvaluateCurrentWord();
     }
 
     public void DeselectTile(TileController tile)
@@ -164,6 +262,7 @@ public class WordBuilderManager : MonoBehaviour
             selectedTiles.Remove(tile);
             tile.MoveTo(tile.originalPosition, false);
             UpdateWordPositions(); // Reorganiza las letras restantes en el escenario
+            EvaluateCurrentWord();
         }
     }
 
@@ -177,6 +276,7 @@ public class WordBuilderManager : MonoBehaviour
             tile.MoveTo(tile.originalPosition, false);
         }
         selectedTiles.Clear();
+        EvaluateCurrentWord();
     }
 
     private void UpdateWordPositions()
@@ -201,6 +301,9 @@ public class WordBuilderManager : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region Tile Interaction
     // Este método es llamado por las fichas individuales cuando llegan a su destino
     public void CheckAndUnfreeze()
     {
@@ -230,4 +333,64 @@ public class WordBuilderManager : MonoBehaviour
     {
         return selectedTiles;
     }
+
+    #endregion
+
+    #region Attack Execution
+    /// <summary>
+    /// Se ejecuta al hacer clic en el botón de ataque. 
+    /// Calcula el daño, dispara la animación de Lex y limpia el tablero.
+    /// </summary>
+    public void ExecuteAttack()
+    {
+        // Validación de seguridad por si acaso
+        if (!isCurrentWordValid || selectedTiles.Count == 0) return;
+
+        int totalDamage = 0;
+
+        // 1. CALCULAR DAÑO TOTAL EVALUANDO LETRAS Y GEMAS
+        foreach (TileController tile in selectedTiles)
+        {
+            int baseLetterDamage = defaultLetterDamage;
+
+            // Buscamos si la letra tiene un valor asignado en nuestra base de datos de daño
+            foreach (LetterDamageData damageData in letterDamageDatabase)
+            {
+                if (damageData.letter.Equals(tile.currentLetter, StringComparison.OrdinalIgnoreCase))
+                {
+                    baseLetterDamage = damageData.baseDamage;
+                    break;
+                }
+            }
+
+            // Daño de la loseta = (Daño base de la letra) * (Multiplicador de gema/estado de la loseta)
+            totalDamage += baseLetterDamage * tile.currentDamageMultiplier;
+        }
+
+        Debug.Log($"¡Ataque ejecutado! Palabra válida. Daño total calculado: {totalDamage}");
+
+        // 2. ANIMACIÓN DINÁMICA
+        // Pasamos el poder total al Animator. En tu Animator de Unity, puedes crear un parámetro 
+        // de tipo Int llamado "AttackPower" y usar transiciones basadas en condiciones.
+        if (lexAnimator != null)
+        {
+            lexAnimator.SetInteger("AttackPower", totalDamage);
+            lexAnimator.SetTrigger("Attack");
+            // Nota: En tu máquina de estados del Animator, si Attack Trigger se activa y 
+            // AttackPower es < 10 va a una animación simple ("perro"), si es >= 10 va al ataque especial ("intracelular").
+        }
+
+        // 3. LIMPIEZA Y GENERACIÓN SIMULTÁNEA
+        // Apagamos las partículas del modo preparación inmediatamente
+        if (validWordParticles.isPlaying) validWordParticles.Stop();
+        glowRenderer.gameObject.SetActive(false);
+
+        // Llamamos al método de consumo y relleno que programamos en el paso anterior.
+        // Al ejecutarse en este mismo frame, las losetas usadas desaparecen y las nuevas
+        // empiezan a caer desde el cielo al mismo tiempo que Lex inicia su animación de ataque.
+        ConsumeTilesAndRefill();
+    }
+    #endregion
+
+
 }

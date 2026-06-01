@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: ff9545e745a78c74982c9e7ee69cee74
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -8523107487241886553
+    second: glint_amethyst__0
+  - first:
+      213: -664485945535470663
+    second: glint_amethyst__1
+  - first:
+      213: 8555647360037757807
+    second: glint_amethyst__2
+  - first:
+      213: 6871789801950991626
+    second: glint_amethyst__3
+  - first:
+      213: -5023642772059255161
+    second: glint_amethyst__4
+  - first:
+      213: 820014265549950022
+    second: glint_amethyst__5
+  - first:
+      213: -145399804797847949
+    second: glint_amethyst__6
+  - first:
+      213: -2305514204738446835
+    second: glint_amethyst__7
+  - first:
+      213: 8276332422422854440
+    second: glint_amethyst__8
+  - first:
+      213: 7847640223567666978
+    second: glint_amethyst__9
+  - first:
+      213: -3043239362216446139
+    second: glint_amethyst__10
+  - first:
+      213: 8071161546338814523
+    second: glint_amethyst__11
+  - first:
+      213: -5484146486162858458
+    second: glint_amethyst__12
+  - first:
+      213: -4670065561431937584
+    second: glint_amethyst__13
+  - first:
+      213: -8907364998015304396
+    second: glint_amethyst__14
+  - first:
+      213: -5415281966924276528
+    second: glint_amethyst__15
+  - first:
+      213: -7855045444328836733
+    second: glint_amethyst__16
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: glint_amethyst__0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 702
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7a4a970d5e6d7b980800000000000000
+      internalID: -8523107487241886553
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 652
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9b36e1a9d8547c6f0800000000000000
+      internalID: -664485945535470663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 602
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f632f86b1f3cbb670800000000000000
+      internalID: 8555647360037757807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 552
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a05d074aa608d5f50800000000000000
+      internalID: 6871789801950991626
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 502
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 78e03f4e38f684ab0800000000000000
+      internalID: -5023642772059255161
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 452
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 64c8bd041a6416b00800000000000000
+      internalID: 820014265549950022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 402
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 376fc9cd5af6bfdf0800000000000000
+      internalID: -145399804797847949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 356
+        width: 26
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0a92f1cb0b2100e0800000000000000
+      internalID: -2305514204738446835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__8
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 352
+        width: 39
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82bff810d707bd270800000000000000
+      internalID: 8276332422422854440
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 302
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22f51da643b68ec60800000000000000
+      internalID: 7847640223567666978
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__10
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 267
+        width: 10
+        height: 9
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5473a908ced34c5d0800000000000000
+      internalID: -3043239362216446139
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__11
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 252
+        width: 43
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3a415ed9a6820070800000000000000
+      internalID: 8071161546338814523
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 202
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62e5e0cb3d564e3b0800000000000000
+      internalID: -5484146486162858458
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__13
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 152
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dd601d6d18903fb0800000000000000
+      internalID: -4670065561431937584
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__14
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 102
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43dbc804abea26480800000000000000
+      internalID: -8907364998015304396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 52
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0dc56e21ebd09d4b0800000000000000
+      internalID: -5415281966924276528
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: glint_amethyst__16
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2
+        width: 50
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 381ba3449c54df290800000000000000
+      internalID: -7855045444328836733
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      glint_amethyst__0: -8523107487241886553
+      glint_amethyst__1: -664485945535470663
+      glint_amethyst__10: -3043239362216446139
+      glint_amethyst__11: 8071161546338814523
+      glint_amethyst__12: -5484146486162858458
+      glint_amethyst__13: -4670065561431937584
+      glint_amethyst__14: -8907364998015304396
+      glint_amethyst__15: -5415281966924276528
+      glint_amethyst__16: -7855045444328836733
+      glint_amethyst__2: 8555647360037757807
+      glint_amethyst__3: 6871789801950991626
+      glint_amethyst__4: -5023642772059255161
+      glint_amethyst__5: 820014265549950022
+      glint_amethyst__6: -145399804797847949
+      glint_amethyst__7: -2305514204738446835
+      glint_amethyst__8: 8276332422422854440
+      glint_amethyst__9: 7847640223567666978
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

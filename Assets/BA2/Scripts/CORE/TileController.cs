@@ -72,6 +72,19 @@ public class TileController : MonoBehaviour
 
     private bool isMovingToTarget = false; //Controla si la baldosa debe moverse por código o si dejamos actuar a la gravedad
 
+    //void Start()
+    //{
+    //    // Si la loseta ya tiene un TextMeshPro asignado y tú escribiste algo en él desde el inspector...
+    //    if (textMesh != null && string.IsNullOrEmpty(currentLetter) && !string.IsNullOrEmpty(textMesh.text))
+    //    {
+    //        // Sincronizamos la variable interna con el texto visual del componente
+    //        currentLetter = textMesh.text;
+
+    //        // Corremos el SetupTile para asegurarnos de que cargue sus sprites e información base
+    //        SetupTile(currentTileType, currentLetter);
+    //    }
+    //}
+
     void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
