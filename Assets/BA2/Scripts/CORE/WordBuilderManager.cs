@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 /*
 El WordBuilderManager se encarga de coordinar las
 acciones entre las baldosas y el tablero con relación
@@ -88,25 +87,6 @@ public class WordBuilderManager : MonoBehaviour
     }
 #endregion
 
-    #region InputSystem
-    private void OnEnable()
-    {
-        inputs.UI.Click.started += OnLeftClick;
-        inputs.UI.RightClick.started += OnRightClick;
-
-    }
-
-    private void OnRightClick(InputAction.CallbackContext context)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void OnLeftClick(InputAction.CallbackContext context)
-    {
-        throw new NotImplementedException();
-    }
-
-    #endregion
 
     #region Tile Management
     /// <summary>
@@ -176,6 +156,11 @@ public class WordBuilderManager : MonoBehaviour
         // Es importante volver a buscar todas las losetas en escena para actualizar el arreglo 'allTiles'
         // ya que destruimos algunas y creamos otras nuevas.
         allTiles = FindObjectsOfType<TileController>();
+
+        // ¡SOLUCIÓN AQUÍ!: Descongelamos todo el tablero. 
+        // Esto hará que las losetas flotantes vuelvan a ser Dynamic y caigan por gravedad 
+        // ocupando los huecos vacíos de forma natural.
+        FreezeBoard(false);
     }
 
     #endregion
@@ -186,57 +171,70 @@ public class WordBuilderManager : MonoBehaviour
     /// </summary>
     public void EvaluateCurrentWord()
     {
-        // 1. Si no hay letras seleccionadas, apagamos todo
+        // 1. Limpieza preventiva: Si no hay losetas, nos aseguramos de apagar todo
         if (selectedTiles.Count == 0)
         {
             isCurrentWordValid = false;
-            glowRenderer.gameObject.SetActive(false);
-
-            // Desactivar botón y apagar partículas
             attackButtonUI.interactable = false;
             if (validWordParticles.isPlaying) validWordParticles.Stop();
             return;
         }
 
-        // 2. Concatenar la palabra leyendo de izquierda a derecha
+        // Antes de evaluar, le apagamos el glow a todas las losetas seleccionadas 
+        // para evitar que se queden sprites viejos si el jugador cambia la palabra.
+        foreach (TileController tile in selectedTiles)
+        {
+            tile.DisableTileGlow();
+        }
+
+        // 2. Construcción de la cadena de texto
         string currentWord = "";
         foreach (TileController tile in selectedTiles)
         {
             currentWord += tile.currentLetter;
         }
 
-        // 3. Validar con el DictionaryManager
+        // 3. Validación con tu HashSet de millones de palabras
         isCurrentWordValid = dictionaryManager.CheckWordIsValid(currentWord);
 
-        // 4. Aplicar Feedback Visual
+        // 4. Distribución dinámica de los Sprites de Glow
         if (isCurrentWordValid)
         {
-            // Encender el resplandor y el botón de ataque
-            glowRenderer.gameObject.SetActive(true);
-            attackButton.SetActive(true);
-
-            // Control de partículas: Solo play si estaban apagadas para evitar reinicios bruscos
+            attackButtonUI.interactable = true;
             if (!validWordParticles.isPlaying) validWordParticles.Play();
 
-            // Calcular el nuevo tamaño del resplandor
-            // Solo modificamos el ancho (X), manteniendo su altura original (Y)
-            float newWidth = selectedTiles.Count * glowWidthPerTile;
-            glowRenderer.size = new Vector2(newWidth, glowRenderer.size.y);
+            int totalTiles = selectedTiles.Count;
 
-            // Ubicar el resplandor exactamente en el centro geométrico de la palabra formada
-            Vector3 firstTilePos = selectedTiles[0].transform.position;
-            Vector3 lastTilePos = selectedTiles[selectedTiles.Count - 1].transform.position;
-            Vector3 centerPos = (firstTilePos + lastTilePos) / 2f;
-
-            glowRenderer.transform.position = new Vector3(centerPos.x, centerPos.y, glowRenderer.transform.position.z);
-
-            // Aquí también podrías instanciar un sistema de partículas de chispas
+            for (int i = 0; i < totalTiles; i++)
+            {
+                if (totalTiles == 1)
+                {
+                    // Caso excepcional: Si una palabra válida tiene una sola letra, 
+                    // podemos usar el sprite del centro o uno neutral.
+                    selectedTiles[i].EnableTileGlow(1);
+                }
+                else if (i == 0)
+                {
+                    // Primera loseta: Usar extremo izquierdo
+                    selectedTiles[i].EnableTileGlow(0);
+                }
+                else if (i == totalTiles - 1)
+                {
+                    // Última loseta: Usar extremo derecho
+                    selectedTiles[i].EnableTileGlow(2);
+                }
+                else
+                {
+                    // Losetas intermedias: Usar sprite central repetible
+                    selectedTiles[i].EnableTileGlow(1);
+                }
+            }
         }
         else
         {
-            // La palabra no es válida o está incompleta
-            glowRenderer.gameObject.SetActive(false);
-            attackButton.SetActive(false);
+            // Si la palabra no es válida, el botón se bloquea y las partículas se detienen.
+            // Los glows ya fueron apagados en la limpieza preventiva al inicio del método.
+            attackButtonUI.interactable = false;
             if (validWordParticles.isPlaying) validWordParticles.Stop();
         }
     }
@@ -297,9 +295,16 @@ public class WordBuilderManager : MonoBehaviour
     {
         foreach (TileController t in allTiles)
         {
-            if (freeze) t.SetStatic();
+            if (t != null) // Añadimos esta validación por seguridad
+            {
+                if (freeze)
+                    t.SetStatic();
+                else
+                    t.SetDynamic(); // ¡Esto es lo que faltaba para reactivar la gravedad!
+            }
         }
     }
+
 
     #endregion
 

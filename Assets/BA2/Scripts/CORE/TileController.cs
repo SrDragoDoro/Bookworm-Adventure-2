@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 /*
 TileController se encarga de manejar el
 comportamiento individual de cada baldosa,
@@ -45,6 +46,12 @@ public class TileController : MonoBehaviour
     [HideInInspector] public Sprite hoverSprite;
     public int currentDamageMultiplier = 1;
 
+    [Header("Configuración del Glow Individual")]
+    [SerializeField] private SpriteRenderer glowSpriteRenderer; // El SpriteRenderer hijo para el resplandor
+    [SerializeField] private Sprite glowLeft;                  // Sprite del extremo izquierdo
+    [SerializeField] private Sprite glowCenter;                // Sprite del cuerpo central
+    [SerializeField] private Sprite glowRight;                 // Sprite del extremo derecho
+
     [Header("Eventos")]
     public UnityEvent onTileInteracted;
 
@@ -72,6 +79,8 @@ public class TileController : MonoBehaviour
 
     private bool isMovingToTarget = false; //Controla si la baldosa debe moverse por código o si dejamos actuar a la gravedad
 
+    private SortingGroup sortingGroup;
+
     //void Start()
     //{
     //    // Si la loseta ya tiene un TextMeshPro asignado y tú escribiste algo en él desde el inspector...
@@ -90,6 +99,9 @@ public class TileController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
+        // 3. Obtenemos el componente. Si se te olvida ponerlo en el editor, el código lo añade por seguridad.
+        sortingGroup = GetComponent<SortingGroup>();
+        if (sortingGroup == null) sortingGroup = gameObject.AddComponent<SortingGroup>();
     }
 
     void Update()
@@ -97,6 +109,48 @@ public class TileController : MonoBehaviour
         HandleMouseInput();
         HandleMovement();
     }
+
+
+    #region Glow
+    /// <summary>
+    /// Activa el resplandor de esta loseta adaptando el sprite según su posición en la palabra.
+    /// </summary>
+    /// <param name="positionIndex">0 = Izquierda, 1 = Centro, 2 = Derecha</param>
+    public void EnableTileGlow(int positionIndex)
+    {
+        if (glowSpriteRenderer == null) return;
+
+        glowSpriteRenderer.gameObject.SetActive(true);
+
+        switch (positionIndex)
+        {
+            case 0:
+                glowSpriteRenderer.sprite = glowLeft;
+                break;
+            case 1:
+                glowSpriteRenderer.sprite = glowCenter;
+                break;
+            case 2:
+                glowSpriteRenderer.sprite = glowRight;
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Apaga por completo el resplandor de esta loseta.
+    /// </summary>
+    public void DisableTileGlow()
+    {
+        if (glowSpriteRenderer != null)
+        {
+            glowSpriteRenderer.gameObject.SetActive(false);
+        }
+    }
+    #endregion
+
+
+
+
 
     /// <summary>
     /// Llama a esta función justo después de instanciar la loseta para definir qué es (Gema, Básica, etc.) y qué letra tiene.
@@ -198,6 +252,8 @@ public class TileController : MonoBehaviour
             isMovingBack = false;
             rb.bodyType = RigidbodyType2D.Kinematic;
             col.isTrigger = true;
+            // 4. TRAER AL FRENTE: Subimos el orden general de toda la loseta
+            if (sortingGroup != null) sortingGroup.sortingOrder = 10; // Un número alto para que tape el escenario
         }
         else if (!selecting)
         {
@@ -205,6 +261,10 @@ public class TileController : MonoBehaviour
             isMovingBack = true;
             spriteRenderer.sprite = normalSprite;
             rb.bodyType = RigidbodyType2D.Kinematic;
+
+            // 5. ENVIAR AL FONDO: Regresamos la loseta a su estado oculto tras el tablero
+            // Ajusta este número al valor negativo necesario para que se esconda detrás de tu marco
+            if (sortingGroup != null) sortingGroup.sortingOrder = -5;
         }
 
         targetPosition = newPos;

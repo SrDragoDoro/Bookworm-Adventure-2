@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8132059572289998977}
   - component: {fileID: 2029806803615827078}
   - component: {fileID: 1077678273860216643}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Lex_stunblock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,4 +179,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3e41f61a2de284bac4fa29f1ddc551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Loseta
-  velocidad: 8
+  speed: 8
