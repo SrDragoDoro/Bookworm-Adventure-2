@@ -46,7 +46,7 @@ public class TileController : TilesData, IDamageDealer
     [SerializeField] private int scrambleCycles = 6;           // Cuántas letras falsas mostrará antes de la real
     [SerializeField] private float scrambleDelay = 0.08f;      // Tiempo entre cada cambio de letra (en segundos)
 
-    private Coroutine scrambleCoroutine;     // Para detenerla si el jugador interactúa rápido
+    private Coroutine scrambleCoroutine;     // Para detenerla si el jugador interactúa rápido (llamados simultaneos)
 
     private Rigidbody2D rb;
     private BoxCollider2D col;
@@ -94,6 +94,7 @@ public class TileController : TilesData, IDamageDealer
     }
 
     #region IMPLEMENTACIÓN DE INTERFAZ
+    //Solo proyección, este método aun no hace daño
     public int GetFinalDamage(int baseDamage)
     {
         // La loseta calcula su daño multiplicando el valor base de la letra por su multiplicador de gema

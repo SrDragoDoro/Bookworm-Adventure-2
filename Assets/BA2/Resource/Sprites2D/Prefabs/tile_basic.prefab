@@ -300,11 +300,11 @@ MonoBehaviour:
   moveSpeed: 15
   currentTileType: 1
   visualDatabase:
-  - type: 0
+  - type: 1
     normalSprite: {fileID: -5875506834092678920, guid: 9a9efc691589763449e7841dd220aac2, type: 3}
     hoverSprite: {fileID: -1087803554, guid: 9a9efc691589763449e7841dd220aac2, type: 3}
     damageMultiplier: 1
-  - type: 1
+  - type: 2
     normalSprite: {fileID: 7271871729811090535, guid: 5048d6fdab35f1143835d861125ce3da, type: 3}
     hoverSprite: {fileID: -878632986307387807, guid: 33508f94dfcd02a49adcc3af840c3207, type: 3}
     damageMultiplier: 2
