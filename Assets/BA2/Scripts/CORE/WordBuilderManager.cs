@@ -8,14 +8,6 @@ al escenario, asegurándose de que las baldosas se muevan
 correctamente y que el juego funcione sin problemas. 
 */
 
-[System.Serializable]
-public struct LetterDamageData
-{
-    public string letter;
-    public int baseDamage;
-}
-
-
 public class WordBuilderManager : MonoBehaviour
 {
     public static WordBuilderManager Instance;
@@ -33,9 +25,9 @@ public class WordBuilderManager : MonoBehaviour
     public int defaultLetterDamage = 1;           // Daño por defecto si una letra no está en la lista
 
     [Header("Generación de Losetas")]
-    public GameObject tilePrefab; // El prefab base de tu loseta
-    public LetterManager letterManager; // Referencia al script de probabilidades
-    public float spawnHeight = 8f; // Altura en Y (fuera de cámara) desde donde caerán
+    public GameObject tilePrefab;        // El prefab base de tu loseta
+    public LetterManager letterManager;  // Referencia al script de probabilidades
+    public float spawnHeight = 8f;       // Altura en Y (fuera de cámara) desde donde caerán
     public float verticalSpacing = 1.2f; // Espacio vertical al instanciar varias en la misma columna
 
     [Header("Configuración de la zona de palabra")]
@@ -87,12 +79,9 @@ public class WordBuilderManager : MonoBehaviour
     }
 #endregion
 
-
-    #region Tile Management
-    /// <summary>
-    /// Se llama cuando se ejecuta un ataque exitoso.
-    /// Consume las letras usadas y repuebla las columnas afectadas.
-    /// </summary>
+    #region Tile Management  
+    // Se llama cuando se ejecuta un ataque exitoso.
+    //Consume las letras usadas y repuebla las columnas afectadas.    
     public void ConsumeTilesAndRefill()
     {
         if (selectedTiles.Count == 0) return;
@@ -166,9 +155,7 @@ public class WordBuilderManager : MonoBehaviour
     #endregion
 
     #region Word Validation and Visual Feedback
-    /// <summary>
-    /// Lee las losetas actuales, valida contra el diccionario y actualiza el estado visual.
-    /// </summary>
+    // Lee las losetas actuales, valida contra el diccionario y actualiza el estado visual.   
     public void EvaluateCurrentWord()
     {
         // 1. Limpieza preventiva: Si no hay losetas, nos aseguramos de apagar todo
@@ -300,7 +287,7 @@ public class WordBuilderManager : MonoBehaviour
                 if (freeze)
                     t.SetStatic();
                 else
-                    t.SetDynamic(); // ¡Esto es lo que faltaba para reactivar la gravedad!
+                    t.SetDynamic(); // Reactivamos la gravedad
             }
         }
     }
@@ -309,10 +296,10 @@ public class WordBuilderManager : MonoBehaviour
     #endregion
 
     #region Tile Interaction
-    // Este método es llamado por las fichas individuales cuando llegan a su destino
+    // Este método es llamado por las fichas individuales cuando llegan a su destino (o sea el tablero)
     public void CheckAndUnfreeze()
     {
-        // Si ya no hay letras seleccionadas en el escenario...
+        // Si ya no hay letras seleccionadas en el escenario
         if (selectedTiles.Count == 0)
         {
             bool anyMoving = false;
@@ -341,11 +328,9 @@ public class WordBuilderManager : MonoBehaviour
 
     #endregion
 
-    #region Attack Execution
-    /// <summary>
-    /// Se ejecuta al hacer clic en el botón de ataque. 
-    /// Calcula el daño, dispara la animación de Lex y limpia el tablero.
-    /// </summary>
+    #region Attack Execution   
+    // Se ejecuta al hacer clic en el botón de ataque. 
+    // Calcula el daño usando interfaces, dispara la animación de Lex y limpia el tablero.    
     public void ExecuteAttack()
     {
         // Validación de seguridad por si acaso
@@ -353,49 +338,53 @@ public class WordBuilderManager : MonoBehaviour
 
         int totalDamage = 0;
 
-        // 1. CALCULAR DAÑO TOTAL EVALUANDO LETRAS Y GEMAS
+        // 1. CALCULAR DAÑO TOTAL EVALUANDO LETRAS Y GEMAS USANDO LA INTERFAZ
         foreach (TileController tile in selectedTiles)
         {
-            int baseLetterDamage = defaultLetterDamage;
+            // Extraemos el daño base de la letra de forma limpia
+            int baseLetterDamage = GetBaseDamageForLetter(tile.currentLetter);
 
-            // Buscamos si la letra tiene un valor asignado en nuestra base de datos de daño
-            foreach (LetterDamageData damageData in letterDamageDatabase)
+            // Polimorfismo: Tratamos a la loseta a través de su interfaz IDamageDealer
+            if (tile is IDamageDealer damageDealer)
             {
-                if (damageData.letter.Equals(tile.currentLetter, StringComparison.OrdinalIgnoreCase))
-                {
-                    baseLetterDamage = damageData.baseDamage;
-                    break;
-                }
+                totalDamage += damageDealer.GetFinalDamage(baseLetterDamage);
             }
-
-            // Daño de la loseta = (Daño base de la letra) * (Multiplicador de gema/estado de la loseta)
-            totalDamage += baseLetterDamage * tile.currentDamageMultiplier;
+            else
+            {
+                // Fallback de seguridad en caso de que una loseta base no tenga la interfaz activa
+                totalDamage += baseLetterDamage * tile.currentDamageMultiplier;
+            }
         }
 
         Debug.Log($"¡Ataque ejecutado! Palabra válida. Daño total calculado: {totalDamage}");
 
-        // 2. ANIMACIÓN DINÁMICA
-        // Pasamos el poder total al Animator. En tu Animator de Unity, puedes crear un parámetro 
-        // de tipo Int llamado "AttackPower" y usar transiciones basadas en condiciones.
+        // 2. ANIMACIÓN DINÁMICA (Experimental por falta de animaciones específicas)
         if (lexAnimator != null)
         {
             lexAnimator.SetInteger("AttackPower", totalDamage);
             lexAnimator.SetTrigger("Attack");
-            // Nota: En tu máquina de estados del Animator, si Attack Trigger se activa y 
-            // AttackPower es < 10 va a una animación simple ("perro"), si es >= 10 va al ataque especial ("intracelular").
         }
 
         // 3. LIMPIEZA Y GENERACIÓN SIMULTÁNEA
-        // Apagamos las partículas del modo preparación inmediatamente
         if (validWordParticles.isPlaying) validWordParticles.Stop();
         glowRenderer.gameObject.SetActive(false);
 
-        // Llamamos al método de consumo y relleno que programamos en el paso anterior.
-        // Al ejecutarse en este mismo frame, las losetas usadas desaparecen y las nuevas
-        // empiezan a caer desde el cielo al mismo tiempo que Lex inicia su animación de ataque.
+        // Consumo y rellenado de tablero
         ConsumeTilesAndRefill();
     }
+
+  
+    // Función Helper para buscar el daño base de una letra específica en la base de datos.  
+    private int GetBaseDamageForLetter(string letter)
+    {
+        foreach (LetterDamageData damageData in letterDamageDatabase)
+        {
+            if (damageData.letter.Equals(letter, StringComparison.OrdinalIgnoreCase))
+            {
+                return damageData.baseDamage; // O damageData.baseDamage dependiendo de tu struct original
+            }
+        }
+        return defaultLetterDamage;
+    }
     #endregion
-
-
 }

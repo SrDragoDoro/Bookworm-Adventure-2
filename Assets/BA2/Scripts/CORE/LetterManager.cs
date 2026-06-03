@@ -22,10 +22,9 @@ public class LetterManager : MonoBehaviour
         CalculateTotalWeight();
     }
 
-    /// <summary>
-    /// Suma todos los pesos configurados en el Inspector. 
-    /// Se hace una sola vez al inicio para optimizar el rendimiento.
-    /// </summary>
+   
+    // Suma todos los pesos configurados en el Inspector. 
+    // Se hace una sola vez al inicio para optimizar el rendimiento.  
     private void CalculateTotalWeight()
     {
         totalWeight = 0;
@@ -34,16 +33,15 @@ public class LetterManager : MonoBehaviour
             totalWeight += item.weight;
         }
 
-        // Pequeña validación en consola por si la lista está vacía
+        // Validación en consola para ver si la lista está vacía
         if (totalWeight == 0)
         {
             Debug.LogWarning("El peso total de las letras es 0. Revisa la lista en el Inspector.");
         }
     }
 
-    /// <summary>
-    /// Devuelve una letra aleatoria basada en su peso estadístico.
-    /// </summary>
+   
+    // Devuelve una letra aleatoria basada en su peso estadístico.   
     public string GetRandomLetter()
     {
         if (totalWeight == 0) CalculateTotalWeight(); // Seguro por si se llama antes de Start()

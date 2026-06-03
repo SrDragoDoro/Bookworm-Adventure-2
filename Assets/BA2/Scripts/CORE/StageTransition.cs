@@ -7,25 +7,25 @@ public class StageTransition : MonoBehaviour
 {
     [Header("Configuración de Objetos del Canvas")]
     [Tooltip("Arrastra aquí los elementos específicos del Canvas que quieres mover.")]
-    public List<RectTransform> objetosEpecificos = new List<RectTransform>();
+    public List<RectTransform> SpecificObjects = new List<RectTransform>();
 
     [Header("Parámetros de Movimiento")]
     [Tooltip("Distancia en el eje X. Valores negativos mueven a la izquierda (simula que Lex avanza hacia la derecha).")]
-    public float distanciaDesplazamientoX = -1000f;
+    public float distanceDisplacementX = -1800f;
 
     [Tooltip("Tiempo en segundos que durará la animación de movimiento.")]
-    public float duracionTransicion = 2f;
+    public float transitionDuration = 5f;
 
     [Header("Eventos")]
     [Tooltip("Añade aquí funciones que deben ocurrir cuando termine de moverse (Ej: Aparecer el nuevo enemigo).")]
-    public UnityEvent alTerminarTransicion;
+    public UnityEvent onTransitionComplete;
 
-    private bool estaMoviendose = false;
+    private bool isMoving = false;
 
     #region CÓDIGOS DE PRUEBA
     void Update()
     {
-        // Presiona la tecla 'T' (de Test) durante el juego para forzar el movimiento
+        // Presionar la tecla 'T' durante el juego para forzar el movimiento
         if (Input.GetKeyDown(KeyCode.T))
         {
             Debug.Log("[Test] Forzando movimiento del escenario...");
@@ -34,63 +34,61 @@ public class StageTransition : MonoBehaviour
     }
     #endregion
 
-    /// <summary>
-    /// Llama a esta función exactamente cuando el HP del enemigo llegue a 0 y sea derrotado.
-    /// </summary>
-    [ContextMenu("Ejecutar Transición de Prueba")] // <--- AÑADE ESTA LÍNEA AQUÍ
+    // Llama a esta función exactamente cuando el HP del enemigo llegue a 0 y sea derrotado.    
+    [ContextMenu("Ejecutar Transición de Prueba")]
     public void OnEnemyDefeated()
     {
-        if (!estaMoviendose)
+        if (!isMoving)
         {
-            StartCoroutine(MoverEscenarioRoutine());
+            StartCoroutine(MoveSceneCoutine());
         }
     }
 
-    private IEnumerator MoverEscenarioRoutine()
+    private IEnumerator MoveSceneCoutine()
     {
-        estaMoviendose = true;
+        isMoving = true;
 
         // 1. Guardamos la posición de inicio y calculamos la posición de destino para cada objeto
-        List<Vector2> posicionesIniciales = new List<Vector2>();
-        List<Vector2> posicionesFinales = new List<Vector2>();
+        List<Vector2> initialPositions = new List<Vector2>();
+        List<Vector2> finalPositions = new List<Vector2>();
 
-        foreach (RectTransform obj in objetosEpecificos)
+        foreach (RectTransform obj in SpecificObjects)
         {
             if (obj != null)
             {
-                posicionesIniciales.Add(obj.anchoredPosition);
+                initialPositions.Add(obj.anchoredPosition);
 
                 // Sumamos la distancia configurada a la posición actual en X
-                Vector2 destino = new Vector2(obj.anchoredPosition.x + distanciaDesplazamientoX, obj.anchoredPosition.y);
-                posicionesFinales.Add(destino);
+                Vector2 destino = new Vector2(obj.anchoredPosition.x + distanceDisplacementX, obj.anchoredPosition.y);
+                finalPositions.Add(destino);
             }
             else
             {
-                // Relleno de seguridad por si dejas un hueco vacío en el Inspector
-                posicionesIniciales.Add(Vector2.zero);
-                posicionesFinales.Add(Vector2.zero);
+                // Relleno de seguridad por si hay un hueco vacío en el Inspector
+                initialPositions.Add(Vector2.zero);
+                finalPositions.Add(Vector2.zero);
             }
         }
 
-        float tiempoTranscurrido = 0f;
+        float elapsedTime = 0f;
 
         // 2. Bucle de interpolación: Mueve los objetos suavemente frame por frame
-        while (tiempoTranscurrido < duracionTransicion)
+        while (elapsedTime < transitionDuration)
         {
-            tiempoTranscurrido += Time.deltaTime;
+            elapsedTime += Time.deltaTime;
 
             // Calculamos el porcentaje del tiempo (de 0 a 1)
-            float porcentaje = tiempoTranscurrido / duracionTransicion;
+            float percentage = elapsedTime / transitionDuration;
 
             // Aplicamos un suavizado (Ease In-Out) para que no empiece ni frene de golpe
-            float curvaSuave = Mathf.SmoothStep(0f, 1f, porcentaje);
+            float smoothCurve = Mathf.SmoothStep(0f, 1f, percentage);
 
-            for (int i = 0; i < objetosEpecificos.Count; i++)
+            for (int i = 0; i < SpecificObjects.Count; i++)
             {
-                if (objetosEpecificos[i] != null)
+                if (SpecificObjects[i] != null)
                 {
                     // Lerp calcula la posición intermedia basándose en la curva
-                    objetosEpecificos[i].anchoredPosition = Vector2.Lerp(posicionesIniciales[i], posicionesFinales[i], curvaSuave);
+                    SpecificObjects[i].anchoredPosition = Vector2.Lerp(initialPositions[i], finalPositions[i], smoothCurve);
                 }
             }
 
@@ -98,17 +96,17 @@ public class StageTransition : MonoBehaviour
         }
 
         // 3. Limpieza final: Nos aseguramos de que terminen exactamente en la coordenada matemática exacta
-        for (int i = 0; i < objetosEpecificos.Count; i++)
+        for (int i = 0; i < SpecificObjects.Count; i++)
         {
-            if (objetosEpecificos[i] != null)
+            if (SpecificObjects[i] != null)
             {
-                objetosEpecificos[i].anchoredPosition = posicionesFinales[i];
+                SpecificObjects[i].anchoredPosition = finalPositions[i];
             }
         }
 
-        estaMoviendose = false;
+        isMoving = false;
 
         // 4. Disparamos el evento final (por ejemplo, para que aparezca el enemigo o se vuelva a jugar)
-        alTerminarTransicion?.Invoke();
+        onTransitionComplete?.Invoke();
     }
 }

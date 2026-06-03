@@ -12,42 +12,17 @@ movimiento hacia el tablero o hacia su posición
 original, y su estado (seleccionada o no). 
 */
 
-
-public enum TileType
-{
-    Basic,
-    Amethyst,
-    Diamond,
-    Cursed,
-    Plagued,
-    Fire
-}
-
-[System.Serializable]
-public struct TileVisualData
-{
-    public TileType type;
-    public Sprite normalSprite;
-    public Sprite hoverSprite;
-    public int damageMultiplier; // ¡Útil para cuando calcules el daño de las gemas!
-
-
-
-}
-
-
-public class TileController : MonoBehaviour
+public class TileController : TilesData, IDamageDealer
 {
     private WordBuilderManager wordBuilderManager;
 
     [Header("Sprites")]
-    // Mantenemos tus variables de sprite actuales, pero ahora serán dinámicas
     [HideInInspector] public Sprite normalSprite;
     [HideInInspector] public Sprite hoverSprite;
     public int currentDamageMultiplier = 1;
 
     [Header("Configuración del Glow Individual")]
-    [SerializeField] private SpriteRenderer glowSpriteRenderer; // El SpriteRenderer hijo para el resplandor
+    [SerializeField] private SpriteRenderer glowSpriteRenderer;// El SpriteRenderer hijo para el resplandor
     [SerializeField] private Sprite glowLeft;                  // Sprite del extremo izquierdo
     [SerializeField] private Sprite glowCenter;                // Sprite del cuerpo central
     [SerializeField] private Sprite glowRight;                 // Sprite del extremo derecho
@@ -60,10 +35,10 @@ public class TileController : MonoBehaviour
 
     [Header("Configuración Visual y Tipos")]
     public TileType currentTileType = TileType.Basic;
-    public List<TileVisualData> visualDatabase; // Aquí arrastrarás tus sprites en el Inspector
+    public List<TileVisualData> visualDatabase;             // Aquí van los sprites en el Inspector
 
     [Header("Referencias Hijas")]
-    public TextMeshPro textMesh; // Arrastra el TextMeshPro hijo aquí desde el Inspector
+    public TextMeshPro textMesh;                            // Arrastrar el TextMeshPro hijo aquí desde el Inspector
     [HideInInspector] public string currentLetter = "";   
 
     private SpriteRenderer spriteRenderer;
@@ -77,10 +52,11 @@ public class TileController : MonoBehaviour
     private Vector3 targetPosition;
     private bool isHovered = false;
 
-    private bool isMovingToTarget = false; //Controla si la baldosa debe moverse por código o si dejamos actuar a la gravedad
+    private bool isMovingToTarget = false; //Controlar si la baldosa debe moverse por código o si dejamos actuar a la gravedad
 
     private SortingGroup sortingGroup;
 
+    #region Prueba de Palabras especificas desde el Inspector
     //void Start()
     //{
     //    // Si la loseta ya tiene un TextMeshPro asignado y tú escribiste algo en él desde el inspector...
@@ -93,6 +69,7 @@ public class TileController : MonoBehaviour
     //        SetupTile(currentTileType, currentLetter);
     //    }
     //}
+    #endregion
 
     void Awake()
     {
@@ -110,12 +87,21 @@ public class TileController : MonoBehaviour
         HandleMovement();
     }
 
+    #region IMPLEMENTACIÓN DE INTERFAZ
+    public int GetFinalDamage(int baseDamage)
+    {
+        // La loseta calcula su daño multiplicando el valor base de la letra por su multiplicador de gema
+        return baseDamage * currentDamageMultiplier;
+    }
+    #endregion
+
 
     #region Glow
     /// <summary>
     /// Activa el resplandor de esta loseta adaptando el sprite según su posición en la palabra.
     /// </summary>
     /// <param name="positionIndex">0 = Izquierda, 1 = Centro, 2 = Derecha</param>
+
     public void EnableTileGlow(int positionIndex)
     {
         if (glowSpriteRenderer == null) return;
@@ -135,10 +121,8 @@ public class TileController : MonoBehaviour
                 break;
         }
     }
-
-    /// <summary>
-    /// Apaga por completo el resplandor de esta loseta.
-    /// </summary>
+        
+    // Apaga por completo el resplandor de esta loseta.   
     public void DisableTileGlow()
     {
         if (glowSpriteRenderer != null)
@@ -148,13 +132,9 @@ public class TileController : MonoBehaviour
     }
     #endregion
 
-
-
-
-
-    /// <summary>
-    /// Llama a esta función justo después de instanciar la loseta para definir qué es (Gema, Básica, etc.) y qué letra tiene.
-    /// </summary>
+     
+    // Llama a esta función justo después de instanciar la loseta
+    // para definir qué es (Gema, Básica, etc.) y qué letra tiene.
     public void SetupTile(TileType newType, string letter)
     {
         currentTileType = newType;
@@ -164,7 +144,6 @@ public class TileController : MonoBehaviour
         {
             textMesh.text = currentLetter;
         }
-
         // Buscar el diseño correspondiente en nuestra base de datos
         foreach (TileVisualData visual in visualDatabase)
         {
@@ -238,8 +217,6 @@ public class TileController : MonoBehaviour
             }
         }
     }
-
-
 
     public void MoveTo(Vector3 newPos, bool selecting)
     {
