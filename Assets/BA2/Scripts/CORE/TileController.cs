@@ -146,8 +146,8 @@ public class TileController : TilesData, IDamageDealer
 
     public void StartScrambleEffect()
     {
-        // No revolvemos losetas que el jugador ya tiene en la zona de palabra
-        if (isSelected || isMovingToTarget) return;
+        //No revolvemos losetas que el jugador ya tiene en la zona de palabra
+        //if (isSelected || isMovingToTarget) return;
 
         // Si ya estaba girando, la detenemos para no sobreescribir procesos
         if (scrambleCoroutine != null)
