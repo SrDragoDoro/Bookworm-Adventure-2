@@ -57,31 +57,31 @@ public class ParallaxManager : MonoBehaviour
         float mouseY = (mousePos.y / Screen.height) - 0.5f;
 
         // 2. Procesamos cada grupo
-        //foreach (var grupo in grupos)
-        //{
-        //    // Calculamos el desfase una sola vez por grupo (¡Optimización!)
-        //    float offsetX = mouseX * Screen.width * grupo.intensidadX;
-        //    float offsetY = mouseY * Screen.height * grupo.intensidadY;
+        foreach (var grupo in grupos)
+        {
+            // Calculamos el desfase una sola vez por grupo
+            float offsetX = mouseX * Screen.width * grupo.intensidadX;
+            float offsetY = mouseY * Screen.height * grupo.intensidadY;
 
-        //    // 3. Movemos todos los objetos dentro de este grupo
-        //    for (int i = 0; i < grupo.objetos.Count; i++)
-        //    {
-        //        if (grupo.objetos[i] == null) continue;
+            // 3. Movemos todos los objetos dentro de este grupo
+            for (int i = 0; i < grupo.objetos.Count; i++)
+            {
+                if (grupo.objetos[i] == null) continue;
 
-        //        // Calculamos el objetivo sumando el desfase a la posición base específica del objeto
-        //        Vector2 posicionObjetivo = new Vector2(
-        //            grupo.posicionesBase[i].x + offsetX,
-        //            grupo.posicionesBase[i].y + offsetY
-        //        );
+                // Calculamos el objetivo sumando el desfase a la posición base específica del objeto
+                Vector2 posicionObjetivo = new Vector2(
+                    grupo.posicionesBase[i].x + offsetX,
+                    grupo.posicionesBase[i].y + offsetY
+                );
 
-        //        // Aplicamos el movimiento suave
-        //        grupo.objetos[i].anchoredPosition = Vector2.Lerp(
-        //            grupo.objetos[i].anchoredPosition,
-        //            posicionObjetivo,
-        //            Time.deltaTime * suavizado
-        //        );
-        //    }
-        //}
+                // Aplicamos el movimiento suave
+                grupo.objetos[i].anchoredPosition = Vector2.Lerp(
+                    grupo.objetos[i].anchoredPosition,
+                    posicionObjetivo,
+                    Time.deltaTime * suavizado
+                );
+            }
+        }
     }
 
     #endregion
@@ -90,19 +90,19 @@ public class ParallaxManager : MonoBehaviour
     /*
     Llama a esta función cuando Lex derrote a un enemigo para mover el escenario. Ejm: MoverEscenario(-100f);
     */
-    public void MoverEscenario(float cantidadX)
-    {
-        // Actualizamos todas las posiciones base para el nuevo centro del nivel
-        foreach (var grupo in grupos)
-        {
-            for (int i = 0; i < grupo.posicionesBase.Length; i++)
-            {
-                grupo.posicionesBase[i].x += cantidadX;
-            }
-        }
+    //public void MoverEscenario(float cantidadX)
+    //{
+    //    // Actualizamos todas las posiciones base para el nuevo centro del nivel
+    //    foreach (var grupo in grupos)
+    //    {
+    //        for (int i = 0; i < grupo.posicionesBase.Length; i++)
+    //        {
+    //            grupo.posicionesBase[i].x += cantidadX;
+    //        }
+    //    }
 
-        // Disparamos el evento
-        alDesplazarEscenario.Invoke();
-    }
+    //    // Disparamos el evento
+    //    alDesplazarEscenario.Invoke();
+    //}
     #endregion
 }
