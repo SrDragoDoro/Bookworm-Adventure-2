@@ -4,6 +4,7 @@ using UnityEngine;
 #region DEFINICIONES DE DATOS GLOBALES
 public enum TileType
 {
+    None,
     Basic,
     Amethyst,
     Diamond,
@@ -18,20 +19,11 @@ public struct TileVisualData
     public TileType type;
     public Sprite normalSprite;
     public Sprite hoverSprite;
-    public int damageMultiplier; //  Calculo del daño de las gemas y tesoros
-}
-
-[System.Serializable]
-public struct LetterDamageData
-{
-    public string letter;
-    public int baseDamage;
+    public int damageMultiplier; // Cálculo del daño de las gemas y tesoros
 }
 #endregion
 
 public abstract class TilesData : MonoBehaviour
 {
-    // Esta clase queda como base abstracta. 
-    // Si en el futuro necesitas que todas las losetas compartan variables o métodos cores,
-    // los programaremos aquí dentro.
+    // Para métodos comparidos
 }

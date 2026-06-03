@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Esta estructura define cada letra y su "peso" (frecuencia de aparición)
-[System.Serializable]
-public struct LetterFrequency
-{
-    public string letter; // Ej: "A", "E", "X", "Qu"
-    public int weight;    // Ej: 30, 5, 1
-}
+//[System.Serializable]
+//public struct LetterFrequency
+//{
+//    public string letter; // Ej: "A", "E", "X", "Qu"
+//    public int weight;    // Ej: 30, 5, 1
+//}
 
 public class LetterManager : MonoBehaviour
 {

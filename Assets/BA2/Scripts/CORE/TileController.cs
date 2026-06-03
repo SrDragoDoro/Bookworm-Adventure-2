@@ -132,7 +132,7 @@ public class TileController : TilesData, IDamageDealer
     }
     #endregion
 
-     
+    
     // Llama a esta función justo después de instanciar la loseta
     // para definir qué es (Gema, Básica, etc.) y qué letra tiene.
     public void SetupTile(TileType newType, string letter)
