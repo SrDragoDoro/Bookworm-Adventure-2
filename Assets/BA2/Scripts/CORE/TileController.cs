@@ -16,10 +16,10 @@ public class TileController : TilesData, IDamageDealer
 {
     private WordBuilderManager wordBuilderManager;
 
-    [Header("Sprites")]
+    [Header("Sprites de la Loseta")]
     [HideInInspector] public Sprite normalSprite;
     [HideInInspector] public Sprite hoverSprite;
-    public int currentDamageMultiplier = 1;
+    [HideInInspector] public int currentDamageMultiplier = 1;
 
     [Header("Configuración del Glow Individual")]
     [SerializeField] private SpriteRenderer glowSpriteRenderer;// El SpriteRenderer hijo para el resplandor
@@ -34,27 +34,27 @@ public class TileController : TilesData, IDamageDealer
     public float moveSpeed = 15f;
 
     [Header("Configuración Visual y Tipos")]
+    // NOTA: TileType y TileVisualData se leen automáticamente del padre TilesData.cs
     public TileType currentTileType = TileType.Basic;
     public List<TileVisualData> visualDatabase;             // Aquí van los sprites en el Inspector
 
     [Header("Referencias Hijas")]
     public TextMeshPro textMesh;                            // Arrastrar el TextMeshPro hijo aquí desde el Inspector
-    [HideInInspector] public string currentLetter = "";   
-
-    private SpriteRenderer spriteRenderer;
+    [HideInInspector] public string currentLetter = "";     // Guarda la letra / sílaba actual(Ej: "A", "Ñ", "Qu")
+      
     private Rigidbody2D rb;
     private BoxCollider2D col;
+    private SpriteRenderer spriteRenderer;
+    private SortingGroup sortingGroup;
 
     [HideInInspector] public Vector3 originalPosition;
     [HideInInspector] public bool isSelected = false;
     [HideInInspector] public bool isMovingBack = false;
-
     private Vector3 targetPosition;
     private bool isHovered = false;
-
     private bool isMovingToTarget = false; //Controlar si la baldosa debe moverse por código o si dejamos actuar a la gravedad
 
-    private SortingGroup sortingGroup;
+    
 
     #region Prueba de Palabras especificas desde el Inspector
     //void Start()
@@ -97,10 +97,9 @@ public class TileController : TilesData, IDamageDealer
 
 
     #region Glow
-    /// <summary>
-    /// Activa el resplandor de esta loseta adaptando el sprite según su posición en la palabra.
-    /// </summary>
-    /// <param name="positionIndex">0 = Izquierda, 1 = Centro, 2 = Derecha</param>
+   
+    // Activa el resplandor de esta loseta adaptando el sprite según su posición en la palabra.
+    // name="positionIndex">0 = Izquierda, 1 = Centro, 2 = Derecha
 
     public void EnableTileGlow(int positionIndex)
     {

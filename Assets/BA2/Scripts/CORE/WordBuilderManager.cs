@@ -19,11 +19,7 @@ public class WordBuilderManager : MonoBehaviour
 
     [Header("Referencias de Animación")]
     public Animator lexAnimator;                  // El Animator asignado al GameObject de Lex
-
-    [Header("Balance de Daño por Letra")]
-    public List<LetterDamageData> letterDamageDatabase;
-    public int defaultLetterDamage = 1;           // Daño por defecto si una letra no está en la lista
-
+    
     [Header("Generación de Losetas")]
     public GameObject tilePrefab;        // El prefab base de tu loseta
     public LetterManager letterManager;  // Referencia al script de probabilidades
@@ -328,63 +324,44 @@ public class WordBuilderManager : MonoBehaviour
 
     #endregion
 
-    #region Attack Execution   
+    #region Attack Execution
+    // Metodo SOLO PARA VALIDACIÓN DEL BOTÓN Y ACTICACIÓN DE ANIMACIONES, este metodo no hace daño
     // Se ejecuta al hacer clic en el botón de ataque. 
     // Calcula el daño usando interfaces, dispara la animación de Lex y limpia el tablero.    
     public void ExecuteAttack()
     {
-        // Validación de seguridad por si acaso
-        if (!isCurrentWordValid || selectedTiles.Count == 0) return;
-
         int totalDamage = 0;
 
-        // 1. CALCULAR DAÑO TOTAL EVALUANDO LETRAS Y GEMAS USANDO LA INTERFAZ
         foreach (TileController tile in selectedTiles)
         {
-            // Extraemos el daño base de la letra de forma limpia
-            int baseLetterDamage = GetBaseDamageForLetter(tile.currentLetter);
+            // NUEVO: Obtenemos el daño base directamente desde AlphabetData usando el string de la loseta
+            int baseLetterDamage = AlphabetData.GetBaseDamage(tile.currentLetter);
 
-            // Polimorfismo: Tratamos a la loseta a través de su interfaz IDamageDealer
             if (tile is IDamageDealer damageDealer)
             {
                 totalDamage += damageDealer.GetFinalDamage(baseLetterDamage);
             }
             else
             {
-                // Fallback de seguridad en caso de que una loseta base no tenga la interfaz activa
+                // Fallback de seguridad si no tuviese la interfaz activa
                 totalDamage += baseLetterDamage * tile.currentDamageMultiplier;
             }
         }
 
         Debug.Log($"¡Ataque ejecutado! Palabra válida. Daño total calculado: {totalDamage}");
 
-        // 2. ANIMACIÓN DINÁMICA (Experimental por falta de animaciones específicas)
+        // Animación dinámica basada en daño
         if (lexAnimator != null)
         {
             lexAnimator.SetInteger("AttackPower", totalDamage);
             lexAnimator.SetTrigger("Attack");
         }
 
-        // 3. LIMPIEZA Y GENERACIÓN SIMULTÁNEA
+        // Limpieza visual
         if (validWordParticles.isPlaying) validWordParticles.Stop();
-        glowRenderer.gameObject.SetActive(false);
+        if (glowRenderer != null) glowRenderer.gameObject.SetActive(false);
 
-        // Consumo y rellenado de tablero
         ConsumeTilesAndRefill();
-    }
-
-  
-    // Función Helper para buscar el daño base de una letra específica en la base de datos.  
-    private int GetBaseDamageForLetter(string letter)
-    {
-        foreach (LetterDamageData damageData in letterDamageDatabase)
-        {
-            if (damageData.letter.Equals(letter, StringComparison.OrdinalIgnoreCase))
-            {
-                return damageData.baseDamage; // O damageData.baseDamage dependiendo de tu struct original
-            }
-        }
-        return defaultLetterDamage;
-    }
+    }    
     #endregion
 }

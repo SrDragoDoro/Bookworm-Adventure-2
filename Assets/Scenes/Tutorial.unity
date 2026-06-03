@@ -4201,7 +4201,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2020231685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4209,7 +4209,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2020231684}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 54b2ad0c36313ae45b9c8793b588a512, type: 3}
   m_Name: 
@@ -4515,32 +4515,6 @@ MonoBehaviour:
   attackButtonUI: {fileID: 1056755661}
   validWordParticles: {fileID: 7924030167184937442, guid: 0827f649f2bd838498fae6e15209f4a4, type: 3}
   lexAnimator: {fileID: 578521064}
-  letterDamageDatabase:
-  - letter: A
-    baseDamage: 5
-  - letter: B
-    baseDamage: 5
-  - letter: O
-    baseDamage: 5
-  - letter: E
-    baseDamage: 5
-  - letter: V
-    baseDamage: 5
-  - letter: QU
-    baseDamage: 5
-  - letter: Z
-    baseDamage: 5
-  - letter: P
-    baseDamage: 5
-  - letter: I
-    baseDamage: 5
-  - letter: M
-    baseDamage: 5
-  - letter: N
-    baseDamage: 5
-  - letter: "\xD1"
-    baseDamage: 5
-  defaultLetterDamage: 1
   tilePrefab: {fileID: 6343342208319466643, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
   letterManager: {fileID: 2020231685}
   spawnHeight: 8
