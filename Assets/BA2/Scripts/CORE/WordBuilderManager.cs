@@ -321,6 +321,20 @@ public class WordBuilderManager : MonoBehaviour
     {
         return selectedTiles;
     }
+        
+    // Ejecuta el efecto de revolver en todas las baldosas que estén en el tablero.
+    // Asigna esto al evento OnClick() de tu botón de la interfaz de Unity.    
+    public void ScrambleAllTiles()
+    {
+        // Recorremos todas las losetas activas
+        foreach (TileController tile in allTiles)
+        {
+            if (tile != null)
+            {
+                tile.StartScrambleEffect();
+            }
+        }       
+    }
 
     #endregion
 

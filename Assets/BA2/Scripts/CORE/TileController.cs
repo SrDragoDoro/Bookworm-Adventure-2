@@ -41,7 +41,13 @@ public class TileController : TilesData, IDamageDealer
     [Header("Referencias Hijas")]
     public TextMeshPro textMesh;                            // Arrastrar el TextMeshPro hijo aquí desde el Inspector
     [HideInInspector] public string currentLetter = "";     // Guarda la letra / sílaba actual(Ej: "A", "Ñ", "Qu")
-      
+
+    [Header("Efecto Revolver")]
+    [SerializeField] private int scrambleCycles = 6;           // Cuántas letras falsas mostrará antes de la real
+    [SerializeField] private float scrambleDelay = 0.08f;      // Tiempo entre cada cambio de letra (en segundos)
+
+    private Coroutine scrambleCoroutine;     // Para detenerla si el jugador interactúa rápido
+
     private Rigidbody2D rb;
     private BoxCollider2D col;
     private SpriteRenderer spriteRenderer;
@@ -76,7 +82,7 @@ public class TileController : TilesData, IDamageDealer
         spriteRenderer = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
-        // 3. Obtenemos el componente. Si se te olvida ponerlo en el editor, el código lo añade por seguridad.
+        // 3. Obtenemos el componente. Por si no está en el editor, el código lo añade por seguridad.
         sortingGroup = GetComponent<SortingGroup>();
         if (sortingGroup == null) sortingGroup = gameObject.AddComponent<SortingGroup>();
     }
@@ -131,7 +137,55 @@ public class TileController : TilesData, IDamageDealer
     }
     #endregion
 
-    
+
+    #region Revolver Letras
+
+    // Inicia el efecto visual de revolver letras.
+    // Solo funciona si la loseta está en el tablero (no seleccionada).
+
+    public void StartScrambleEffect()
+    {
+        // No revolvemos losetas que el jugador ya tiene en la zona de palabra
+        if (isSelected || isMovingToTarget) return;
+
+        // Si ya estaba girando, la detenemos para no sobreescribir procesos
+        if (scrambleCoroutine != null)
+        {
+            StopCoroutine(scrambleCoroutine);
+        }
+
+        // Iniciamos la animación
+        scrambleCoroutine = StartCoroutine(ScrambleRoutine());
+    }
+
+    private System.Collections.IEnumerator ScrambleRoutine()
+    {
+        // 1. Ciclo de letras falsas
+        for (int i = 0; i < scrambleCycles; i++)
+        {
+            // Obtenemos una letra aleatoria y la mostramos SIN alterar el tipo visual
+            string fakeLetter = AlphabetData.GetRandomLetter();
+
+            // Actualizamos solo el texto y la variable interna
+            currentLetter = fakeLetter;
+            if (textMesh != null) textMesh.text = currentLetter;
+
+            // Esperamos unos milisegundos antes del siguiente cambio
+            yield return new WaitForSeconds(scrambleDelay);
+        }
+
+        // 2. Resultado Final Real
+        string finalLetter = AlphabetData.GetRandomLetter();
+
+        // Aquí SÍ llamamos a tu método completo por si quieres que el "revolver" 
+        // también tenga una pequeña probabilidad de convertir la loseta en una Gema
+        SetupTile(currentTileType, finalLetter);
+
+        scrambleCoroutine = null;
+    }
+    #endregion
+
+
     // Llama a esta función justo después de instanciar la loseta
     // para definir qué es (Gema, Básica, etc.) y qué letra tiene.
     public void SetupTile(TileType newType, string letter)
