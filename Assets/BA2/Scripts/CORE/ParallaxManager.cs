@@ -35,7 +35,7 @@ public class ParallaxManager : MonoBehaviour
         // Al iniciar, recorremos cada grupo para guardar las posiciones iniciales
         foreach (var grupo in grupos)
         {
-            // Creamos un arreglo de posiciones del mismo tamaño que la lista de objetos
+            // Arreglo de posiciones del mismo tamaño que la lista de objetos
             grupo.posicionesBase = new Vector2[grupo.objetos.Count];
 
             for (int i = 0; i < grupo.objetos.Count; i++)
@@ -88,8 +88,7 @@ public class ParallaxManager : MonoBehaviour
 
     #region Public Methods
     /*
-    Llama a esta función cuando Lex derrote a un enemigo para mover el escenario.
-    Ejemplo de uso: MoverEscenario(-100f);
+    Llama a esta función cuando Lex derrote a un enemigo para mover el escenario. Ejm: MoverEscenario(-100f);
     */
     public void MoverEscenario(float cantidadX)
     {
@@ -105,6 +104,5 @@ public class ParallaxManager : MonoBehaviour
         // Disparamos el evento
         alDesplazarEscenario.Invoke();
     }
-
     #endregion
 }

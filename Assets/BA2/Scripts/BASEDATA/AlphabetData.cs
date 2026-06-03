@@ -32,7 +32,7 @@ public static class AlphabetData
 
     private static void InitializeFrequencies()
     {
-        // Definimos la frecuencia (peso) adaptada al español con Ñ y Qu
+        // Definimos la frecuencia (peso) en español 
         Frequencies = new List<LetterFrequency>
         {
             new() { letter = "A", weight = 12 }, new() { letter = "B", weight = 2 },
