@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -84,6 +85,8 @@ public class HealthController : MonoBehaviour
         }
     }
 
+
     // Método de prueba rápida desde un botón o evento
+    [Button]
     public void TestDamage(int dmg) => stats.TakeDamage(dmg);
 }

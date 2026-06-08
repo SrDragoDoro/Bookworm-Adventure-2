@@ -4048,9 +4048,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 7560b9522bc6efd4ea7361afa731cbc5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1474506104}
-    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 7560b9522bc6efd4ea7361afa731cbc5, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1474506105}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 7560b9522bc6efd4ea7361afa731cbc5, type: 3}
 --- !u!1 &1474506097 stripped
 GameObject:
@@ -4224,7 +4221,7 @@ MonoBehaviour:
     name: Stuffy
     description: El entrenador de Lex
     xpValue: 0
-    baseDamage: 4
+    baseDamage: 7
     maxHealth: 12
   heartPrefab: {fileID: 7211702122059940243, guid: 18edc2f873cf6314787ced7aa6acedb6, type: 3}
   heartsContainer: {fileID: 392844502}
@@ -4248,21 +4245,6 @@ MonoBehaviour:
   unitAnimator: {fileID: 1474506099}
   attackTarget: {fileID: 578521063}
   pendingDamage: 0
---- !u!114 &1474506105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1474506097}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e38f8ddd054e5d41a20e678bc6e9ee1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyAttack
-  animator: {fileID: 1474506099}
-  baseStateName: Stuffy_AJump
-  attackVariants: 1
 --- !u!1 &1484873531
 GameObject:
   m_ObjectHideFlags: 0

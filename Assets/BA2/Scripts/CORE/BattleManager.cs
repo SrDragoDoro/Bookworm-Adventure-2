@@ -30,7 +30,7 @@ public class BattleManager : MonoBehaviour
 
         if (currentState == BattleState.PlayerTurn)
         {
-            // Al volver al turno del jugador, evaluamos la palabra en tablero para activar/desactivar el botón
+            // Al volver al turno del jugador, evaluamos la palabra en el tablero para activar el botón
             WordBuilderManager.Instance.EvaluateCurrentWord();
         }
         else
@@ -47,7 +47,13 @@ public class BattleManager : MonoBehaviour
 
     private IEnumerator EnemyTurnRoutine()
     {
-        yield return new WaitForSeconds(1.2f); // Pausa dramática antes de que Sfuffy ataque
-        enemyCombat.PerformAttack();
+        // Pausa dramática antes de que Stuffy empiece a moverse/atacar
+        yield return new WaitForSeconds(1.2f);
+
+        // Ordena a Stuffy que ejecute su lógica de ataque
+        if (enemyCombat != null)
+        {
+            enemyCombat.PerformAttack();
+        }
     }
 }
