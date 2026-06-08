@@ -2,30 +2,34 @@ using UnityEngine;
 
 public class TileShot : MonoBehaviour
 {
-    [SerializeField] private float speed = 8f;
-  
+    [SerializeField] private float speed = 12f;
+
     private Rigidbody2D rb;
     private bool hasCollided = false;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        // Le damos impulso inicial hacia la derecha (x = 1)
+        // Vuela hacia la derecha
         rb.linearVelocity = new Vector2(speed, 0f);
+
+        // Mecanismo de seguridad: se destruye sí o sí después de 3 segundos por si sale del mapa
+        Destroy(gameObject, 3f);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        // Validamos si choca con el enemigo y que no haya chocado antes
+        // Solo un efecto visual de rebote al chocar con el enemigo
         if (collision.gameObject.CompareTag("Enemy") && !hasCollided)
         {
-            hasCollided = true;            
+            hasCollided = true;
 
-            // Rotación física al rebotar
-            rb.angularVelocity = 180f;
+            // Frenamos y hacemos que rebote hacia arriba/atrás
+            rb.linearVelocity = new Vector2(-2f, 4f);
+            rb.angularVelocity = 360f;
 
-            // Desaparecer/Destruir la loseta tras 1 segundo del rebote
-            Destroy(gameObject, 1f);
+            // Desaparecer tras 0.5 segundos del rebote
+            Destroy(gameObject, 0.5f);
         }
     }
 }

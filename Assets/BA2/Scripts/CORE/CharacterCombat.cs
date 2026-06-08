@@ -7,48 +7,59 @@ public class CharacterCombat : MonoBehaviour
     public Animator unitAnimator;
 
     [Header("Objetivo de Ataque")]
-    public Transform attackTarget; // Lex apuntará al transform de Sfuffy y viceversa
+    public Transform attackTarget;
 
-    [HideInInspector] public int pendingDamage; // Almacena el daño antes de aplicar el golpe final
+    [HideInInspector] public int pendingDamage;
 
+    // Llama a esto el WordBuilderManager (o el BattleManager para el enemigo)
     public void PerformAttack()
     {
-        // Si la unidad ya fue derrotada, no hace nada
         if (healthController.stats.Health <= 0) return;
 
         if (gameObject.CompareTag("Player"))
         {
-            // Turno de Lex: El daño de su palabra ya fue calculado e inyectado por el WordBuilderManager
             if (unitAnimator != null)
             {
-                unitAnimator.SetInteger("AttackPower", pendingDamage);
-                unitAnimator.SetTrigger("Attack");
+                // Configura el daño para que el Animator sepa qué animación elegir (si tienes varias)
+                //unitAnimator.SetInteger("AttackPower", pendingDamage);
+                unitAnimator.SetTrigger("OnAttack");
             }
         }
         else
         {
-            // Turno del Enemigo (Sfuffy): Usa su daño por defecto definido en sus BaseStats
             pendingDamage = healthController.stats.baseDamage;
-
             if (unitAnimator != null)
             {
-                unitAnimator.SetTrigger("Attack");
-            }
-            else
-            {
-                // Si Sfuffy aún no tiene animaciones listas, aplica daño directo para pruebas
-                ApplyDirectDamageFallback();
+                unitAnimator.SetTrigger("OnAttack");
             }
         }
     }
 
-    // Método seguro por si el enemigo realiza un ataque instantáneo sin proyectiles físicos
-    private void ApplyDirectDamageFallback()
+    // ==========================================
+    // METODOS PARA ANIMATION EVENTS
+    // ==========================================
+
+    // 1. Pon este evento en el frame donde visualmente el golpe conecta (o la loseta choca)
+    public void ApplyDamageEvent()
     {
         HealthController targetHealth = attackTarget.GetComponent<HealthController>();
-        if (targetHealth != null) targetHealth.stats.TakeDamage(pendingDamage);
+        if (targetHealth != null)
+        {
+            targetHealth.stats.TakeDamage(pendingDamage);
+            Debug.Log($"{gameObject.name} aplicó {pendingDamage} de daño a {attackTarget.name}");
+        }
+    }
 
-        // Regresa el turno al jugador
-        BattleManager.Instance.ChangeState(BattleState.PlayerTurn);
+    // 2. Pon este evento en el ÚLTIMO frame de la animación de ataque
+    public void FinishTurnEvent()
+    {
+        if (gameObject.CompareTag("Player"))
+        {
+            BattleManager.Instance.ChangeState(BattleState.EnemyTurn);
+        }
+        else
+        {
+            BattleManager.Instance.ChangeState(BattleState.PlayerTurn);
+        }
     }
 }
