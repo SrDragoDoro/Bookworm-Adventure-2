@@ -1,20 +1,43 @@
+using System;
 using UnityEngine;
 
-//Datos básicos de los enemigos y Lex, se pueden añadir más datos si se necesitan, pero estos son los básicos para el funcionamiento del juego.
+[Serializable]
 public class BaseStats
 {
-    private int health;
-    private string name;
-    private string description;
-    private int damage; // 1 es igual a 1/4 de corazon del enemigo y Lex, 4 es igual a un corazon entero.
-    private float xpValue;
+    public string name;
+    public string description;  
 
+    [Header("Health Settings")]
+    public int maxHealth = 12; // 12 int = 3 corazones
+    private int currentHealth;
 
+    // Evento que se dispara cada vez que la vida cambia.
+    // Pasa dos parámetros: (Vida actual, Vida máxima)
+    public event Action<int, int> OnHealthChanged;
 
+    public int Health
+    {
+        get => currentHealth;
+        private set
+        {
+            // Mantenemos la vida entre 0 y el máximo
+            currentHealth = Mathf.Clamp(value, 0, maxHealth);
+            OnHealthChanged?.Invoke(currentHealth, maxHealth);
+        }
+    }
 
+    public void Initialize()
+    {
+        currentHealth = maxHealth;
+    }
 
+    public void TakeDamage(int amount)
+    {
+        Health -= amount;
+    }
 
-
-
-
+    public void Heal(int amount)
+    {
+        Health += amount;
+    }
 }

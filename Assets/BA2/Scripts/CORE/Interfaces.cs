@@ -7,3 +7,9 @@ public interface IDamageDealer
     //El daño total definitivo.
     int GetFinalDamage(int baseDamage);
 }
+public interface IHealer
+{
+    // Devuelve la cantidad de salud (en int) que restaura este objeto
+    int GetHealAmount();
+}
+
