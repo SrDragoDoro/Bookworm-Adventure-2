@@ -4,15 +4,19 @@ using UnityEngine;
 [Serializable]
 public class BaseStats
 {
+    [Header("Datos Generales")]
     public string name;
-    public string description;  
+    public string description;
+    public float xpValue;
 
-    [Header("Health Settings")]
-    public int maxHealth = 12; // 12 int = 3 corazones
+    [Header("Combate")]
+    public int baseDamage = 4; // Daño base (útil para el enemigo)
+
+    [Header("Vida (1 Corazón = 4 Puntos)")]
+    public int maxHealth = 16; // Ej: 4 corazones = 16 int
     private int currentHealth;
 
-    // Evento que se dispara cada vez que la vida cambia.
-    // Pasa dos parámetros: (Vida actual, Vida máxima)
+    // Evento vital para que HealthController dibuje los corazones
     public event Action<int, int> OnHealthChanged;
 
     public int Health
@@ -20,7 +24,6 @@ public class BaseStats
         get => currentHealth;
         private set
         {
-            // Mantenemos la vida entre 0 y el máximo
             currentHealth = Mathf.Clamp(value, 0, maxHealth);
             OnHealthChanged?.Invoke(currentHealth, maxHealth);
         }

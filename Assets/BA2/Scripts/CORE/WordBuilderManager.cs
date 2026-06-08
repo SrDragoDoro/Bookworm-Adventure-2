@@ -326,11 +326,17 @@ public class WordBuilderManager : MonoBehaviour
 
         Debug.Log($"¡Ataque ejecutado! Palabra válida. Daño total calculado: {totalDamage}");
 
-        if (lexAnimator != null)
-        {
-            lexAnimator.SetInteger("AttackPower", totalDamage);
-            lexAnimator.SetTrigger("Attack");
-        }
+        // ================= CAMBIOS PARA EL TURNO RPG =================
+
+        // 1. Cambiamos el estado a ocupado para bloquear interacciones de botones
+        BattleManager.Instance.ChangeState(BattleState.Busy);
+
+        // 2. Pasamos el daño calculado a Lex e iniciamos su secuencia de ataque
+        CharacterCombat playerCombat = BattleManager.Instance.playerCombat;
+        playerCombat.pendingDamage = totalDamage;
+        playerCombat.PerformAttack();
+
+        // =============================================================
 
         if (validWordParticles.isPlaying) validWordParticles.Stop();
         if (glowRenderer != null) glowRenderer.gameObject.SetActive(false);

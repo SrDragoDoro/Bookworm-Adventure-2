@@ -2,15 +2,30 @@ using UnityEngine;
 
 public class LexAttackController : MonoBehaviour
 {
-    [SerializeField] private GameObject tileShotPrefab;
-    [SerializeField] private Transform shootPoint; // Un objeto vacío en la boca de Lex
+    [SerializeField] private GameObject tileShotPrefab; // Tu prefab del sprite volador
+    [SerializeField] private Transform shootPoint;      // Punto de salida de la boca
 
-    // Este método lo llamará la animación de Unity
+    private CharacterCombat combatUnit;
+
+    void Awake()
+    {
+        combatUnit = GetComponent<CharacterCombat>();
+    }
+
+    // Este método lo llamará el Animation Event de tu animación de ataque
     public void ShotTile()
     {
-        if (tileShotPrefab != null && shootPoint != null)
+        if (tileShotPrefab != null && shootPoint != null && combatUnit != null)
         {
-            Instantiate(tileShotPrefab, shootPoint.position, Quaternion.identity);
+            GameObject projObj = Instantiate(tileShotPrefab, shootPoint.position, Quaternion.identity);
+            TileProjectile projectile = projObj.GetComponent<TileProjectile>();
+
+            if (projectile != null)
+            {
+                // Inyectamos los datos del combate al proyectil instanciado
+                bool isPlayer = gameObject.CompareTag("Player");
+                projectile.Setup(combatUnit.attackTarget, combatUnit.pendingDamage, isPlayer);
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8132059572289998977}
   - component: {fileID: 2029806803615827078}
   - component: {fileID: 1077678273860216643}
+  - component: {fileID: -5379910567276699446}
   m_Layer: 10
   m_Name: Lex_stunblock
   m_TagString: Untagged
@@ -179,4 +180,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c3e41f61a2de284bac4fa29f1ddc551, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Loseta
-  speed: 8
+  speed: 5
+--- !u!114 &-5379910567276699446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4943414579988276047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f66eefc5a64aa674cbda67c1bbdb9d97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TileProjectile

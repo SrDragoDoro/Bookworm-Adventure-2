@@ -1257,6 +1257,53 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4584201798144518352, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
   m_PrefabInstance: {fileID: 958133428}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &485577076
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 485577078}
+  - component: {fileID: 485577077}
+  m_Layer: 0
+  m_Name: BattleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &485577077
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485577076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d6d078d739af3e4f9cde1d742e61e49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BattleManager
+  currentState: 0
+  playerCombat: {fileID: 578521070}
+  enemyCombat: {fileID: 1474506104}
+--- !u!4 &485577078
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 485577076}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -10.20245, y: -3.75686, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &564040354
 GameObject:
   m_ObjectHideFlags: 0
@@ -1612,6 +1659,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 76af78e7320272a4f91b7ae5fa73e645, type: 3}
       insertIndex: -1
       addedObject: {fileID: 578521069}
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 76af78e7320272a4f91b7ae5fa73e645, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 578521070}
     - targetCorrespondingSourceObject: {fileID: 4845057100818070668, guid: 76af78e7320272a4f91b7ae5fa73e645, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1905375682}
@@ -1769,13 +1819,31 @@ MonoBehaviour:
   stats:
     name: Lex
     description: "Due\xF1o de la gran biblioteca"
-    maxHealth: 100
+    xpValue: 0
+    baseDamage: 4
+    maxHealth: 24
   heartPrefab: {fileID: 7211702122059940243, guid: 18edc2f873cf6314787ced7aa6acedb6, type: 3}
   heartsContainer: {fileID: 2008020721}
   spawnDirection: 1
   maxHeartsPerRow: 10
   horizontalSpacing: 0.4
   verticalSpacing: -0.4
+--- !u!114 &578521070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578521062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ce6530b3eb36b44f887359a5fbab47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterCombat
+  healthController: {fileID: 578521069}
+  unitAnimator: {fileID: 578521064}
+  attackTarget: {fileID: 1474506098}
+  pendingDamage: 0
 --- !u!1001 &589820680
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3977,6 +4045,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 7560b9522bc6efd4ea7361afa731cbc5, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1474506103}
+    - targetCorrespondingSourceObject: {fileID: -8653719598885068355, guid: 7560b9522bc6efd4ea7361afa731cbc5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1474506104}
   m_SourcePrefab: {fileID: 4843985084834002234, guid: 7560b9522bc6efd4ea7361afa731cbc5, type: 3}
 --- !u!1 &1474506097 stripped
 GameObject:
@@ -4122,7 +4193,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 1.4849893, y: -0.062207937}
+  m_Offset: {x: 1.2055117, y: -0.27181566}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -4132,7 +4203,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.9700787, y: 6.8407836}
+  m_Size: {x: 3.529034, y: 7.2599993}
   m_EdgeRadius: 0
 --- !u!114 &1474506103
 MonoBehaviour:
@@ -4149,6 +4220,8 @@ MonoBehaviour:
   stats:
     name: Stuffy
     description: El entrenador de Lex
+    xpValue: 0
+    baseDamage: 4
     maxHealth: 12
   heartPrefab: {fileID: 7211702122059940243, guid: 18edc2f873cf6314787ced7aa6acedb6, type: 3}
   heartsContainer: {fileID: 392844502}
@@ -4156,6 +4229,22 @@ MonoBehaviour:
   maxHeartsPerRow: 10
   horizontalSpacing: 0.4
   verticalSpacing: -0.4
+--- !u!114 &1474506104
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1474506097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ce6530b3eb36b44f887359a5fbab47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterCombat
+  healthController: {fileID: 1474506103}
+  unitAnimator: {fileID: 1474506099}
+  attackTarget: {fileID: 578521063}
+  pendingDamage: 0
 --- !u!1 &1484873531
 GameObject:
   m_ObjectHideFlags: 0
@@ -11345,12 +11434,82 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
+--- !u!1001 &3091093959175278341
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.4338541
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.4338541
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.4338541
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -11.314
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.6802
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3364748310162299318, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5288777984037901692, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
+      propertyPath: m_Name
+      value: item_health_nobubble_0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 864198ab3d52ca245bd65a31b43a1475, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 375898719}
   - {fileID: 1220849975}
+  - {fileID: 485577078}
   - {fileID: 2020231686}
   - {fileID: 171277406}
   - {fileID: 1003052674}
@@ -11363,3 +11522,4 @@ SceneRoots:
   - {fileID: 1946782253}
   - {fileID: 78987516}
   - {fileID: 1433447659}
+  - {fileID: 3091093959175278341}
