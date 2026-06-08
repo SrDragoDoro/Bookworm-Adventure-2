@@ -89,8 +89,9 @@ public class TileController : TilesData, IDamageDealer
 
     void Update()
     {
+        LayerOnTable();
         HandleMouseInput();
-        HandleMovement();
+        HandleMovement();        
     }
 
     #region IMPLEMENTACIÓN DE INTERFAZ
@@ -183,6 +184,30 @@ public class TileController : TilesData, IDamageDealer
         SetupTile(currentTileType, finalLetter);
 
         scrambleCoroutine = null;
+    }
+    #endregion
+
+    #region Control de Capas al Llegar al Tablero
+    public void LayerOnTable()
+    {
+        // Modifica la condición de llegada en el Update de TileController.cs
+        if (transform.position == targetPosition)
+        {
+            isMovingToTarget = false; // Ya llegó, apagamos el movimiento por código
+
+            if (isMovingBack)
+            {
+                isMovingBack = false;
+                col.isTrigger = false;
+                WordBuilderManager.Instance.CheckAndUnfreeze(); // Avisa al manager que llegó al tablero
+
+                // NUEVO: Cambiamos el orden al fondo ÚNICAMENTE cuando ya se encuentra en su posición original
+                if (sortingGroup != null)
+                {
+                    sortingGroup.sortingOrder = -5;
+                }
+            }
+        }
     }
     #endregion
 
@@ -291,11 +316,7 @@ public class TileController : TilesData, IDamageDealer
             isSelected = false;
             isMovingBack = true;
             spriteRenderer.sprite = normalSprite;
-            rb.bodyType = RigidbodyType2D.Kinematic;
-
-            // 5. ENVIAR AL FONDO: Regresamos la loseta a su estado oculto tras el tablero
-            // Ajusta este número al valor negativo necesario para que se esconda detrás de tu marco
-            if (sortingGroup != null) sortingGroup.sortingOrder = -5;
+            rb.bodyType = RigidbodyType2D.Kinematic;          
         }
 
         targetPosition = newPos;
