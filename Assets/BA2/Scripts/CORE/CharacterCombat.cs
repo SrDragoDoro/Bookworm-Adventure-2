@@ -7,13 +7,10 @@ public class CharacterCombat : MonoBehaviour
     public Animator unitAnimator;
 
     [Header("Objetivo de Ataque")]
-    public Transform attackTarget; // Para Stuffy, arrastra aquí a Lex. Para Lex, arrastra a Stuffy.
+    public Transform attackTarget; 
 
     [HideInInspector] public int pendingDamage; // Almacena temporalmente el daño del turno activo
-
-    /// <summary>
-    /// Inicia la secuencia de ataque activando el Trigger en el Animator.
-    /// </summary>
+        
     public void PerformAttack()
     {
         // Seguridad: Si la unidad está muerta, no ataca
@@ -53,13 +50,8 @@ public class CharacterCombat : MonoBehaviour
         }
     }
 
-    // ==========================================
-    // MÉTODOS PARA EVENTOS DE ANIMACIÓN (ANIMATION EVENTS)
-    // ==========================================
-
-    /// <summary>
-    /// Coloca este evento en el frame exacto donde Stuffy asesta el golpe o muerde.
-    /// </summary>
+    #region ANIMATION EVENTS
+    // Coloca este evento en el frame exacto donde Stuffy asesta el golpe o muerde.
     public void ApplyDamageEvent()
     {
         if (attackTarget == null) return;
@@ -73,9 +65,7 @@ public class CharacterCombat : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Coloca este evento en el ÚLTIMO frame de la animación de ataque de Stuffy.
-    /// </summary>
+    // Coloca este evento en el ÚLTIMO frame de la animación de ataque de Stuffy.
     public void FinishTurnEvent()
     {
         if (gameObject.CompareTag("Player"))
@@ -89,4 +79,6 @@ public class CharacterCombat : MonoBehaviour
             BattleManager.Instance.ChangeState(BattleState.PlayerTurn);
         }
     }
+
+    #endregion
 }

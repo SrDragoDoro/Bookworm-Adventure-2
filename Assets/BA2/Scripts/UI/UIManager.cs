@@ -1,8 +1,17 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public TextMeshProUGUI EnemyName;
+
+    public static Action<string> OnEnemyNameChange;
+
+    private void OnEnable()
+    {
+        OnEnemyNameChange += UpdateEnemyName;
+    }
     void Start()
     {
         
@@ -12,5 +21,10 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void UpdateEnemyName(string value)
+    {
+        EnemyName.text = value; 
     }
 }

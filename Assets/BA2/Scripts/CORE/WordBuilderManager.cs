@@ -312,6 +312,7 @@ public class WordBuilderManager : MonoBehaviour
 
         foreach (TileController tile in selectedTiles)
         {
+
             int baseLetterDamage = AlphabetData.GetBaseDamage(tile.currentLetter);
 
             if (tile is IDamageDealer damageDealer)

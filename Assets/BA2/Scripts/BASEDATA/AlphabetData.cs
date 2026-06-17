@@ -53,8 +53,6 @@ public static class AlphabetData
 
     private static void InitializeDamageTable()
     {
-        // Se eliminó la fila de la 'Ñ' ya que será procesada directamente por la 'N'
-        // Subimos el daño base de 'N' a 2 como un balance intermedio por representar a la 'Ñ'
         DamageTable = new List<LetterDamageData>
         {
             new() { letter = "A", baseDamage = 1 }, new() { letter = "B", baseDamage = 3 },

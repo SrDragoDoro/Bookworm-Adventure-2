@@ -1,15 +1,33 @@
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class GameManager : MonoBehaviour
 {      
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public static GameManager instance;
+    public DictionaryManager manager;
+
+    //DictionaryManager
+    //SoundManager
+    //BattleManager
+    //
+
+    void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+    }
+
     void Start()
     {
        
     }
 
-    // Update is called once per frame
     void Update()
     {
         

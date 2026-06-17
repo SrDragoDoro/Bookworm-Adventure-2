@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class HealthController : MonoBehaviour
 {
+    public EnemyData Data;
     public enum SpawnDirection { None, LeftToRight, RightToLeft }
 
     [Header("Datos y Referencias")]
@@ -28,6 +29,9 @@ public class HealthController : MonoBehaviour
 
     private void InitializeHearts()
     {
+        UIManager.OnEnemyNameChange?.Invoke(Data.EnemyName);
+        maxHeartsPerRow = Data.maxHeartsPerRow;
+
         // Limpiamos corazones previos si los hay
         foreach (Transform child in heartsContainer) Destroy(child.gameObject);
         heartsList.Clear();
