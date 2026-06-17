@@ -63,7 +63,7 @@ public class WordBuilderManager : MonoBehaviour
         {
             if (tile != null)
             {
-                string randomLetter = letterManager.GetRandomLetter();
+                string randomLetter = AlphabetData.GetRandomLetter();
                 tile.SetupTile(TileType.Basic, randomLetter);
             }
         }
@@ -116,7 +116,7 @@ public class WordBuilderManager : MonoBehaviour
                 GameObject newTileObj = Instantiate(tilePrefab, spawnPos, Quaternion.identity);
                 TileController newTile = newTileObj.GetComponent<TileController>();
 
-                string randomLetter = letterManager.GetRandomLetter();
+                string randomLetter = AlphabetData.GetRandomLetter();
                 newTile.SetupTile(TileType.Basic, randomLetter);
             }
         }

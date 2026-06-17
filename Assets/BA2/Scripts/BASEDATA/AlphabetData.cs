@@ -32,7 +32,7 @@ public static class AlphabetData
 
     private static void InitializeFrequencies()
     {
-        // Definimos la frecuencia (peso) en español 
+        // Se unificó la frecuencia de la 'Ñ' (1) con la 'N' (6), dando un peso total de 7 para la ficha 'N'
         Frequencies = new List<LetterFrequency>
         {
             new() { letter = "A", weight = 12 }, new() { letter = "B", weight = 2 },
@@ -41,20 +41,20 @@ public static class AlphabetData
             new() { letter = "G", weight = 3 },  new() { letter = "H", weight = 2 },
             new() { letter = "I", weight = 9 },  new() { letter = "J", weight = 1 },
             new() { letter = "K", weight = 1 },  new() { letter = "L", weight = 4 },
-            new() { letter = "M", weight = 2 },  new() { letter = "N", weight = 6 },
-            new() { letter = "Ñ", weight = 1 },  new() { letter = "O", weight = 8 },  
-            new() { letter = "P", weight = 2 },  new() { letter = "Qu", weight = 1 }, 
-            new() { letter = "R", weight = 6 },  new() { letter = "S", weight = 4 },
-            new() { letter = "T", weight = 6 },  new() { letter = "U", weight = 4 },
-            new() { letter = "V", weight = 2 },  new() { letter = "W", weight = 1 },
-            new() { letter = "X", weight = 1 },  new() { letter = "Y", weight = 2 },
-            new() { letter = "Z", weight = 1 }
+            new() { letter = "M", weight = 2 },  new() { letter = "N", weight = 7 }, // N + Ñ
+            new() { letter = "O", weight = 8 },  new() { letter = "P", weight = 2 },
+            new() { letter = "Qu", weight = 1 }, new() { letter = "R", weight = 6 },
+            new() { letter = "S", weight = 4 },  new() { letter = "T", weight = 6 },
+            new() { letter = "U", weight = 4 },  new() { letter = "V", weight = 2 },
+            new() { letter = "W", weight = 1 },  new() { letter = "X", weight = 1 },
+            new() { letter = "Y", weight = 2 },  new() { letter = "Z", weight = 1 }
         };
     }
 
     private static void InitializeDamageTable()
     {
-        // Definimos el daño base asignando recompensas altas a las letras difíciles
+        // Se eliminó la fila de la 'Ñ' ya que será procesada directamente por la 'N'
+        // Subimos el daño base de 'N' a 2 como un balance intermedio por representar a la 'Ñ'
         DamageTable = new List<LetterDamageData>
         {
             new() { letter = "A", baseDamage = 1 }, new() { letter = "B", baseDamage = 3 },
@@ -63,14 +63,13 @@ public static class AlphabetData
             new() { letter = "G", baseDamage = 2 }, new() { letter = "H", baseDamage = 4 },
             new() { letter = "I", baseDamage = 1 }, new() { letter = "J", baseDamage = 8 },
             new() { letter = "K", baseDamage = 5 }, new() { letter = "L", baseDamage = 1 },
-            new() { letter = "M", baseDamage = 3 }, new() { letter = "N", baseDamage = 1 },
-            new() { letter = "Ñ", baseDamage = 5 }, new() { letter = "O", baseDamage = 1 }, 
-            new() { letter = "P", baseDamage = 3 }, new() { letter = "Qu", baseDamage = 6 }, 
-            new() { letter = "R", baseDamage = 1 }, new() { letter = "S", baseDamage = 1 },
-            new() { letter = "T", baseDamage = 1 }, new() { letter = "U", baseDamage = 1 },
-            new() { letter = "V", baseDamage = 4 }, new() { letter = "W", baseDamage = 8 },
-            new() { letter = "X", baseDamage = 8 }, new() { letter = "Y", baseDamage = 4 },
-            new() { letter = "Z", baseDamage = 10 }
+            new() { letter = "M", baseDamage = 3 }, new() { letter = "N", baseDamage = 2 }, // Ajustado por la Ñ
+            new() { letter = "O", baseDamage = 1 }, new() { letter = "P", baseDamage = 3 },
+            new() { letter = "Qu", baseDamage = 6 }, new() { letter = "R", baseDamage = 1 },
+            new() { letter = "S", baseDamage = 1 }, new() { letter = "T", baseDamage = 1 },
+            new() { letter = "U", baseDamage = 1 }, new() { letter = "V", baseDamage = 4 },
+            new() { letter = "W", baseDamage = 8 }, new() { letter = "X", baseDamage = 8 },
+            new() { letter = "Y", baseDamage = 4 }, new() { letter = "Z", baseDamage = 10 }
         };
     }
 
@@ -93,7 +92,30 @@ public static class AlphabetData
 
     public static int GetBaseDamage(string letter)
     {
-        var data = DamageTable.Find(d => d.letter.Equals(letter, StringComparison.OrdinalIgnoreCase));
+        // 2. Normalizamos la letra entrante antes de buscarla en la tabla de daños
+        string normalizedLetter = NormalizeLetter(letter);
+
+        var data = DamageTable.Find(d => d.letter.Equals(normalizedLetter, StringComparison.OrdinalIgnoreCase));
         return data.letter != null ? data.baseDamage : 1;
+    }
+
+    
+    // Convierte variantes de caracteres (tildes, diéresis, Ñ) a su letra base representativa. 
+    public static string NormalizeLetter(string letter)
+    {
+        if (string.IsNullOrEmpty(letter)) return "A";
+
+        string upper = letter.ToUpper();
+
+        return upper switch
+        {
+            "Á" => "A",
+            "É" => "E",
+            "Í" => "I",
+            "Ó" => "O",
+            "Ú" or "Ü" => "U", // Triple caso para la U
+            "Ñ" => "N",        // Doble caso para la N
+            _ => upper
+        };
     }
 }
