@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-/*
+/* quietar metodos de ataque y daño de las baldodosas, este script solo debe encargarse de la 
+ * logica de formacion de palabras, validacion y comunicacion con el tablero, el daño y ataque 
+ * lo maneja cada loseta individualmente, asi el WordBuilderManager no se sobrecarga con 
+ * responsabilidades que no le corresponden.
 El WordBuilderManager se encarga de coordinar las
 acciones entre las baldosas y el tablero con relación
 al escenario, asegurándose de que las baldosas se muevan 
-correctamente y que el juego funcione sin problemas. 
+correctamente y que la formacion de palabras funcione. 
 */
 
 public class WordBuilderManager : MonoBehaviour
@@ -129,7 +132,7 @@ public class WordBuilderManager : MonoBehaviour
     #region Word Validation and Visual Feedback  
     public void EvaluateCurrentWord()
     {
-        if (selectedTiles.Count == 0)
+        if (selectedTiles.Count == 0 || selectedTiles.Count<=2) // Si no hay baldosas seleccionadas, la palabra no es válida
         {
             isCurrentWordValid = false;
             attackButtonUI.interactable = false;

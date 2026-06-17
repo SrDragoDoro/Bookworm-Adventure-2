@@ -14,7 +14,7 @@ public enum Gems
 public class CharacterData : ScriptableObject
 {
     public string LetterID = "";
-    [Range(0,100)]public int Frequency = 0;
-    public int BaseDamage;
+    [Range(0.0f,100f)]public float Frequency = 0;
+    public float BaseDamage; //antes era int
     public Gems gem = Gems.Normal;
 }

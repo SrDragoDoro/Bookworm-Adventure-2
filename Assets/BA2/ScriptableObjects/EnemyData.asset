@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 017c3e20ed1bf62438653639eb1154b5, type: 3}
   m_Name: EnemyData
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  EnemyName: Frijolito
+  EnemyName: Stuffy
   maxHeartsPerRow: 10
   BaseAttack: 0
   MeleeAttackType: 1

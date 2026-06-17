@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: A
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   LetterID: A
-  Frequency: 74
+  Frequency: 69
   BaseDamage: 1
   gem: 1

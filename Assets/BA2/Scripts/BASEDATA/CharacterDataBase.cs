@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using Sirenix.OdinInspector;
-
+// Este scriptable object es el encargado de almacenar los datos de cada letra, como su daño base, su tipo de gema, etc.
 [CreateAssetMenu(fileName = "CharacterDataBase", menuName = "BookWorm/CharacterDataBase")]
 public class CharacterDataBase : SerializedScriptableObject
 {
@@ -35,10 +35,11 @@ public class CharacterDataBase : SerializedScriptableObject
         int total = 0;  
         for (int i = 0; i < word.Length; i++)
         {
-            total += DataBase[word[i].ToString()].BaseDamage;
+            total += (int)DataBase[word[i].ToString()].BaseDamage;
         }
         return total;
     }
+
     /*public CharacterData GetRandomChar()
     {
         // 1. Copy dictionary keys to an indexable List

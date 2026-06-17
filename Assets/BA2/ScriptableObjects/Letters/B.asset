@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48809487a51e45d438320d956bc876c1, type: 3}
   m_Name: B
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
-  LetterID: 
-  Frequency: 0
-  BaseDamage: 0
+  LetterID: B
+  Frequency: 64
+  BaseDamage: 2
   gem: 1

@@ -31,12 +31,15 @@ public class BattleManager : MonoBehaviour
         if (currentState == BattleState.PlayerTurn)
         {
             // Al volver al turno del jugador, evaluamos la palabra en el tablero para activar el botón
-            WordBuilderManager.Instance.EvaluateCurrentWord();
+            WordBuilderManager.Instance.EvaluateCurrentWord();//Aplicar singleton
+            GameManager.instance.wordBuilderManager.ScrambleAllTiles();
         }
         else
         {
             // Bloquea por completo el botón de ataque si es turno enemigo o si hay animaciones corriendo
             WordBuilderManager.Instance.attackButtonUI.interactable = false;
+            // También bloquea el botón de revolver el tablero
+
         }
 
         if (currentState == BattleState.EnemyTurn)
