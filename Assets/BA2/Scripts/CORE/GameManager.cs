@@ -11,11 +11,12 @@ public class GameManager : MonoBehaviour
     //
     public TileController tileController;
     public WordBuilderManager wordBuilderManager;
+    public StageTransition stageTransition;
 
     //Data
     public CharacterData characterData;
     public EnemyData enemyData;
-    public CharacterDataBase characterDataBase;
+    [SerializeField] public CharacterDataBase characterDataBase;
     public ModifiersDataBase modifiersData;
 
 

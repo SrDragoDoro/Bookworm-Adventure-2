@@ -16,11 +16,11 @@ public enum TileAttackType
 }
 
 
-[CreateAssetMenu(fileName = "EnemyData", menuName = "BookWorms/EnemyData")]
+[CreateAssetMenu(fileName = "EnemyData", menuName = "BookWorm/EnemyData")]
 public class EnemyData : ScriptableObject
 {
     public string EnemyName;
-    public int maxHeartsPerRow = 10;
+    public int maxHealth = 10; //Vida actual
     public int BaseAttack;
     public MeleeAttackType MeleeAttackType;
     public TileAttackType TileAttackType;

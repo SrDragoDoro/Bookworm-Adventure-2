@@ -45,11 +45,11 @@ public class TileProjectile : MonoBehaviour
         // Cambio de turnos coordinado post-impacto
         if (isPlayerProjectile)
         {
-            BattleManager.Instance.ChangeState(BattleState.EnemyTurn);
+            GameManager.instance.battleManager.ChangeState(BattleState.EnemyTurn);
         }
         else
         {
-            BattleManager.Instance.ChangeState(BattleState.PlayerTurn);
+            GameManager.instance.battleManager.ChangeState(BattleState.PlayerTurn);
         }
 
         Destroy(gameObject);

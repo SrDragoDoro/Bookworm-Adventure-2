@@ -14,7 +14,7 @@ public class HealthController : MonoBehaviour
 
     [Header("Configuración de Cuadrícula")]
     public SpawnDirection spawnDirection = SpawnDirection.LeftToRight;
-    public int maxHeartsPerRow = 10;
+    public int maxHeartsPerRow = 10; // Número máximo de corazones por fila antes de saltar a la siguiente
     public float horizontalSpacing = 0.4f;
     public float verticalSpacing = -0.4f; // Negativo para que baje de fila
 
@@ -30,7 +30,7 @@ public class HealthController : MonoBehaviour
     private void InitializeHearts()
     {
         UIManager.OnEnemyNameChange?.Invoke(Data.EnemyName);
-        maxHeartsPerRow = Data.maxHeartsPerRow;
+        maxHeartsPerRow = Data.maxHealth;
 
         // Limpiamos corazones previos si los hay
         foreach (Transform child in heartsContainer) Destroy(child.gameObject);

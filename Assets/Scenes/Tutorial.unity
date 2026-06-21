@@ -2154,7 +2154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55074f9d081c1964c95ceb110a34c22d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthController
-  Data: {fileID: 11400000, guid: 14ad3b0e2423f9f47b5d730a6b2b8f13, type: 2}
+  Data: {fileID: 11400000, guid: 955f0f1647446d947b8e6500a79a91cf, type: 2}
   stats:
     name: Lex
     description: "Due\xF1o de la gran biblioteca"
@@ -3233,6 +3233,7 @@ GameObject:
   - component: {fileID: 1003052677}
   - component: {fileID: 1003052678}
   - component: {fileID: 1003052679}
+  - component: {fileID: 1003052680}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3351,6 +3352,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   EnemyName: {fileID: 1866035892}
+--- !u!114 &1003052680
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1003052672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24b7ee0dc425f4144b6ec09f9bbea03e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  manager: {fileID: 0}
+  battleManager: {fileID: 0}
+  uiManager: {fileID: 0}
+  tileController: {fileID: 0}
+  wordBuilderManager: {fileID: 0}
+  characterData: {fileID: 0}
+  enemyData: {fileID: 0}
+  characterDataBase: {fileID: 11400000, guid: c280e08c6d31e534a8736152a95822f0, type: 2}
+  modifiersData: {fileID: 0}
 --- !u!1001 &1022613419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6986,7 +7008,7 @@ MonoBehaviour:
   validWordSound: {fileID: 2045025688}
   lexAnimator: {fileID: 578521064}
   tilePrefab: {fileID: 6343342208319466643, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
-  letterManager: {fileID: 0}
+  characterData: {fileID: 11400000, guid: c280e08c6d31e534a8736152a95822f0, type: 2}
   spawnHeight: 8
   verticalSpacing: 1.2
   wordZoneCenter: {fileID: 2045025684}

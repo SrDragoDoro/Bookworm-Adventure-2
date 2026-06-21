@@ -12,7 +12,7 @@ movimiento hacia el tablero o hacia su posición
 original, y su estado (seleccionada o no). 
 */
 
-public class TileController : TilesData, IDamageDealer
+public class TileController : TilesData
 {
     private WordBuilderManager wordBuilderManager;
 
@@ -93,17 +93,6 @@ public class TileController : TilesData, IDamageDealer
         HandleMouseInput();
         HandleMovement();        
     }
-
-    #region IMPLEMENTACIÓN DE INTERFAZ
-    //Solo proyección, este método aun no hace daño
-    public int GetFinalDamage(int baseDamage)
-    {
-        // La loseta calcula su daño multiplicando el valor base de la letra por su multiplicador de gema
-        return baseDamage * currentDamageMultiplier;
-    }
-    #endregion
-
-
     #region Glow
    
     // Activa el resplandor de esta loseta adaptando el sprite según su posición en la palabra.
@@ -139,7 +128,6 @@ public class TileController : TilesData, IDamageDealer
     }
     #endregion
 
-
     #region Revolver Letras
 
     // Inicia el efecto visual de revolver letras.
@@ -166,7 +154,8 @@ public class TileController : TilesData, IDamageDealer
         for (int i = 0; i < scrambleCycles; i++)
         {
             // Obtenemos una letra aleatoria y la mostramos SIN alterar el tipo visual
-            string fakeLetter = AlphabetData.GetRandomLetter();
+            string fakeLetter = GameManager.instance.characterDataBase.GetRandomLetter();
+            //string fakeLetter = AlphabetData.GetRandomLetter();
 
             // Actualizamos solo el texto y la variable interna
             currentLetter = fakeLetter;
@@ -177,7 +166,8 @@ public class TileController : TilesData, IDamageDealer
         }
 
         // 2. Resultado Final Real
-        string finalLetter = AlphabetData.GetRandomLetter();
+        string finalLetter = GameManager.instance.characterDataBase.GetRandomLetter();
+        //string finalLetter = AlphabetData.GetRandomLetter();
 
         // Aquí SÍ llamamos a tu método completo por si quieres que el "revolver" 
         // también tenga una pequeña probabilidad de convertir la loseta en una Gema

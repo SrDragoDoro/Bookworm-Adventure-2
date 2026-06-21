@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.Events;
+
 
 /* quietar metodos de ataque y daño de las baldodosas, este script solo debe encargarse de la 
  * logica de formacion de palabras, validacion y comunicacion con el tablero, el daño y ataque 
@@ -28,7 +30,7 @@ public class WordBuilderManager : MonoBehaviour
 
     [Header("Generación de Losetas")]
     public GameObject tilePrefab;        // El prefab base de tu loseta
-    public LetterManager letterManager;  // Referencia al script de probabilidades
+    //public LetterManager letterManager;  // Referencia al script de probabilidades    
     public float spawnHeight = 8f;       // Altura en Y (fuera de cámara) desde donde caerán
     public float verticalSpacing = 1.2f; // Espacio vertical al instanciar varias en la misma columna
 
@@ -66,7 +68,9 @@ public class WordBuilderManager : MonoBehaviour
         {
             if (tile != null)
             {
-                string randomLetter = AlphabetData.GetRandomLetter();
+                //string randomLetter = AlphabetData.GetRandomLetter();
+                string randomLetter = GameManager.instance.characterDataBase.GetRandomLetter();
+
                 tile.SetupTile(TileType.Basic, randomLetter);
             }
         }
@@ -119,7 +123,8 @@ public class WordBuilderManager : MonoBehaviour
                 GameObject newTileObj = Instantiate(tilePrefab, spawnPos, Quaternion.identity);
                 TileController newTile = newTileObj.GetComponent<TileController>();
 
-                string randomLetter = AlphabetData.GetRandomLetter();
+                //string randomLetter = AlphabetData.GetRandomLetter();
+                string randomLetter = GameManager.instance.characterDataBase.GetRandomLetter();
                 newTile.SetupTile(TileType.Basic, randomLetter);
             }
         }
@@ -315,8 +320,8 @@ public class WordBuilderManager : MonoBehaviour
 
         foreach (TileController tile in selectedTiles)
         {
-
-            int baseLetterDamage = AlphabetData.GetBaseDamage(tile.currentLetter);
+            //int baseLetterDamage = AlphabetData.GetBaseDamage(tile.currentLetter);
+            int baseLetterDamage = GameManager.instance.characterDataBase.GetTotalDamage(tile.currentLetter);
 
             if (tile is IDamageDealer damageDealer)
             {
@@ -333,10 +338,10 @@ public class WordBuilderManager : MonoBehaviour
         // ================= CAMBIOS PARA EL TURNO RPG =================
 
         // 1. Cambiamos el estado a ocupado para bloquear interacciones de botones
-        BattleManager.Instance.ChangeState(BattleState.Busy);
+        GameManager.instance.battleManager.ChangeState(BattleState.Busy);
 
         // 2. Pasamos el daño calculado a Lex e iniciamos su secuencia de ataque
-        CharacterCombat playerCombat = BattleManager.Instance.playerCombat;
+        CharacterCombat playerCombat = GameManager.instance.battleManager.playerCombat;
         playerCombat.pendingDamage = totalDamage;
         playerCombat.PerformAttack();
 

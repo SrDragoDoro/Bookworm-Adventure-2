@@ -24,7 +24,11 @@ public class StageTransition : MonoBehaviour
     [Tooltip("Añade aquí funciones que deben ocurrir cuando termine de moverse.")]
     public UnityEvent onTransitionComplete;
 
+    public EnemyData currentEnemy;
+
     private bool isMoving = false;
+    private bool isFinished = false;
+
 
     #region CÓDIGOS DE PRUEBA
     void Update()
@@ -37,10 +41,18 @@ public class StageTransition : MonoBehaviour
     }
     #endregion
 
+    public void DeadEnemy()
+    {
+        if (!isFinished)
+        {
+            isFinished = true;
+        }
+    }
+
     [ContextMenu("Ejecutar Transición de Prueba")]
     public void OnEnemyDefeated()
     {
-        if (!isMoving)
+        if (!isMoving ||isFinished)
         {
             StartCoroutine(MoveSceneCoutine());
         }

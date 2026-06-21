@@ -10,7 +10,7 @@ public enum Gems
     Purple,
 }
 
-[CreateAssetMenu(fileName = "CharacterData", menuName = "BookWorms/CharacterData")]
+[CreateAssetMenu(fileName = "CharacterData", menuName = "BookWorm/CharacterData")]
 public class CharacterData : ScriptableObject
 {
     public string LetterID = "";

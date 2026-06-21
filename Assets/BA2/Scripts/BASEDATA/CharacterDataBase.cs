@@ -7,6 +7,7 @@ using Sirenix.OdinInspector;
 public class CharacterDataBase : SerializedScriptableObject
 {
     [SerializeField]public Dictionary<string, CharacterData> DataBase;
+    private float _totalWeight = 0f;
 
     public CharacterData GetChar(string value ,out Gems gem)
     {
@@ -28,6 +29,45 @@ public class CharacterDataBase : SerializedScriptableObject
 
         return null;
 
+    }
+
+    // 2. Quitamos el 'static' para poder leer el DataBase de esta instancia
+    public void CalculateTotalWeight()
+    {
+        _totalWeight = 0f;
+        // Iteramos sobre el diccionario directamente
+        foreach (var kvp in DataBase) //kvp es un KeyValuePair<string, CharacterData>
+        {
+            // Sumamos la variable Frequency de cada CharacterData
+            _totalWeight += kvp.Value.Frequency;
+        }
+    }
+
+    // 3. Quitamos el 'static' y usamos floats para la probabilidad
+    public string GetRandomLetter()
+    {
+        // Medida de seguridad: Si el peso es 0 (ej. primera vez que se llama), lo calculamos
+        if (_totalWeight <= 0f)
+        {
+            CalculateTotalWeight();
+        }
+
+        // Generamos un float aleatorio entre 0 y el peso total
+        float randomValue = UnityEngine.Random.Range(0f, _totalWeight);
+
+        foreach (var kvp in DataBase)
+        {
+            randomValue -= kvp.Value.Frequency;
+
+            // Si el valor llega a 0 o menos, esta es la letra elegida
+            if (randomValue <= 0f)
+            {
+                return kvp.Key; // Retornamos la clave del diccionario (que asumo es la letra)
+            }
+        }
+
+        // Fallback de seguridad en caso de errores de redondeo de punto flotante
+        return "A";
     }
 
     public int GetTotalDamage(string word)

@@ -3,9 +3,9 @@ using UnityEngine;
 
 public enum BattleState { PlayerTurn, EnemyTurn, Busy }
 
-public class BattleManager : MonoBehaviour
+public class BattleManager : MonoBehaviour, IDamageDealer
 {
-    public static BattleManager Instance;
+    //public static BattleManager Instance;
 
     [Header("Estado del Combate")]
     public BattleState currentState;
@@ -16,7 +16,7 @@ public class BattleManager : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
+        //Instance = this;
     }
 
     void Start()
@@ -59,4 +59,13 @@ public class BattleManager : MonoBehaviour
             enemyCombat.PerformAttack();
         }
     }
+
+
+    public int GetFinalDamage(int baseDamage)
+    {
+
+
+        return baseDamage; // Por ahora, no hay multiplicadores ni efectos adicionales, pero aquí es donde se aplicarían.
+    }
+
 }

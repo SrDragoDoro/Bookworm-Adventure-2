@@ -71,12 +71,12 @@ public class CharacterCombat : MonoBehaviour
         if (gameObject.CompareTag("Player"))
         {
             // Si Lex terminó de atacar, pasa al turno del enemigo
-            BattleManager.Instance.ChangeState(BattleState.EnemyTurn);
+            GameManager.instance.battleManager.ChangeState(BattleState.EnemyTurn);
         }
         else
         {
             // Si Stuffy terminó de atacar, le devuelve el turno al jugador
-            BattleManager.Instance.ChangeState(BattleState.PlayerTurn);
+            GameManager.instance.battleManager.ChangeState(BattleState.PlayerTurn);
         }
     }
 
