@@ -8,7 +8,7 @@ public class HealthController : MonoBehaviour
     public enum SpawnDirection { None, LeftToRight, RightToLeft }
 
     [Header("Datos y Referencias")]
-    public BaseStats stats;
+    //public BaseStats stats;
     public GameObject heartPrefab;
     public Transform heartsContainer; // El objeto padre donde se crearán los corazones
 
@@ -22,22 +22,23 @@ public class HealthController : MonoBehaviour
 
     void Start()
     {
-        stats.Initialize();
-        stats.OnHealthChanged += UpdateHeartsDisplay;
+        Data.Initialize(); 
+        Data.OnHealthChanged += UpdateHeartsDisplay;
         InitializeHearts();
     }
 
     private void InitializeHearts()
     {
-        UIManager.OnEnemyNameChange?.Invoke(Data.EnemyName);
-        maxHeartsPerRow = Data.maxHealth;
+        UIManager.OnEnemyNameChange?.Invoke(Data.nameEntity);
+        //maxHeartsPerRow = Data.maxHeartsPerRow;// Actualizamos el valor de maxHeartsPerRow según los datos del enemigo
+        //stats.maxHealth = Data.maxHealth; // Actualizamos la salud máxima según los datos del enemigo
 
         // Limpiamos corazones previos si los hay
         foreach (Transform child in heartsContainer) Destroy(child.gameObject);
         heartsList.Clear();
 
         // Calculamos cuántos corazones enteros necesitamos como máximo
-        int totalHearts = Mathf.CeilToInt((float)stats.maxHealth / 4f);
+        int totalHearts = Mathf.CeilToInt((float)Data.maxHealth / 4f);
 
         for (int i = 0; i < totalHearts; i++)
         {
@@ -63,7 +64,7 @@ public class HealthController : MonoBehaviour
         }
 
         // Forzamos la primera actualización real para reflejar la vida exacta actual
-        UpdateHeartsDisplay(stats.Health, stats.maxHealth);
+        UpdateHeartsDisplay(Data.GetHealth(), Data.maxHealth);
     }
 
     private void UpdateHeartsDisplay(int currentHealth, int maxHealth)
@@ -92,5 +93,5 @@ public class HealthController : MonoBehaviour
 
     // Método de prueba rápida desde un botón o evento
     [Button]
-    public void TestDamage(int dmg) => stats.TakeDamage(dmg);
+    public void TestDamage(int dmg) => Data.TakeDamage(dmg);
 }

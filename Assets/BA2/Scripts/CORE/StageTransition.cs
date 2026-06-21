@@ -41,18 +41,52 @@ public class StageTransition : MonoBehaviour
     }
     #endregion
 
+    void OnEnable()
+    {
+        if (currentEnemy != null)
+        {
+            currentEnemy.OnHealthChanged += OnEnemyHealthChanged;
+        }
+    }
+
+    void OnDisable()
+    {
+        if (currentEnemy != null)
+        {
+            currentEnemy.OnHealthChanged -= OnEnemyHealthChanged;
+        }
+    }
+
+    private void OnEnemyHealthChanged(int currentHealth, int maxHealth)
+    {
+        // Si la vida llega a cero, disparamos la transición
+        if (currentHealth <= 0)
+        {
+            DeadEnemy();
+        }
+    }
+
+    /// <summary>
+    /// Comprueba si el enemigo actual está muerto y, si es así, lanza la transición de escena.
+    /// </summary>
     public void DeadEnemy()
     {
-        if (!isFinished)
+        if (currentEnemy == null) return;
+
+        // Usamos la propiedad Health del EnemyData si está disponible
+        int currentHealth = currentEnemy.Health;
+
+        if (currentHealth <= 0 && !isMoving && !isFinished)
         {
             isFinished = true;
+            StartCoroutine(MoveSceneCoutine());
         }
     }
 
     [ContextMenu("Ejecutar Transición de Prueba")]
     public void OnEnemyDefeated()
     {
-        if (!isMoving ||isFinished)
+        if (!isMoving || !isFinished)
         {
             StartCoroutine(MoveSceneCoutine());
         }

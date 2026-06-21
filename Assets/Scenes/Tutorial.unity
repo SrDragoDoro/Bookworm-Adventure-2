@@ -633,6 +633,7 @@ MonoBehaviour:
   onTransitionComplete:
     m_PersistentCalls:
       m_Calls: []
+  currentEnemy: {fileID: 11400000, guid: 14ad3b0e2423f9f47b5d730a6b2b8f13, type: 2}
 --- !u!4 &171277406
 Transform:
   m_ObjectHideFlags: 0
@@ -2155,12 +2156,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthController
   Data: {fileID: 11400000, guid: 955f0f1647446d947b8e6500a79a91cf, type: 2}
-  stats:
-    name: Lex
-    description: "Due\xF1o de la gran biblioteca"
-    xpValue: 0
-    baseDamage: 4
-    maxHealth: 24
   heartPrefab: {fileID: 7211702122059940243, guid: 18edc2f873cf6314787ced7aa6acedb6, type: 3}
   heartsContainer: {fileID: 2008020721}
   spawnDirection: 1
@@ -3364,11 +3359,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24b7ee0dc425f4144b6ec09f9bbea03e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  manager: {fileID: 0}
-  battleManager: {fileID: 0}
+  manager: {fileID: 1220849974}
+  battleManager: {fileID: 485577077}
   uiManager: {fileID: 0}
   tileController: {fileID: 0}
   wordBuilderManager: {fileID: 0}
+  stageTransition: {fileID: 0}
   characterData: {fileID: 0}
   enemyData: {fileID: 0}
   characterDataBase: {fileID: 11400000, guid: c280e08c6d31e534a8736152a95822f0, type: 2}
@@ -4957,12 +4953,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthController
   Data: {fileID: 11400000, guid: 14ad3b0e2423f9f47b5d730a6b2b8f13, type: 2}
-  stats:
-    name: Stuffy
-    description: El entrenador de Lex
-    xpValue: 0
-    baseDamage: 7
-    maxHealth: 12
   heartPrefab: {fileID: 7211702122059940243, guid: 18edc2f873cf6314787ced7aa6acedb6, type: 3}
   heartsContainer: {fileID: 392844502}
   spawnDirection: 2
@@ -7008,7 +6998,6 @@ MonoBehaviour:
   validWordSound: {fileID: 2045025688}
   lexAnimator: {fileID: 578521064}
   tilePrefab: {fileID: 6343342208319466643, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
-  characterData: {fileID: 11400000, guid: c280e08c6d31e534a8736152a95822f0, type: 2}
   spawnHeight: 8
   verticalSpacing: 1.2
   wordZoneCenter: {fileID: 2045025684}

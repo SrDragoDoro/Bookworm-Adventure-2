@@ -39,7 +39,7 @@ public class TileProjectile : MonoBehaviour
         if (targetHealth != null)
         {
             // Aquí se aplica el daño real a las estadísticas y se caen los corazones
-            targetHealth.stats.TakeDamage(damageToApply);
+            targetHealth.Data.TakeDamage(damageToApply);
         }
 
         // Cambio de turnos coordinado post-impacto

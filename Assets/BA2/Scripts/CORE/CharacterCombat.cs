@@ -14,7 +14,7 @@ public class CharacterCombat : MonoBehaviour
     public void PerformAttack()
     {
         // Seguridad: Si la unidad está muerta, no ataca
-        if (healthController != null && healthController.stats.Health <= 0) return;
+        if (healthController != null && healthController.Data.Health <= 0) return;
 
         if (gameObject.CompareTag("Player"))
         {
@@ -28,9 +28,9 @@ public class CharacterCombat : MonoBehaviour
         {
             // TURNO DEL ENEMIGO (Stuffy):
             // Leemos directamente el daño base de sus BaseStats asignadas en su HealthController
-            if (healthController != null && healthController.stats != null)
+            if (healthController != null && healthController.Data != null)
             {
-                pendingDamage = healthController.stats.baseDamage;
+                pendingDamage = healthController.Data.baseDamage;
             }
             else
             {
@@ -60,7 +60,7 @@ public class CharacterCombat : MonoBehaviour
         if (targetHealth != null)
         {
             // Aplica el daño guardado en las estadísticas del objetivo
-            targetHealth.stats.TakeDamage(pendingDamage);
+            targetHealth.Data.TakeDamage(pendingDamage);
             Debug.Log($"[COMBATE] {gameObject.name} aplicó {pendingDamage} de daño a {attackTarget.name}");
         }
     }

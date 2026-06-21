@@ -23,7 +23,7 @@ public class HealingPotion : MonoBehaviour, IHealer
             if (healthObj != null)
             {
                 // 3. Lo curamos
-                healthObj.stats.Heal(GetHealAmount());
+                healthObj.Data.Heal(GetHealAmount());
 
                 // TODO: Puedes agregar un AudioSource.PlayClipAtPoint o instanciar partículas aquí antes de destruir
 

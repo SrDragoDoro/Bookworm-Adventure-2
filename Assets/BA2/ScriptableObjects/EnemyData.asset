@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 017c3e20ed1bf62438653639eb1154b5, type: 3}
   m_Name: EnemyData
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  EnemyName: Stuffy
-  maxHeartsPerRow: 10
-  BaseAttack: 0
   MeleeAttackType: 1
   TileAttackType: 1
+  nameEntity: Stuffy
+  description: Best friend
+  xpValue: 0
+  baseDamage: 4
+  maxHealth: 4

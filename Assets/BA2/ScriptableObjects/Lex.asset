@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 017c3e20ed1bf62438653639eb1154b5, type: 3}
   m_Name: Lex
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
-  EnemyName: Lex
-  maxHeartsPerRow: 10
-  BaseAttack: 0
-  MeleeAttackType: 0
-  TileAttackType: 0
+  MeleeAttackType: 1
+  TileAttackType: 1
+  nameEntity: Lex
+  description: The bookworm
+  xpValue: 0
+  baseDamage: 5
+  maxHealth: 12
