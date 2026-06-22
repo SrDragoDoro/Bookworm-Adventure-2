@@ -70,14 +70,16 @@ public class CharacterDataBase : SerializedScriptableObject
         return "A";
     }
 
-    public int GetTotalDamage(string word)
+    public int GetTotalDamage(string tileLetter)
     {
-        int total = 0;  
-        for (int i = 0; i < word.Length; i++)
+        // Como ahora mandas letra por letra desde la loseta (ej. "A" o "Qu"),
+        // solo necesitamos buscar esa clave exacta directamente.
+        if (DataBase.ContainsKey(tileLetter))
         {
-            total += (int)DataBase[word[i].ToString()].BaseDamage;
+            return (int)DataBase[tileLetter].BaseDamage;
         }
-        return total;
+
+        return 0; // Si por algún motivo no existe, devuelve 0 daño
     }
 
     /*public CharacterData GetRandomChar()

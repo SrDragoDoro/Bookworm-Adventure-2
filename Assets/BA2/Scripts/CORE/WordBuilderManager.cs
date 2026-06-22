@@ -170,11 +170,21 @@ public class WordBuilderManager : MonoBehaviour
             if (validWordSound != null && !validWordSound.isPlaying) validWordSound.Play();
 
             int totalTiles = selectedTiles.Count;
+            int charIndex = 0; // NUEVO: Llevamos el control de qué parte de la palabra estamos leyendo
 
             for (int i = 0; i < totalTiles; i++)
             {
-                // CAMBIO: Transformamos visualmente la letra. (Ej: Si el jugador puso 'A', se convierte en 'Á')
-                selectedTiles[i].SetVisualLetter(correctedWord[i]);
+                // Vemos cuántos caracteres tiene la loseta original (Ej: "A" = 1, "Qu" = 2)
+                int letterLength = selectedTiles[i].currentLetter.Length;
+
+                // Extraemos ese mismo número de caracteres de la palabra corregida
+                string tileCorrectText = correctedWord.Substring(charIndex, letterLength);
+
+                // CAMBIO: Le pasamos el texto exacto a la loseta
+                selectedTiles[i].SetVisualLetter(tileCorrectText);
+
+                // Avanzamos el índice para la siguiente loseta
+                charIndex += letterLength;
 
                 if (totalTiles == 1) selectedTiles[i].EnableTileGlow(1);
                 else if (i == 0) selectedTiles[i].EnableTileGlow(0);

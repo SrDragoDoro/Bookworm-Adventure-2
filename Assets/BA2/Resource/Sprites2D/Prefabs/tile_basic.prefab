@@ -312,6 +312,8 @@ MonoBehaviour:
   currentLetter: 
   scrambleCycles: 6
   scrambleDelay: 0.08
+  normalFontSize: 6
+  doubleLetterFontSize: 5
   originalPosition: {x: 0, y: 0, z: 0}
   isSelected: 0
   isMovingBack: 0
@@ -612,7 +614,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -0.081792355, y: 0, z: -0.077121735, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   _SortingLayer: 0

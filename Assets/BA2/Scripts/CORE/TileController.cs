@@ -46,6 +46,10 @@ public class TileController : TilesData
     [SerializeField] private int scrambleCycles = 6;           // Cuántas letras falsas mostrará antes de la real
     [SerializeField] private float scrambleDelay = 0.08f;      // Tiempo entre cada cambio de letra (en segundos)
 
+    [Header("Configuración de Tamaño de Fuente")]
+    [SerializeField] private float normalFontSize = 1f; // Pon aquí el tamaño por defecto de tus letras en el Inspector
+    [SerializeField] private float doubleLetterFontSize = 0.5f; // El tamaño más pequeño para "QU" o similares
+
     private Coroutine scrambleCoroutine;     // Para detenerla si el jugador interactúa rápido (llamados simultaneos)
 
     private Rigidbody2D rb;
@@ -159,7 +163,7 @@ public class TileController : TilesData
 
             // Actualizamos solo el texto y la variable interna
             currentLetter = fakeLetter;
-            if (textMesh != null) textMesh.text = currentLetter;
+            if (textMesh != null) UpdateTextFontSize(currentLetter);//textMesh.text = currentLetter;
 
             // Esperamos unos milisegundos antes del siguiente cambio
             yield return new WaitForSeconds(scrambleDelay);
@@ -202,24 +206,42 @@ public class TileController : TilesData
     #endregion
 
     #region Control Visual de Acentos
-    // Cambia el texto a su versión con tilde/eñe, pero mantiene la lógica intacta
-    public void SetVisualLetter(char correctCharacter)
+    // CAMBIO: Ahora recibe un 'string' en lugar de un 'char'
+    public void SetVisualLetter(string correctText)
     {
-        if (textMesh != null)
-        {
-            textMesh.text = correctCharacter.ToString().ToUpper();
-        }
+        // Usamos la función que formatea todo correctamente (Qu en vez de QU)
+        UpdateTextFontSize(correctText);
     }
 
     // Devuelve la loseta a su letra original sin tilde si la palabra se desarma
     public void ResetVisualLetter()
     {
-        if (textMesh != null)
-        {
-            textMesh.text = currentLetter.ToUpper();
-        }
+        // Usamos la función que formatea todo correctamente
+        UpdateTextFontSize(currentLetter);
     }
     #endregion
+
+    // Reemplaza o añade este método para actualizar el texto de forma segura controlando el tamaño
+    public void UpdateTextFontSize(string textValue)
+    {
+        if (textMesh == null || string.IsNullOrEmpty(textValue)) return;
+
+        // Formateamos el texto: Primera letra mayúscula, el resto minúsculas.
+        // Ej: "qU" o "qu" se convierten en "Qu". "a" se convierte en "A".
+        string formattedText = char.ToUpper(textValue[0]) + textValue.Substring(1).ToLower();
+
+        textMesh.text = formattedText;
+
+        // Si el texto tiene 2 o más letras (como "Qu"), reducimos el tamaño de la fuente
+        if (textValue.Length > 1)
+        {
+            textMesh.fontSize = doubleLetterFontSize;
+        }
+        else
+        {
+            textMesh.fontSize = normalFontSize;
+        }
+    }
 
     // Llama a esta función justo después de instanciar la loseta
     // para definir qué es (Gema, Básica, etc.) y qué letra tiene.
@@ -230,7 +252,7 @@ public class TileController : TilesData
 
         if (textMesh != null)
         {
-            textMesh.text = currentLetter;
+            UpdateTextFontSize(currentLetter);
         }
         // Buscar el diseño correspondiente en nuestra base de datos
         foreach (TileVisualData visual in visualDatabase)
