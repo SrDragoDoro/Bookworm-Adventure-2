@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -15,9 +16,25 @@ public class BattleManager : MonoBehaviour, IDamageDealer
     public CharacterCombat playerCombat;
     public CharacterCombat enemyCombat;
 
+    [Header("Cinemática del Jefe")]
+    public CinematicPresentationController bossIntroController;
+    public AudioClip bossIntroMusic; // Tu archivo de audio .mp3 o .wav
+
+    [Header("Cinemática del Tesoro")]
+    public CinematicPresentationController treasureController;
+    public AudioClip treasureSFX;
+
+    
+
     void Awake()
     {
         //Instance = this;
+    }
+
+    void Start()
+    {
+        ChangeState(BattleState.PlayerTurn);
+       // StartBossBattle();
     }
 
     #region Suscripción a eventos de salud
@@ -58,6 +75,31 @@ public class BattleManager : MonoBehaviour, IDamageDealer
         }
     }
 
+    #endregion
+
+    #region Ejemplos de uso de las presentaciones cinemáticas
+    // Ejemplo: Cuando el Boss entra en combate
+    public void StartBossBattle()
+    {
+        // Activa el Fade In y suena el rugido/música del boss
+        bossIntroController.ShowPresentation(bossIntroMusic);
+
+        // Puedes usar una coroutine o un botón de UI para cerrarlo después de unos segundos:
+        StartCoroutine(AutoCloseIntro());
+    }
+
+    private IEnumerator AutoCloseIntro()
+    {
+        yield return new WaitForSeconds(3.5f); // Espera 3.5 segundos en pantalla
+        bossIntroController.HidePresentation(); // Fade Out automático
+    }
+
+    // Ejemplo: Cuando el jugador gana un tesoro
+    public void RewardPlayer()
+    {
+        treasureController.ShowPresentation(treasureSFX);
+    }
+
 #endregion
 
     // Handler que se dispara cuando cualquiera de las entidades cambia de vida
@@ -84,12 +126,7 @@ public class BattleManager : MonoBehaviour, IDamageDealer
         enemyData.SetEnemyState(EnemyState.Alerted); // <- Así de limpio
         Debug.Log($"[BattleManager] Enemy state -> Alerted");
     }
-
-    void Start()
-    {
-        ChangeState(BattleState.PlayerTurn);
-    }
-
+ 
     public void ChangeState(BattleState newState)
     {
         currentState = newState;
