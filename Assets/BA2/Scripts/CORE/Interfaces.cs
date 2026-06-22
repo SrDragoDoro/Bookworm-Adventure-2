@@ -13,4 +13,8 @@ public interface IHealer
     int GetHealAmount();
 }
 
-
+public interface IPowerUp
+{
+    // Devuelve un valor que multiplica el daño total de la palabra formada
+    int GetPowerUpType();
+}

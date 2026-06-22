@@ -275,6 +275,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1c8d3211c9655548847ec9bee195938, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TileController
+  currentTableState: 1
   normalSprite: {fileID: -5875506834092678920, guid: 9a9efc691589763449e7841dd220aac2, type: 3}
   hoverSprite: {fileID: -1087803554, guid: 9a9efc691589763449e7841dd220aac2, type: 3}
   currentDamageMultiplier: 1

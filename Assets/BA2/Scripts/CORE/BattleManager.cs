@@ -71,6 +71,8 @@ public class BattleManager : MonoBehaviour, IDamageDealer
         // Si la vida del enemigo llegó a 0 -> Dead
         if (enemyData.Health <= 0)
         {
+            // Para detener todas las losetas:
+            TileController.OnGlobalTableStateChanged?.Invoke(TableState.Stopped);
             enemyData.EnemyState = EnemyState.Dead;
             enemyData.SetEnemyState(EnemyState.Dead); // <- Así de limpio
             Debug.Log($"[BattleManager] Enemy state -> Dead");

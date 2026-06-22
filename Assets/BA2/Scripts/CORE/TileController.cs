@@ -12,9 +12,18 @@ movimiento hacia el tablero o hacia su posición
 original, y su estado (seleccionada o no). 
 */
 
+public enum TableState
+{
+    None,
+    Playing,
+    Stopped    
+}
+
+
 public class TileController : TilesData
 {
     private WordBuilderManager wordBuilderManager;
+    public TableState currentTableState = TableState.Playing; // Estado actual del tablero (jugando, detenido, etc.)
 
     [Header("Sprites de la Loseta")]
     [HideInInspector] public Sprite normalSprite;
@@ -64,7 +73,8 @@ public class TileController : TilesData
     private bool isHovered = false;
     private bool isMovingToTarget = false; //Controlar si la baldosa debe moverse por código o si dejamos actuar a la gravedad
 
-    
+    public static System.Action<TableState> OnGlobalTableStateChanged;
+
 
     #region Prueba de Palabras especificas desde el Inspector
     //void Start()
@@ -94,11 +104,32 @@ public class TileController : TilesData
     void Update()
     {
         LayerOnTable();
-        HandleMouseInput();
+        if (currentTableState == TableState.Stopped) return;  HandleMouseInput();
         HandleMovement();        
     }
+
+    //Para controlor del tablero durante cinemáticas o cambio de enemigo, etc. Evita que el jugador pueda interactuar o mover las losetas.
+    #region Eventos Globales de Estado del Tablero
+    private void OnEnable()
+    {
+        // Se suscriben al evento al aparecer en el juego
+        OnGlobalTableStateChanged += ChangeTableState;
+    }
+
+    private void OnDisable()
+    {
+        // Se desuscriben al ser destruidas o consumidas para evitar errores de memoria
+        OnGlobalTableStateChanged -= ChangeTableState;
+    }
+
+    private void ChangeTableState(TableState newState)
+    {
+        currentTableState = newState;
+    }
+    #endregion
+
     #region Glow
-   
+
     // Activa el resplandor de esta loseta adaptando el sprite según su posición en la palabra.
     // name="positionIndex">0 = Izquierda, 1 = Centro, 2 = Derecha
 
@@ -206,7 +237,7 @@ public class TileController : TilesData
     #endregion
 
     #region Control Visual de Acentos
-    // CAMBIO: Ahora recibe un 'string' en lugar de un 'char'
+    //Recibe un 'string' en lugar de un 'char'
     public void SetVisualLetter(string correctText)
     {
         // Usamos la función que formatea todo correctamente (Qu en vez de QU)
@@ -271,8 +302,9 @@ public class TileController : TilesData
         }
     }
 
-    private void HandleMouseInput()
+    private void HandleMouseInput() // Maneja la interacción del mouse con la loseta
     {
+        
         if (Mouse.current == null) return;
 
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
@@ -306,7 +338,7 @@ public class TileController : TilesData
         }
     }
 
-    private void HandleMovement()
+    private void HandleMovement() // Maneja el movimiento de la loseta hacia su destino o de regreso a su posición original
     {
         // SOLO nos movemos por código si el Manager nos dio una orden (isMovingToTarget = true)
         if (isMovingToTarget)
