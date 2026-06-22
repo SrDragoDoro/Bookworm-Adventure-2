@@ -33,8 +33,7 @@ public class BattleManager : MonoBehaviour, IDamageDealer
 
     void Start()
     {
-        ChangeState(BattleState.PlayerTurn);
-       // StartBossBattle();
+        ChangeState(BattleState.PlayerTurn);      
     }
 
     #region Suscripción a eventos de salud
@@ -77,30 +76,6 @@ public class BattleManager : MonoBehaviour, IDamageDealer
 
     #endregion
 
-    #region Ejemplos de uso de las presentaciones cinemáticas
-    // Ejemplo: Cuando el Boss entra en combate
-    public void StartBossBattle()
-    {
-        // Activa el Fade In y suena el rugido/música del boss
-        bossIntroController.ShowPresentation(bossIntroMusic);
-
-        // Puedes usar una coroutine o un botón de UI para cerrarlo después de unos segundos:
-        StartCoroutine(AutoCloseIntro());
-    }
-
-    private IEnumerator AutoCloseIntro()
-    {
-        yield return new WaitForSeconds(3.5f); // Espera 3.5 segundos en pantalla
-        bossIntroController.HidePresentation(); // Fade Out automático
-    }
-
-    // Ejemplo: Cuando el jugador gana un tesoro
-    public void RewardPlayer()
-    {
-        treasureController.ShowPresentation(treasureSFX);
-    }
-
-#endregion
 
     // Handler que se dispara cuando cualquiera de las entidades cambia de vida
     private void OnAnyEntityHealthChanged(int currentHealth, int maxHealth)

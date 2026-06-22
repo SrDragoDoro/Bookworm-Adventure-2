@@ -5,140 +5,172 @@ using Sirenix.OdinInspector;
 [RequireComponent(typeof(AudioSource))]
 public class CinematicPresentationController : MonoBehaviour
 {
-    [Header("Referencias de UI (Canvas)")]
+    [Header("Grupo 1: Efecto Destello (Flash)")]
+    [Tooltip("El SpriteRenderer del rectángulo blanco para el destello inicial.")]
+    [SerializeField] private SpriteRenderer flashSprite;
+    [Tooltip("Tiempo en segundos que tarda en desaparecer el destello blanco.")]
+    [SerializeField] private float flashFadeDuration = 0.5f;
+
+    [Header("Grupo 2: Elementos de Presentación")]
     [Tooltip("El CanvasGroup del panel que contiene las imágenes y textos del evento.")]
     [SerializeField] private CanvasGroup canvasGroup;
-
-    [Header("Referencias de Sprites Extras (Fuera del Canvas)")]
-    [Tooltip("Arrastra aquí los SpriteRenderers del mundo que deban desvanecerse junto a la UI (opcional).")]
+    [Tooltip("Arrastra aquí los SpriteRenderers del mundo (letras, círculo, etc).")]
     [SerializeField] private SpriteRenderer[] worldSprites;
 
-    [Header("Configuración del Fade")]
-    [SerializeField] private float fadeDuration = 1.0f; // Tiempo en segundos que tarda en aparecer/desaparecer
+    [Header("Tiempos de Presentación (Grupo 2)")]
+    [Tooltip("Tiempo que la presentación se quedará en pantalla al máximo visible.")]
+    [SerializeField] private float displayDuration = 2.5f;
+    [Tooltip("Tiempo que tarda en desvanecerse (Fade Out) la presentación al final.")]
+    [SerializeField] private float fadeOutDuration = 1.0f;
 
     private AudioSource audioSource;
-    private Coroutine activeFadeRoutine;
+    private Coroutine activeSequenceRoutine;
+
+    // Array para guardar la opacidad máxima de cada sprite según el Inspector
+    private float[] originalSpriteAlphas;
 
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
 
-        // Si no asignaste el CanvasGroup, intentamos buscarlo en este mismo GameObject
         if (canvasGroup == null)
             canvasGroup = GetComponent<CanvasGroup>();
 
-        // Empezamos con todo oculto por defecto al iniciar el juego
-        SetInitialState(0f);
-    }
+        // 1. Guardamos la opacidad que le pusiste a cada sprite en el Inspector (ej. 175)
+        originalSpriteAlphas = new float[worldSprites.Length];
+        for (int i = 0; i < worldSprites.Length; i++)
+        {
+            if (worldSprites[i] != null)
+            {
+                originalSpriteAlphas[i] = worldSprites[i].color.a;
+            }
+        }
 
-    private void Start()
-    {
-        
+        // 2. Empezamos con todo oculto por defecto al iniciar la escena
+        SetGroup2State(0f);
+        SetFlashState(0f);
     }
 
     /// <summary>
-    /// Muestra la pantalla cinemática con un efecto Fade In y reproduce un audio.
+    /// Inicia toda la secuencia cinemática: Aparece de golpe + Destello -> Espera -> Fade Out.
     /// </summary>
-
-    [Button]
-    public void ShowPresentation(AudioClip clipToPlay = null)
+    [Button("Probar Cinemática")]
+    public void StartPresentationSequence(AudioClip clipToPlay = null)
     {
-        if (activeFadeRoutine != null) StopCoroutine(activeFadeRoutine);
+        if (activeSequenceRoutine != null) StopCoroutine(activeSequenceRoutine);
 
-        // Bloqueamos interacciones del Canvas de inmediato para que el jugador no de clicks por detrás
+        // 1. Iniciamos la rutina visual
+        activeSequenceRoutine = StartCoroutine(PresentationRoutine());
+
+        // 2. Iniciamos la rutina del audio con 0.5 segundos de retraso
+        if (clipToPlay != null && audioSource != null)
+        {
+            StartCoroutine(PlayAudioWithDelay(clipToPlay, 0.5f));
+        }
+    }
+
+    // Nueva corrutina exclusiva para manejar el retraso del sonido
+    private IEnumerator PlayAudioWithDelay(AudioClip clip, float delay)
+    {
+        yield return new WaitForSeconds(delay); // Esperamos el tiempo indicado
+        audioSource.PlayOneShot(clip);          // ¡Reproducimos!
+    }
+
+    private IEnumerator PresentationRoutine()
+    {
+        // ==========================================
+        // 1. APARICIÓN INSTANTÁNEA DE TODO
+        // ==========================================
+        SetGroup2State(1f); // Se multiplica internamente por el alpha original
+        SetFlashState(1f);  // El destello blanco tapa todo al instante
+
+        // Bloqueamos interacciones del Canvas
         if (canvasGroup != null)
         {
             canvasGroup.blocksRaycasts = true;
             canvasGroup.interactable = true;
         }
 
-        // Reproducir sonido si se asignó uno
-        if (clipToPlay != null && audioSource != null)
+        // ==========================================
+        // 2. FADE OUT DEL DESTELLO (GRUPO 1) Y ESPERA
+        // ==========================================
+        float timer = 0f;
+
+        while (timer < displayDuration)
         {
-            audioSource.PlayOneShot(clipToPlay);
+            timer += Time.deltaTime;
+
+            if (flashSprite != null && timer <= flashFadeDuration)
+            {
+                float flashAlpha = Mathf.Lerp(1f, 0f, timer / flashFadeDuration);
+                SetFlashAlpha(flashAlpha);
+            }
+            else if (flashSprite != null && timer > flashFadeDuration && flashSprite.color.a > 0)
+            {
+                SetFlashAlpha(0f);
+            }
+
+            yield return null;
         }
 
-        activeFadeRoutine = StartCoroutine(FadeRoutine(1f));
-    }
-
-    /// <summary>
-    /// Oculta la pantalla cinemática con un efecto Fade Out.
-    /// </summary>
-    public void HidePresentation()
-    {
-        if (activeFadeRoutine != null) StopCoroutine(activeFadeRoutine);
-
-        // Desactivamos la detección de clicks antes de desvanecer para liberar el juego
+        // ==========================================
+        // 3. FADE OUT DE LA PRESENTACIÓN (GRUPO 2)
+        // ==========================================
         if (canvasGroup != null)
         {
             canvasGroup.blocksRaycasts = false;
             canvasGroup.interactable = false;
         }
 
-        activeFadeRoutine = StartCoroutine(FadeRoutine(0f));
-    }
-
-    // Rutina matemática que cambia el Alpha frame a frame suavemente
-    private IEnumerator FadeRoutine(float targetAlpha)
-    {
-        float startAlphaUI = canvasGroup != null ? canvasGroup.alpha : 0f;
-
-        // Guardamos las opacidades iniciales de los sprites del mundo
-        float[] startAlphasSprites = new float[worldSprites.Length];
-        for (int i = 0; i < worldSprites.Length; i++)
+        float fadeTimer = 0f;
+        while (fadeTimer < fadeOutDuration)
         {
-            if (worldSprites[i] != null) startAlphasSprites[i] = worldSprites[i].color.a;
+            fadeTimer += Time.deltaTime;
+            float alpha = Mathf.Lerp(1f, 0f, fadeTimer / fadeOutDuration);
+            SetGroup2State(alpha);
+            yield return null;
         }
 
-        float elapsedTime = 0f;
-
-        while (elapsedTime < fadeDuration)
-        {
-            elapsedTime += Time.deltaTime;
-            float normalizedTime = elapsedTime / fadeDuration;
-
-            // 1. Lerp para el Canvas de la UI
-            if (canvasGroup != null)
-            {
-                canvasGroup.alpha = Mathf.Lerp(startAlphaUI, targetAlpha, normalizedTime);
-            }
-
-            // 2. Lerp para los Sprites del escenario
-            for (int i = 0; i < worldSprites.Length; i++)
-            {
-                if (worldSprites[i] != null)
-                {
-                    Color c = worldSprites[i].color;
-                    c.a = Mathf.Lerp(startAlphasSprites[i], targetAlpha, normalizedTime);
-                    worldSprites[i].color = c;
-                }
-            }
-
-            yield return null; // Espera al siguiente frame
-        }
-
-        // Aseguramos los valores exactos al terminar
-        SetInitialState(targetAlpha);
-        activeFadeRoutine = null;
+        SetGroup2State(0f);
+        activeSequenceRoutine = null;
     }
 
-    private void SetInitialState(float alpha)
+    #region Funciones de Ayuda Visual
+    private void SetGroup2State(float alphaPercent)
     {
+        // Aplica alpha a la UI
         if (canvasGroup != null)
         {
-            canvasGroup.alpha = alpha;
-            canvasGroup.blocksRaycasts = alpha > 0.5f;
-            canvasGroup.interactable = alpha > 0.5f;
+            canvasGroup.alpha = alphaPercent;
         }
 
-        foreach (var sprite in worldSprites)
+        // Aplica alpha a los Sprites del mundo RESPETANDO su opacidad original
+        for (int i = 0; i < worldSprites.Length; i++)
         {
-            if (sprite != null)
+            if (worldSprites[i] != null)
             {
-                Color c = sprite.color;
-                c.a = alpha;
-                sprite.color = c;
+                Color c = worldSprites[i].color;
+                // Multiplicamos el porcentaje actual (0 a 1) por el alpha que pusiste en el Inspector
+                c.a = alphaPercent * originalSpriteAlphas[i];
+                worldSprites[i].color = c;
             }
         }
     }
+
+    private void SetFlashState(float alpha)
+    {
+        if (flashSprite != null)
+        {
+            SetFlashAlpha(alpha);
+            flashSprite.gameObject.SetActive(alpha > 0f);
+        }
+    }
+
+    private void SetFlashAlpha(float alpha)
+    {
+        Color c = flashSprite.color;
+        c.a = alpha;
+        flashSprite.color = c;
+    }
+    #endregion
 }

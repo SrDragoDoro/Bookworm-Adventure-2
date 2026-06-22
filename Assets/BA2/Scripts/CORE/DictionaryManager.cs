@@ -71,7 +71,7 @@ public class DictionaryManager : MonoBehaviour
         }
     }
 
-    // Método mágico que le quita las tildes, diéresis y transforma la ñ en n
+    // Método que le quita las tildes, diéresis y transforma la ñ en n para normalizar la búsqueda en el diccionario
     private string RemoveAccents(string input)
     {
         return input.Replace('á', 'a').Replace('é', 'e').Replace('í', 'i')
