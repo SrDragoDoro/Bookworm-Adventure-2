@@ -198,10 +198,11 @@ public class WordBuilderManager : MonoBehaviour
             if (validWordParticles.isPlaying) validWordParticles.Stop();
             if (validWordSound != null && validWordSound.isPlaying) validWordSound.Stop();
 
-            // Si se volvió inválida, regresamos las letras a su estado base
+            // Si se volvió inválida, regresamos las letras a su estado base Y apagamos el glow
             foreach (TileController tile in selectedTiles)
             {
                 tile.ResetVisualLetter();
+                tile.DisableTileGlow(); // <-- Añade esta línea
             }
         }
     }
@@ -222,11 +223,26 @@ public class WordBuilderManager : MonoBehaviour
 
     public void DeselectTile(TileController tile)
     {
+        if (GameManager.instance.battleManager.currentState != BattleState.PlayerTurn)
+            return;
+
         if (selectedTiles.Contains(tile))
         {
             selectedTiles.Remove(tile);
+
+            // Apagamos el glow y reseteamos la letra al soltar la loseta
+            tile.DisableTileGlow();
+            tile.ResetVisualLetter();
+
             tile.MoveTo(tile.originalPosition, false);
+            tile.SetDynamic();
+
+            // ==========================================
+            // NUEVO: ¡Llamamos a esta función para que las 
+            // letras restantes cierren el hueco y se centren!
             UpdateWordPositions();
+            // ==========================================
+
             EvaluateCurrentWord();
         }
     }
@@ -237,8 +253,15 @@ public class WordBuilderManager : MonoBehaviour
         {
             TileController tile = selectedTiles[i];
             tile.onTileInteracted?.Invoke();
+
+            // NUEVO: Apagamos el glow y reseteamos la letra individualmente
+            // antes de que la loseta sea eliminada de la lista
+            tile.DisableTileGlow();
+            tile.ResetVisualLetter();
+
             tile.MoveTo(tile.originalPosition, false);
         }
+
         selectedTiles.Clear();
         EvaluateCurrentWord();
     }
