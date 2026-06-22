@@ -16,6 +16,21 @@ public enum TileAttackType
     Confunsion
 }
 
+public enum EnemyType
+{
+    None,
+    Normal,
+    Boss
+}
+
+public enum EnemyState
+{
+    None,
+    Idle,
+    Alerted,
+    Attacking,
+    Dead
+}
 
 [CreateAssetMenu(fileName = "EnemyData", menuName = "BookWorm/EnemyData")]
 public class EnemyData : ScriptableObject
@@ -23,6 +38,8 @@ public class EnemyData : ScriptableObject
 
     public MeleeAttackType MeleeAttackType;
     public TileAttackType TileAttackType;
+    public EnemyType EnemyType;
+    public EnemyState EnemyState;
 
     [Header("Datos Generales")]
     public string nameEntity;
@@ -38,6 +55,14 @@ public class EnemyData : ScriptableObject
 
     // Evento vital para que HealthController dibuje los corazones
     public event Action<int, int> OnHealthChanged;
+
+    public event Action<EnemyState> OnStateChanged; // Evento para notificar cambios de estado del enemigo
+
+    public void SetEnemyState(EnemyState newState)
+    {
+        EnemyState = newState;
+        OnStateChanged?.Invoke(newState); // Aquí sí es legal llamarlo porque estamos dentro de su propia clase
+    }
 
     public int Health
     {

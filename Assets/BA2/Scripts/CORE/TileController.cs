@@ -201,6 +201,25 @@ public class TileController : TilesData
     }
     #endregion
 
+    #region Control Visual de Acentos
+    // Cambia el texto a su versión con tilde/eñe, pero mantiene la lógica intacta
+    public void SetVisualLetter(char correctCharacter)
+    {
+        if (textMesh != null)
+        {
+            textMesh.text = correctCharacter.ToString().ToUpper();
+        }
+    }
+
+    // Devuelve la loseta a su letra original sin tilde si la palabra se desarma
+    public void ResetVisualLetter()
+    {
+        if (textMesh != null)
+        {
+            textMesh.text = currentLetter.ToUpper();
+        }
+    }
+    #endregion
 
     // Llama a esta función justo después de instanciar la loseta
     // para definir qué es (Gema, Básica, etc.) y qué letra tiene.

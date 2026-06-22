@@ -137,73 +137,61 @@ public class WordBuilderManager : MonoBehaviour
     #region Word Validation and Visual Feedback  
     public void EvaluateCurrentWord()
     {
-        if (selectedTiles.Count == 0 || selectedTiles.Count<=2) // Si no hay baldosas seleccionadas, la palabra no es válida
+        if (selectedTiles.Count == 0 || selectedTiles.Count <= 2)
         {
             isCurrentWordValid = false;
             attackButtonUI.interactable = false;
             if (validWordParticles.isPlaying) validWordParticles.Stop();
-
-            // Opcional: Detener sonido si el tablero queda vacío
             if (validWordSound != null && validWordSound.isPlaying) validWordSound.Stop();
 
+            // Reseteamos visualmente por si deshicieron una palabra válida
+            foreach (TileController tile in selectedTiles)
+            {
+                tile.DisableTileGlow();
+                tile.ResetVisualLetter(); // <-- Vuelve la Á a ser A
+            }
             return;
-        }
-
-        foreach (TileController tile in selectedTiles)
-        {
-            tile.DisableTileGlow();
         }
 
         string currentWord = "";
         foreach (TileController tile in selectedTiles)
         {
+            tile.DisableTileGlow();
             currentWord += tile.currentLetter;
         }
 
-        isCurrentWordValid = dictionaryManager.CheckWordIsValid(currentWord);
+        // CAMBIO: Ahora pedimos la palabra corregida (con tildes)
+        isCurrentWordValid = dictionaryManager.CheckWordIsValid(currentWord, out string correctedWord);
 
         if (isCurrentWordValid)
         {
             attackButtonUI.interactable = true;
             if (!validWordParticles.isPlaying) validWordParticles.Play();
-
-            // <-- CAMBIO: Lógica segura para reproducir el AudioSource
-            if (validWordSound != null && !validWordSound.isPlaying)
-            {
-                validWordSound.Play();
-            }
+            if (validWordSound != null && !validWordSound.isPlaying) validWordSound.Play();
 
             int totalTiles = selectedTiles.Count;
 
             for (int i = 0; i < totalTiles; i++)
             {
-                if (totalTiles == 1)
-                {
-                    selectedTiles[i].EnableTileGlow(1);
-                }
-                else if (i == 0)
-                {
-                    selectedTiles[i].EnableTileGlow(0);
-                }
-                else if (i == totalTiles - 1)
-                {
-                    selectedTiles[i].EnableTileGlow(2);
-                }
-                else
-                {
-                    selectedTiles[i].EnableTileGlow(1);
-                }
+                // CAMBIO: Transformamos visualmente la letra. (Ej: Si el jugador puso 'A', se convierte en 'Á')
+                selectedTiles[i].SetVisualLetter(correctedWord[i]);
+
+                if (totalTiles == 1) selectedTiles[i].EnableTileGlow(1);
+                else if (i == 0) selectedTiles[i].EnableTileGlow(0);
+                else if (i == totalTiles - 1) selectedTiles[i].EnableTileGlow(2);
+                else selectedTiles[i].EnableTileGlow(1);
             }
         }
         else
         {
             attackButtonUI.interactable = false;
             if (validWordParticles.isPlaying) validWordParticles.Stop();
+            if (validWordSound != null && validWordSound.isPlaying) validWordSound.Stop();
 
-            // <-- CAMBIO: Detiene el sonido si el jugador añade una letra y la palabra deja de ser válida
-            if (validWordSound != null && validWordSound.isPlaying)
+            // Si se volvió inválida, regresamos las letras a su estado base
+            foreach (TileController tile in selectedTiles)
             {
-                validWordSound.Stop();
+                tile.ResetVisualLetter();
             }
         }
     }

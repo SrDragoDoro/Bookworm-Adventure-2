@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   MeleeAttackType: 1
   TileAttackType: 1
+  EnemyType: 1
+  EnemyState: 1
   nameEntity: Stuffy
   description: Best friend
   xpValue: 0

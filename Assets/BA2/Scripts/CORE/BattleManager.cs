@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
+
 public enum BattleState { PlayerTurn, EnemyTurn, Busy }
 
 public class BattleManager : MonoBehaviour, IDamageDealer
@@ -17,6 +18,69 @@ public class BattleManager : MonoBehaviour, IDamageDealer
     void Awake()
     {
         //Instance = this;
+    }
+
+    #region Suscripción a eventos de salud
+    void OnEnable()
+    {
+        // Subscribe to health change events if possible
+        TrySubscribeToHealthEvents();
+    }
+
+    void OnDisable()
+    {
+        TryUnsubscribeFromHealthEvents();
+    }
+
+    private void TrySubscribeToHealthEvents()
+    {
+        if (playerCombat != null && playerCombat.healthController != null && playerCombat.healthController.Data != null)
+        {
+            playerCombat.healthController.Data.OnHealthChanged += OnAnyEntityHealthChanged;
+        }
+
+        if (enemyCombat != null && enemyCombat.healthController != null && enemyCombat.healthController.Data != null)
+        {
+            enemyCombat.healthController.Data.OnHealthChanged += OnAnyEntityHealthChanged;
+        }
+    }
+
+    private void TryUnsubscribeFromHealthEvents()
+    {
+        if (playerCombat != null && playerCombat.healthController != null && playerCombat.healthController.Data != null)
+        {
+            playerCombat.healthController.Data.OnHealthChanged -= OnAnyEntityHealthChanged;
+        }
+
+        if (enemyCombat != null && enemyCombat.healthController != null && enemyCombat.healthController.Data != null)
+        {
+            enemyCombat.healthController.Data.OnHealthChanged -= OnAnyEntityHealthChanged;
+        }
+    }
+
+#endregion
+
+    // Handler que se dispara cuando cualquiera de las entidades cambia de vida
+    private void OnAnyEntityHealthChanged(int currentHealth, int maxHealth)
+    {
+        // Siempre alertamos al enemigo cuando cualquiera recibe daño
+        if (enemyCombat == null || enemyCombat.healthController == null || enemyCombat.healthController.Data == null) return;
+
+        var enemyData = enemyCombat.healthController.Data;
+
+        // Si la vida del enemigo llegó a 0 -> Dead
+        if (enemyData.Health <= 0)
+        {
+            enemyData.EnemyState = EnemyState.Dead;
+            enemyData.SetEnemyState(EnemyState.Dead); // <- Así de limpio
+            Debug.Log($"[BattleManager] Enemy state -> Dead");
+            return;
+        }
+
+        // Si cualquiera recibe daño pero el enemigo sigue vivo, lo ponemos en alerta
+        enemyData.EnemyState = EnemyState.Alerted;
+        enemyData.SetEnemyState(EnemyState.Alerted); // <- Así de limpio
+        Debug.Log($"[BattleManager] Enemy state -> Alerted");
     }
 
     void Start()
@@ -62,8 +126,7 @@ public class BattleManager : MonoBehaviour, IDamageDealer
 
 
     public int GetFinalDamage(int baseDamage)
-    {
-
+    {        
 
         return baseDamage; // Por ahora, no hay multiplicadores ni efectos adicionales, pero aquí es donde se aplicarían.
     }

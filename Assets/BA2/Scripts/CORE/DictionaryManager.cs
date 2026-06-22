@@ -3,32 +3,27 @@ using System.IO;
 using UnityEngine;
 using System.Diagnostics;
 
-/*
-Objetivo: Insertar una lista de millones de palabras.
-El archivo de las palabras está en un txt. Debemos leer el txt y cargarlo en un HashSet para luego usarlo en el juego.
-Debemos hacer que la palabra que formemos la verifique con la lista y mencione si es válida o no.
-*/
 public class DictionaryManager : MonoBehaviour
 {
-    [SerializeField] private string wordToCheck = "palabra";              // Ejemplo de palabra a verificar
-    [SerializeField] private string wordToCheck2 = "palabrainventada123"; // Ejemplo de palabra inventada
+    [SerializeField] private string wordToCheck = "mama";
+    [SerializeField] private string wordToCheck2 = "palabrainventada123";
 
-    // Usamos HashSet en lugar de Dictionary. Es mucho más eficiente en memoria 
-    // y velocidad cuando solo queremos comprobar si un elemento existe.
-    private HashSet<string> dictionarySpanish = new HashSet<string>();
+    // CLAVE: Palabra sin tildes ni diéresis (ej. "nino")
+    // VALOR: Palabra original correcta (ej. "niño")
+    private Dictionary<string, string> dictionarySpanish = new Dictionary<string, string>();
 
-    // Nombre del archivo txt
     public string fileName = "0_palabras_todas.txt";
 
     void Start()
     {
         LoadDictionary();
     }
-    
+
     void Update()
     {
         TestList();
     }
+
     #region Carga del diccionario
     void LoadDictionary()
     {
@@ -37,8 +32,6 @@ public class DictionaryManager : MonoBehaviour
         if (File.Exists(filePath))
         {
             print("Cargando diccionario, esto puede tomar unos segundos...");
-
-            // 1. Creamos e iniciamos el cronómetro
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
@@ -47,64 +40,74 @@ public class DictionaryManager : MonoBehaviour
                 string line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    string word = line.Trim().ToLower();
+                    string originalWord = line.Trim().ToLower();
 
-                    if (!string.IsNullOrEmpty(word))
+                    if (!string.IsNullOrEmpty(originalWord))
                     {
-                        dictionarySpanish.Add(word);
+                        string normalizedWord = RemoveAccents(originalWord);
+
+                        // Si la palabra no existe, la añadimos.
+                        // Si ya existe (ej. "bebe"), y la nueva tiene tilde ("bebé"), la sobreescribimos 
+                        // para darle prioridad a la visualización de la tilde/eñe en el juego.
+                        if (!dictionarySpanish.ContainsKey(normalizedWord))
+                        {
+                            dictionarySpanish.Add(normalizedWord, originalWord);
+                        }
+                        else if (originalWord != normalizedWord)
+                        {
+                            dictionarySpanish[normalizedWord] = originalWord;
+                        }
                     }
                 }
             }
 
-            // 2. Detenemos el cronómetro al terminar de leer todo
             stopwatch.Stop();
-
-            // 3. Mostramos el resultado en la consola con el tiempo transcurrido
-            print("¡Diccionario cargado con éxito! Total de palabras: " + dictionarySpanish.Count);
-            print("Tiempo de carga: " + stopwatch.ElapsedMilliseconds + " ms (" + stopwatch.Elapsed.TotalSeconds.ToString("F2") + " segundos).");
+            print("¡Diccionario cargado con éxito! Total de palabras únicas base: " + dictionarySpanish.Count);
+            print("Tiempo de carga: " + stopwatch.ElapsedMilliseconds + " ms.");
         }
         else
         {
             print("No se encontró el archivo " + fileName + " en la ruta: " + filePath + ".");
         }
     }
+
+    // Método mágico que le quita las tildes, diéresis y transforma la ñ en n
+    private string RemoveAccents(string input)
+    {
+        return input.Replace('á', 'a').Replace('é', 'e').Replace('í', 'i')
+                    .Replace('ó', 'o').Replace('ú', 'u').Replace('ü', 'u')
+                    .Replace('ñ', 'n');
+    }
     #endregion
 
     #region Chequeo de palabras
-    // Método principal para verificar si la palabra formada por el jugador es válida
-    public bool CheckWordIsValid(string wordToCheck)
+    // AHORA DEVUELVE TAMBIÉN LA PALABRA CORREGIDA A TRAVÉS DE 'out string correctedWord'
+    public bool CheckWordIsValid(string wordToCheck, out string correctedWord)
     {
+        correctedWord = "";
         if (string.IsNullOrEmpty(wordToCheck)) return false;
 
-        // Formateamos la palabra de la misma forma que la guardamos (minúsculas y sin espacios)
-        string formattedWord = wordToCheck.Trim().ToLower();
+        // Limpiamos la palabra que armó el jugador (por si acaso)
+        string normalizedInput = RemoveAccents(wordToCheck.Trim().ToLower());
 
-        // Verifica si la palabra está en nuestro HashSet
-        bool isValid = dictionarySpanish.Contains(formattedWord);
-
-        // Mencionamos si es válida o no en consola
-        if (isValid)
+        // Buscamos si existe la versión sin tildes en el diccionario
+        if (dictionarySpanish.TryGetValue(normalizedInput, out correctedWord))
         {
-            print($"[Resultado] La palabra '{formattedWord}' ES válida.");
-        }
-        else
-        {
-            print($"[Resultado] La palabra '{formattedWord}' NO es válida.");
+            //print($"[Resultado] Valida. Entrada: '{normalizedInput}', Corregida a: '{correctedWord}'");
+            return true;
         }
 
-        return isValid;
+        return false;
     }
     #endregion
 
     #region CÓDIGOS DE PRUEBA
     private void TestList()
     {
-        // --- CÓDIGO DE PRUEBA ---
-        // Presiona la tecla Espacio durante el juego para probar dos palabras: una válida y una inventada.
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            CheckWordIsValid(wordToCheck); // Palabra que sí está en tu archivo
-            CheckWordIsValid(wordToCheck2); // Palabra que no está
+            CheckWordIsValid(wordToCheck, out string res1);
+            CheckWordIsValid(wordToCheck2, out string res2);
         }
     }
     #endregion
