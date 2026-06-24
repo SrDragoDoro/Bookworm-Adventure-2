@@ -77,18 +77,18 @@ public class TileController : TilesData
 
 
     #region Prueba de Palabras especificas desde el Inspector
-    //void Start()
-    //{
-    //    // Si la loseta ya tiene un TextMeshPro asignado y tú escribiste algo en él desde el inspector...
-    //    if (textMesh != null && string.IsNullOrEmpty(currentLetter) && !string.IsNullOrEmpty(textMesh.text))
-    //    {
-    //        // Sincronizamos la variable interna con el texto visual del componente
-    //        currentLetter = textMesh.text;
+    void Start()
+    {
+        // Si la loseta ya tiene un TextMeshPro asignado y tú escribiste algo en él desde el inspector...
+        if (textMesh != null && string.IsNullOrEmpty(currentLetter) && !string.IsNullOrEmpty(textMesh.text))
+        {
+            // Sincronizamos la variable interna con el texto visual del componente
+            currentLetter = textMesh.text;
 
-    //        // Corremos el SetupTile para asegurarnos de que cargue sus sprites e información base
-    //        SetupTile(currentTileType, currentLetter);
-    //    }
-    //}
+            // Corremos el SetupTile para asegurarnos de que cargue sus sprites e información base
+            SetupTile(currentTileType, currentLetter);
+        }
+    }
     #endregion
 
     void Awake()
@@ -235,6 +235,7 @@ public class TileController : TilesData
         }
     }
     #endregion
+
 
     #region Control Visual de Acentos
     //Recibe un 'string' en lugar de un 'char'
