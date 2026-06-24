@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: U
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   LetterID: U
-  Frequency: 36
+  Frequency: 74.6
   BaseDamage: 0.24
   gem: 1

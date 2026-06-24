@@ -28,6 +28,7 @@ public class TileController : TilesData
     [Header("Sprites de la Loseta")]
     [HideInInspector] public Sprite normalSprite;
     [HideInInspector] public Sprite hoverSprite;
+    [HideInInspector] public UnityEvent AnimationTileGem;
     [HideInInspector] public int currentDamageMultiplier = 1;
 
     [Header("Configuración del Glow Individual")]
@@ -286,18 +287,19 @@ public class TileController : TilesData
         {
             UpdateTextFontSize(currentLetter);
         }
-        // Buscar el diseño correspondiente en nuestra base de datos
+        // Buscar el diseño correspondiente en a la base de datos
         foreach (TileVisualData visual in visualDatabase)
         {
             if (visual.type == newType)
             {
                 // Asignamos los sprites correctos para este tipo
                 normalSprite = visual.normalSprite;
-                hoverSprite = visual.hoverSprite;
+                hoverSprite = visual.hoverSprite;                
                 currentDamageMultiplier = visual.damageMultiplier;
-
+                
                 // Actualizamos el renderizador inmediatamente
                 spriteRenderer.sprite = isHovered ? hoverSprite : normalSprite;
+                
                 break;
             }
         }
@@ -311,6 +313,7 @@ public class TileController : TilesData
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         bool wasHovered = isHovered;
         isHovered = col.OverlapPoint(mousePos);
+        AnimationTileGem?.Invoke();
 
         // Lógica de Hover
         if (isHovered && !wasHovered && !isSelected)
