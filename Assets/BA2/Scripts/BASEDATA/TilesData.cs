@@ -19,6 +19,7 @@ public struct TileVisualData
     public TileType type;
     public Sprite normalSprite;
     public Sprite hoverSprite;
+    public Animation Animation;
     public int damageMultiplier; // Cálculo del daño de las gemas y tesoros
 }
 #endregion

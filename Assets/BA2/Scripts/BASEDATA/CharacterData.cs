@@ -3,11 +3,15 @@ public enum Gems
 {
     None,
     Normal,
-    Green,
-    Blue,
-    Red,
-    Yellow,
-    Purple,
+    Amethyst,
+    Ruby,
+    Saphire,
+    Topaz,
+    Garnet,
+    Crystal,
+    Emerald,
+    Diamond
+
 }
 
 [CreateAssetMenu(fileName = "CharacterData", menuName = "BookWorm/CharacterData")]
