@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HealingPotion : MonoBehaviour, IHealer
 {
     [SerializeField] private int healAmount = 10; // 10 ints = 2.5 corazones
+    [SerializeField] private UnityEvent soundAction;
 
     public int GetHealAmount()
     {
@@ -25,10 +28,11 @@ public class HealingPotion : MonoBehaviour, IHealer
                 // 3. Lo curamos
                 healthObj.Data.Heal(GetHealAmount());
 
+                soundAction?.Invoke();
                 // TODO: Puedes agregar un AudioSource.PlayClipAtPoint o instanciar partículas aquí antes de destruir
 
                 // 4. Destruimos la poción
-                Destroy(gameObject);
+                Destroy(gameObject, 1);
             }
             else
             {

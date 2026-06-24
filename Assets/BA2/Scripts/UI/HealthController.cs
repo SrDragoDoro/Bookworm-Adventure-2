@@ -1,6 +1,7 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class HealthController : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class HealthController : MonoBehaviour
     //public BaseStats stats;
     public GameObject heartPrefab;
     public Transform heartsContainer; // El objeto padre donde se crearán los corazones
+    [SerializeField] private UnityEvent soundAction;
+
 
     [Header("Configuración de Cuadrícula")]
     public SpawnDirection spawnDirection = SpawnDirection.LeftToRight;
