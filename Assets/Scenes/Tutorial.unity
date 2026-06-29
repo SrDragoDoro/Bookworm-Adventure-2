@@ -1140,6 +1140,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1417912147}
     m_Modifications:
+    - target: {fileID: -3634253025397144540, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
+      propertyPath: visualDatabase.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1174190118364199070, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
       propertyPath: m_TextStyleHashCode
       value: -1183493901
@@ -1868,6 +1872,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
+--- !u!1 &343482373 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6343342208319466643, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
+  m_PrefabInstance: {fileID: 148424009910191320}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &370002085 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4584201798144518352, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
@@ -3967,6 +3976,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4584201798144518352, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
   m_PrefabInstance: {fileID: 148424009910191320}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &732163409
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 343482373}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &811292491
 GameObject:
   m_ObjectHideFlags: 0
@@ -8977,6 +9008,7 @@ MonoBehaviour:
   validWordSound: {fileID: 2045025688}
   lexAnimator: {fileID: 578521064}
   tilePrefab: {fileID: 6343342208319466643, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
+  normalGemData: {fileID: 0}
   spawnHeight: 8
   verticalSpacing: 1.2
   wordZoneCenter: {fileID: 2045025684}
@@ -14490,6 +14522,10 @@ PrefabInstance:
       propertyPath: moveSpeed
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: -3634253025397144540, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
+      propertyPath: gemAnimator
+      value: 
+      objectReference: {fileID: 732163409}
     - target: {fileID: 1174190118364199070, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
       propertyPath: m_TextStyleHashCode
       value: -1183493901
@@ -14542,6 +14578,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6343342208319466643, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 732163409}
     - targetCorrespondingSourceObject: {fileID: 8195084939810453003, guid: fb80e4872dcfa4b409b25dc4164503f9, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}

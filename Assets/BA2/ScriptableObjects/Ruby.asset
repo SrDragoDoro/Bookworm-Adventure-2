@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1fbb4f1f84f0a1746914c251cbdf35f5, type: 3}
+  m_Name: Ruby
+  m_EditorClassIdentifier: Assembly-CSharp::GemDataSO
+  gemName: Ruby
+  gemType: 2
+  isSpecialGem: 1
+  baseSprite: {fileID: 6552573784654605478, guid: c99d327ee273cd94ab8ca03de69ebee9, type: 3}
+  overlaySprite: {fileID: -764289362387876156, guid: e56fa75ddd0ec0147b5d0fc18fa25269, type: 3}
+  damageMultiplier: 1.2
+  healAmount: 0
+  skillType: 4

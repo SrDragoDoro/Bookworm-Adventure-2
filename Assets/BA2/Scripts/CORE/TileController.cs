@@ -25,6 +25,15 @@ public class TileController : TilesData
     private WordBuilderManager wordBuilderManager;
     public TableState currentTableState = TableState.Playing; // Estado actual del tablero (jugando, detenido, etc.)
 
+    [Header("Referencias Visuales de Gemas")]
+    [SerializeField] private SpriteRenderer gemGlowRenderer; // SpriteRenderer hijo para el Sprite B (Glow superpuesto)
+    [SerializeField] private Animator gemAnimator;           // Animator hijo para la Animación C (Brillo)
+
+    // Referencia a la data actual de esta loseta
+    private GemDataSO currentGemData;
+    // --- NUEVO: Propiedad pública para que el WordBuilderManager pueda leer el ScriptableObject ---
+    public GemDataSO CurrentGemData => currentGemData;
+
     [Header("Sprites de la Loseta")]
     [HideInInspector] public Sprite normalSprite;
     [HideInInspector] public Sprite hoverSprite;
@@ -41,12 +50,7 @@ public class TileController : TilesData
     public UnityEvent onTileInteracted;
 
     [Header("Movimiento")]
-    public float moveSpeed = 15f;
-
-    [Header("Configuración Visual y Tipos")]
-    // NOTA: TileType y TileVisualData se leen automáticamente del padre TilesData.cs
-    public TileType currentTileType = TileType.Basic;
-    public List<TileVisualData> visualDatabase;             // Aquí van los sprites en el Inspector
+    public float moveSpeed = 15f;   
 
     [Header("Referencias Hijas")]
     public TextMeshPro textMesh;                            // Arrastrar el TextMeshPro hijo aquí desde el Inspector
@@ -86,8 +90,11 @@ public class TileController : TilesData
             // Sincronizamos la variable interna con el texto visual del componente
             currentLetter = textMesh.text;
 
-            // Corremos el SetupTile para asegurarnos de que cargue sus sprites e información base
-            SetupTile(currentTileType, currentLetter);
+            // NUEVO: Solo corremos el SetupTile si la data no es nula
+            if (currentGemData != null)
+            {
+                SetupTile(currentGemData, currentLetter);
+            }
         }
     }
     #endregion
@@ -207,7 +214,7 @@ public class TileController : TilesData
 
         // Aquí SÍ llamamos a tu método completo por si quieres que el "revolver" 
         // también tenga una pequeña probabilidad de convertir la loseta en una Gema
-        SetupTile(currentTileType, finalLetter);
+        SetupTile(currentGemData, finalLetter);
 
         scrambleCoroutine = null;
     }
@@ -278,48 +285,91 @@ public class TileController : TilesData
 
     // Llama a esta función justo después de instanciar la loseta
     // para definir qué es (Gema, Básica, etc.) y qué letra tiene.
-    public void SetupTile(TileType newType, string letter)
+    // Modificamos SetupTile para recibir el nuevo ScriptableObject optimizado
+    // Llama a esta función justo después de instanciar la loseta
+    // para definir qué es (Gema, Básica, etc.) y qué letra tiene.
+    public void SetupTile(GemDataSO gemData, string letter)
     {
-        currentTileType = newType;
+        // --- NUEVO: VALIDACIÓN DE SEGURIDAD ---
+        if (gemData == null)
+        {
+            Debug.LogWarning($"[TileController] Cuidado: Intentaste configurar la loseta '{gameObject.name}' con un GemData nulo.");
+            return;
+        }
+        // --------------------------------------
+
+        currentGemData = gemData;
         currentLetter = letter;
 
+        // Tu lógica existente para mantener formatos como "Qu" intactos
         if (textMesh != null)
         {
             UpdateTextFontSize(currentLetter);
         }
-        // Buscar el diseño correspondiente en a la base de datos
-        foreach (TileVisualData visual in visualDatabase)
+
+        // Configuración base compartida
+        normalSprite = currentGemData.baseSprite;
+        currentDamageMultiplier = (int)currentGemData.damageMultiplier;
+
+        if (!currentGemData.isSpecialGem)
         {
-            if (visual.type == newType)
+            // Lógica loseta NORMAL: Intercambio de Sprites (A por B)
+            hoverSprite = currentGemData.overlaySprite;
+            spriteRenderer.sprite = normalSprite;
+
+            if (gemGlowRenderer != null) gemGlowRenderer.gameObject.SetActive(false);
+        }
+        else
+        {
+            // Lógica GEMA: Sprite base estático, Glow se asigna al hijo
+            spriteRenderer.sprite = normalSprite;
+
+            if (gemGlowRenderer != null)
             {
-                // Asignamos los sprites correctos para este tipo
-                normalSprite = visual.normalSprite;
-                hoverSprite = visual.hoverSprite;                
-                currentDamageMultiplier = visual.damageMultiplier;
-                
-                // Actualizamos el renderizador inmediatamente
-                spriteRenderer.sprite = isHovered ? hoverSprite : normalSprite;
-                
-                break;
+                gemGlowRenderer.sprite = currentGemData.overlaySprite;
+                gemGlowRenderer.gameObject.SetActive(false); // Apagado por defecto
             }
         }
-    }
+    } // <--- ESTA ES LA LLAVE QUE FALTABA
 
-    private void HandleMouseInput() // Maneja la interacción del mouse con la loseta
+    private void HandleMouseInput()
     {
-        
         if (Mouse.current == null) return;
 
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         bool wasHovered = isHovered;
         isHovered = col.OverlapPoint(mousePos);
-        AnimationTileGem?.Invoke();
 
-        // Lógica de Hover
+        // LÓGICA DE HOVER Y ESTADOS VISUALES
         if (isHovered && !wasHovered && !isSelected)
-            spriteRenderer.sprite = hoverSprite;
+        {
+            AnimationTileGem?.Invoke();
+
+            if (currentGemData != null && currentGemData.isSpecialGem)
+            {
+                // Efecto Gema: Enciende el overlay (Sprite B) y activa animación (C)
+                if (gemGlowRenderer != null) gemGlowRenderer.gameObject.SetActive(true);
+                if (gemAnimator != null) gemAnimator.SetTrigger("PlaySparkle");
+            }
+            else
+            {
+                // Efecto Normal: Cambia Sprite A por B
+                spriteRenderer.sprite = hoverSprite;
+            }
+        }
         else if (!isHovered && wasHovered && !isSelected)
-            spriteRenderer.sprite = normalSprite;
+        {
+            if (currentGemData != null && currentGemData.isSpecialGem)
+            {
+                // Apaga el overlay de la gema
+                if (gemGlowRenderer != null) gemGlowRenderer.gameObject.SetActive(false);
+            }
+            else
+            {
+                // Regresa la loseta normal a su Sprite A
+                spriteRenderer.sprite = normalSprite;
+            }
+        }
 
         // Clic Izquierdo para Seleccionar/Deseleccionar
         if (isHovered && Mouse.current.leftButton.wasPressedThisFrame)
@@ -332,7 +382,7 @@ public class TileController : TilesData
                 WordBuilderManager.Instance.DeselectTile(this);
         }
 
-        // Clic Derecho: Regresar TODAS las baldosas al tablero a la vez
+        // Clic Derecho: Regresar TODAS las baldosas
         if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)
         {
             if (WordBuilderManager.Instance.GetSelectedTiles().Count > 0)
@@ -366,24 +416,33 @@ public class TileController : TilesData
 
     public void MoveTo(Vector3 newPos, bool selecting)
     {
-        isMovingToTarget = true; // Activamos el movimiento por código para que vaya al destino
+        isMovingToTarget = true; // Activamos el movimiento por código
 
         if (selecting && !isSelected)
         {
-            originalPosition = transform.position; // Guarda su posición real después de caer
+            originalPosition = transform.position; // Guarda su posición real
             isSelected = true;
             isMovingBack = false;
             rb.bodyType = RigidbodyType2D.Kinematic;
             col.isTrigger = true;
-            // 4. TRAER AL FRENTE: Subimos el orden general de toda la loseta
-            if (sortingGroup != null) sortingGroup.sortingOrder = 10; // Un número alto para que tape el escenario
+            if (sortingGroup != null) sortingGroup.sortingOrder = 10;
+
+            // --- NUEVO: Apagar el hover/glow al enviarla a la palabra ---
+            if (currentGemData != null)
+            {
+                if (currentGemData.isSpecialGem && gemGlowRenderer != null)
+                    gemGlowRenderer.gameObject.SetActive(false); // Apaga glow de gema
+                else
+                    spriteRenderer.sprite = normalSprite;        // Regresa loseta normal a base
+            }
+            // ------------------------------------------------------------
         }
         else if (!selecting)
         {
             isSelected = false;
             isMovingBack = true;
             spriteRenderer.sprite = normalSprite;
-            rb.bodyType = RigidbodyType2D.Kinematic;          
+            rb.bodyType = RigidbodyType2D.Kinematic;
         }
 
         targetPosition = newPos;

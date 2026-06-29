@@ -30,6 +30,13 @@ public class WordBuilderManager : MonoBehaviour
 
     [Header("Generación de Losetas")]
     public GameObject tilePrefab;        // El prefab base de tu loseta
+    public GemDataSO normalGemData;      // <--- AÑADE ESTO: Referencia al SO de la loseta normal
+                                         
+    // --- NUEVO ---
+    [Header("Pool de Gemas Especiales")]
+    public List<GemDataSO> specialGemsPool; // Aquí arrastrarás tus ScriptableObjects de gemas especiales
+    [SerializeField] private int specialGemsToSpawn; // Contador de cuántas gemas especiales se deben reponer en la siguiente generación
+    
     //public LetterManager letterManager;  // Referencia al script de probabilidades    
     public float spawnHeight = 8f;       // Altura en Y (fuera de cámara) desde donde caerán
     public float verticalSpacing = 1.2f; // Espacio vertical al instanciar varias en la misma columna
@@ -71,7 +78,7 @@ public class WordBuilderManager : MonoBehaviour
                 //string randomLetter = AlphabetData.GetRandomLetter();
                 string randomLetter = GameManager.instance.characterDataBase.GetRandomLetter();
 
-                tile.SetupTile(TileType.Basic, randomLetter);
+                tile.SetupTile(normalGemData, randomLetter);
             }
         }
     }
@@ -123,9 +130,29 @@ public class WordBuilderManager : MonoBehaviour
                 GameObject newTileObj = Instantiate(tilePrefab, spawnPos, Quaternion.identity);
                 TileController newTile = newTileObj.GetComponent<TileController>();
 
-                //string randomLetter = AlphabetData.GetRandomLetter();
+                // 1. Obtienes tu letra aleatoria (Mantenemos tu línea original)
                 string randomLetter = GameManager.instance.characterDataBase.GetRandomLetter();
-                newTile.SetupTile(TileType.Basic, randomLetter);
+
+                // --- NUEVO: Decidir si la nueva loseta será una gema especial o una normal ---
+                GemDataSO gemToAssign = normalGemData; // Por defecto es normal
+
+                // CHISMOSO: Nos dirá en la consola qué está intentando hacer
+                Debug.Log($"[Refill] Gemas por aparecer: {specialGemsToSpawn} | Tamaño del Pool: {(specialGemsPool != null ? specialGemsPool.Count : 0)}");
+
+                if (specialGemsToSpawn > 0 && specialGemsPool != null && specialGemsPool.Count > 0)
+                {
+                    // Elegimos una gema aleatoria del pool
+                    int randomIndex = UnityEngine.Random.Range(0, specialGemsPool.Count);
+                    gemToAssign = specialGemsPool[randomIndex];
+
+                    specialGemsToSpawn--; // Restamos 1 al contador porque ya la vamos a usar
+
+                    // CHISMOSO: Confirmación de éxito
+                    Debug.Log($"[Refill] ¡Éxito! Se asignó una gema especial: {gemToAssign.name}");
+                }
+
+                // 3. Configuramos la loseta con la gema que haya ganado (normal o especial)
+                newTile.SetupTile(gemToAssign, randomLetter);
             }
         }
 
@@ -371,6 +398,19 @@ public class WordBuilderManager : MonoBehaviour
         if (validWordParticles.isPlaying) validWordParticles.Stop();
         if (glowRenderer != null) glowRenderer.gameObject.SetActive(false);
 
+
+        // --- NUEVO: Contaminar el contador antes de limpiar o destruir las losetas de la palabra ---
+        //specialGemsToSpawn = 0;
+        foreach (TileController tile in selectedTiles)
+        {
+            if (tile != null && tile.CurrentGemData != null && tile.CurrentGemData.isSpecialGem)
+            {
+                specialGemsToSpawn++;
+            }
+        }
+
+
+        // Consumimos las losetas (ahora sí, sabiendo cuántas gemas especiales reponer)
         ConsumeTilesAndRefill();
     }
     #endregion
