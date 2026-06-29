@@ -14,11 +14,14 @@ public class GemDataSO : ScriptableObject
     public bool isSpecialGem;
 
     [Header("Visuales")]
-    public Sprite baseSprite;       // Sprite A (Estado normal)
-    public Sprite overlaySprite;    // Sprite B (Hover para Normal, Glow superpuesto para Gemas)
+    public Sprite baseSprite;       // Sprite A: Estado normal (Para normales y gemas)
+    public Sprite overlaySprite;    // Sprite B: Hover (Reemplaza a Normal) o Glow (Superpuesto en Gemas)
+
+    // Controlador de animación de esta gema (Animación C)
+    public RuntimeAnimatorController gemAnimatorController;
 
     [Header("Atributos de Combate")]
     public float damageMultiplier = 1.0f;
-    public int healAmount = 0; // Cantidad de curación que proporciona la gema (si aplica)
+    public int healAmount = 0;
     public SkillType skillType = SkillType.None;
 }

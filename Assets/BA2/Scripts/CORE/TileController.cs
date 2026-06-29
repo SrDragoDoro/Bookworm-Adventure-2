@@ -290,47 +290,51 @@ public class TileController : TilesData
     // para definir qué es (Gema, Básica, etc.) y qué letra tiene.
     public void SetupTile(GemDataSO gemData, string letter)
     {
-        // --- NUEVO: VALIDACIÓN DE SEGURIDAD ---
         if (gemData == null)
         {
             Debug.LogWarning($"[TileController] Cuidado: Intentaste configurar la loseta '{gameObject.name}' con un GemData nulo.");
             return;
         }
-        // --------------------------------------
 
         currentGemData = gemData;
         currentLetter = letter;
 
-        // Tu lógica existente para mantener formatos como "Qu" intactos
-        if (textMesh != null)
-        {
-            UpdateTextFontSize(currentLetter);
-        }
+        if (textMesh != null) UpdateTextFontSize(currentLetter);
 
-        // Configuración base compartida
+        // 1. Configuración base compartida
         normalSprite = currentGemData.baseSprite;
+        hoverSprite = currentGemData.overlaySprite; // Asignamos el sprite desde el SO
         currentDamageMultiplier = (int)currentGemData.damageMultiplier;
 
-        if (!currentGemData.isSpecialGem)
-        {
-            // Lógica loseta NORMAL: Intercambio de Sprites (A por B)
-            hoverSprite = currentGemData.overlaySprite;
-            spriteRenderer.sprite = normalSprite;
+        if (spriteRenderer != null) spriteRenderer.sprite = normalSprite;
 
-            if (gemGlowRenderer != null) gemGlowRenderer.gameObject.SetActive(false);
-        }
-        else
+        // 2. Comportamiento especial si es gema
+        if (currentGemData.isSpecialGem)
         {
-            // Lógica GEMA: Sprite base estático, Glow se asigna al hijo
-            spriteRenderer.sprite = normalSprite;
-
             if (gemGlowRenderer != null)
             {
                 gemGlowRenderer.sprite = currentGemData.overlaySprite;
-                gemGlowRenderer.gameObject.SetActive(false); // Apagado por defecto
+                gemGlowRenderer.gameObject.SetActive(false); // Apagado hasta hacer hover
+            }
+
+            if (gemAnimator != null)
+            {
+                gemAnimator.enabled = true; // <-- CORRECCIÓN: Encendemos solo el componente
+                gemAnimator.runtimeAnimatorController = currentGemData.gemAnimatorController;
             }
         }
-    } // <--- ESTA ES LA LLAVE QUE FALTABA
+        else
+        {
+            // Lógica para losetas normales
+            if (gemGlowRenderer != null) gemGlowRenderer.gameObject.SetActive(false);
+
+            if (gemAnimator != null)
+            {
+                gemAnimator.runtimeAnimatorController = null; // Limpiamos por si acaso
+                gemAnimator.enabled = false; // <-- CORRECCIÓN: Apagamos solo el componente, NO el GameObject entero
+            }
+        }
+    }
 
     private void HandleMouseInput()
     {
@@ -340,28 +344,28 @@ public class TileController : TilesData
         bool wasHovered = isHovered;
         isHovered = col.OverlapPoint(mousePos);
 
-        // LÓGICA DE HOVER Y ESTADOS VISUALES
+        // 1. LÓGICA DE HOVER Y ESTADOS VISUALES
         if (isHovered && !wasHovered && !isSelected)
         {
             AnimationTileGem?.Invoke();
 
             if (currentGemData != null && currentGemData.isSpecialGem)
             {
-                // Efecto Gema: Enciende el overlay (Sprite B) y activa animación (C)
+                // Efecto Gema (A + B + C): Enciende el overlay superpuesto y activa animación
                 if (gemGlowRenderer != null) gemGlowRenderer.gameObject.SetActive(true);
                 if (gemAnimator != null) gemAnimator.SetTrigger("PlaySparkle");
             }
             else
             {
-                // Efecto Normal: Cambia Sprite A por B
-                spriteRenderer.sprite = hoverSprite;
+                // Efecto Normal: Cambia Sprite A por B directamente
+                if (hoverSprite != null) spriteRenderer.sprite = hoverSprite;
             }
         }
         else if (!isHovered && wasHovered && !isSelected)
         {
             if (currentGemData != null && currentGemData.isSpecialGem)
             {
-                // Apaga el overlay de la gema
+                // Apaga el overlay de la gema, el Sprite A base sigue visible detrás
                 if (gemGlowRenderer != null) gemGlowRenderer.gameObject.SetActive(false);
             }
             else
@@ -371,24 +375,11 @@ public class TileController : TilesData
             }
         }
 
-        // Clic Izquierdo para Seleccionar/Deseleccionar
+        // 2. LÓGICA DE SELECCIÓN (CLIC) ---> ¡Esto era lo que se había borrado!
         if (isHovered && Mouse.current.leftButton.wasPressedThisFrame)
         {
+            // Dispara el evento que le avisa al WordBuilderManager que esta loseta fue tocada
             onTileInteracted?.Invoke();
-
-            if (!isSelected)
-                WordBuilderManager.Instance.SelectTile(this);
-            else
-                WordBuilderManager.Instance.DeselectTile(this);
-        }
-
-        // Clic Derecho: Regresar TODAS las baldosas
-        if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)
-        {
-            if (WordBuilderManager.Instance.GetSelectedTiles().Count > 0)
-            {
-                WordBuilderManager.Instance.ClearAllTiles();
-            }
         }
     }
 
@@ -416,26 +407,26 @@ public class TileController : TilesData
 
     public void MoveTo(Vector3 newPos, bool selecting)
     {
-        isMovingToTarget = true; // Activamos el movimiento por código
+        isMovingToTarget = true;
 
         if (selecting && !isSelected)
         {
-            originalPosition = transform.position; // Guarda su posición real
+            originalPosition = transform.position;
             isSelected = true;
             isMovingBack = false;
             rb.bodyType = RigidbodyType2D.Kinematic;
             col.isTrigger = true;
             if (sortingGroup != null) sortingGroup.sortingOrder = 10;
 
-            // --- NUEVO: Apagar el hover/glow al enviarla a la palabra ---
+            // --- CORRECCIÓN: Apagar el hover/glow al enviarla a la palabra ---
             if (currentGemData != null)
             {
                 if (currentGemData.isSpecialGem && gemGlowRenderer != null)
-                    gemGlowRenderer.gameObject.SetActive(false); // Apaga glow de gema
-                else
-                    spriteRenderer.sprite = normalSprite;        // Regresa loseta normal a base
+                    gemGlowRenderer.gameObject.SetActive(false); // Apaga glow de gema superpuesto
+
+                // Siempre nos aseguramos de que el sprite base regrese a la normalidad
+                spriteRenderer.sprite = normalSprite;
             }
-            // ------------------------------------------------------------
         }
         else if (!selecting)
         {
