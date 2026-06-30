@@ -26,9 +26,36 @@ public class StageTransition : MonoBehaviour
 
     public EnemyData currentEnemy; //Es un ScriptableObject que contiene la información del enemigo actual, incluyendo su vida.
 
+    // ==========================================
+    // NUEVO: Variables para la Secuencia de Tesoros y Escena
+    // ==========================================
+    [Header("Secuencia de Victoria (Tesoros)")]
+    [Tooltip("El CinematicPresentationController de tu PanelDeTesoros.")]
+    public CinematicPresentationController treasurePanelCinematic;
+
+    // NUEVO: Agregamos el campo para el sonido del tesoro
+    [Tooltip("El clip de audio que se reproducirá al mostrar el tesoro.")]
+    public AudioClip treasureAudioClip;
+
+    [Tooltip("Segundos a esperar DESPUÉS de que el enemigo muere para mostrar el tesoro.")]
+    public float delayBeforeTreasure = 2.0f;
+
+    [Tooltip("Tiempo total que dura la cinemática del tesoro (Display Duration + Fade Out Duration).")]
+    public float treasureCinematicDuration = 3.5f;
+
+    [Header("Cambio de Escena")]
+    [Tooltip("Tiempo a esperar DESPUÉS de que desaparece el panel de tesoros antes de cambiar de escena.")]
+    public float delayBeforeSceneChange = 2.0f;
+
+    [Tooltip("Referencia a tu script SceneManager (arrastra el objeto que lo contiene).")]
+    public SceneManager customSceneManager;
+
+    [Tooltip("El nombre exacto de la escena a la que quieres ir (Ej: GameScene2, Map, etc).")]
+    public string nextSceneName = "MainMenu";
+    // ==========================================
+
     private bool isMoving = false;
     private bool isFinished = false;
-
 
     #region CÓDIGOS DE PRUEBA
     void Update()
@@ -79,7 +106,10 @@ public class StageTransition : MonoBehaviour
         if (currentHealth <= 0 && !isMoving && !isFinished)
         {
             isFinished = true;
-            StartCoroutine(MoveSceneCoutine());
+            StartCoroutine(MoveSceneCoutine()); // Sigue moviendo el fondo como lo tenías planeado
+
+            // NUEVO: Iniciamos la secuencia del tesoro de forma paralela
+            StartCoroutine(VictorySequenceRoutine());
         }
     }
 
@@ -89,6 +119,41 @@ public class StageTransition : MonoBehaviour
         if (!isMoving || !isFinished)
         {
             StartCoroutine(MoveSceneCoutine());
+        }
+    }
+
+    // NUEVO: Corrutina que maneja los tiempos del Panel de Tesoros y el SceneManager
+    // Corrutina que maneja los tiempos del Panel de Tesoros y el SceneManager
+    private IEnumerator VictorySequenceRoutine()
+    {
+        // 1. Esperamos unos segundos inmediatamente después de que la vida llega a 0
+        yield return new WaitForSeconds(delayBeforeTreasure);
+
+        // 2. Activamos el panel de tesoros
+        if (treasurePanelCinematic != null)
+        {
+            // NUEVO: Le pasamos el clip de audio a la función
+            treasurePanelCinematic.StartPresentationSequence(treasureAudioClip);
+
+            // 3. Esperamos a que la presentación del tesoro termine completamente
+            yield return new WaitForSeconds(treasureCinematicDuration);
+        }
+        else
+        {
+            Debug.LogWarning("¡Falta asignar el Panel de Tesoros en el StageTransition!");
+        }
+
+        // 4. Esperamos los últimos segundos de gracia antes de cambiar la pantalla
+        yield return new WaitForSeconds(delayBeforeSceneChange);
+
+        // 5. ¡Cambiamos de escena usando tu script SceneManager!
+        if (customSceneManager != null)
+        {
+            customSceneManager.LoadScene(nextSceneName);
+        }
+        else
+        {
+            Debug.LogError("¡Falta asignar el SceneManager en el StageTransition!");
         }
     }
 
