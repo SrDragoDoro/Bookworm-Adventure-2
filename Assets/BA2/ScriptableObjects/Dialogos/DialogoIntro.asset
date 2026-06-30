@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f5adf9095a87b45a45cbde235a8720, type: 3}
+  m_Name: DialogoIntro
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
+  lines:
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: "\xBFListo para practicar, Lex?"
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "\xA1Estoy listo para practicar, Stuffy!"
+    speakerSprite: {fileID: 1807796243776642811, guid: 19d644c2432439343b5de43b7e037a3c, type: 3}
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: 'Bien, en ese caso comencemos, Lex. '
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "Buen\xEDsimo, \xBFQu\xE9 debo hacer para empezar?"
+    speakerSprite: {fileID: 2351938916683378888, guid: d95dbadcb41cd59429d120822e293ac4, type: 3}
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: "\xA1Ah!, claro. \xBFVes esas losetas en escenario? Intenta formar
+      una palabra mayor a 3 letras y prueba d\xE1ndole al bot\xF3n atacar. \xA1Vamos,
+      Lex!"
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "\xBFQu\xE9 pasa si no tengo vocales o consonantes para formar una
+      palabra?"
+    speakerSprite: {fileID: 2802897829158577038, guid: e54b4bb694a62fd4fb0a4f9a9396a154, type: 3}
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: "\xA1No te preocupes por eso, Lex! Hay una opci\xF3n \"buen\xEDsima\"
+      para esos casos. "
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: "Si no tienes la posibilidad de formar una palabra, d\xE1le al bot\xF3n
+      Revolver y tendr\xE1s nuevas posibilidaes. \xA1Anda, int\xE9ntalo, Lex!  "
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "\xA1De acuerdo vamos al lio, Stuffy!"
+    speakerSprite: {fileID: -654299915282157565, guid: 0f748d512793ee94ea3bf3162e5d6824, type: 3}
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: "Jajaja, No tan deprisa mi rat\xF3n de biblioteca. "
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: "Hay 2 cocas m\xE1s que debes saber antes de empezar tu entrenamiento."
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "\xBFY cu\xE1les son esas 2 cosas, Stuffy?"
+    speakerSprite: {fileID: 5231503863339311210, guid: 7fa74c00520d5c748bbfc571dee283fc, type: 3}
+  - speakerName: Sfutty
+    isLex: 0
+    textContent: Primero, luego de que realices un ataque, hay una posibilidad de
+      que la siguiente loseta sea de un valor especial.
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: "Estas losetas especiales potencian mucho tu poder de ataque dependiendo
+      de su rareza. Encontrar\xE1s varias mientras avances en la historia."
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: "Segundo, si te est\xE1s quedando sin vida, no dudes en usar la
+      posci\xF3n de curaci\xF3n que tienes de bajo de t\xED. No te costar\xE1 ning\xFAn
+      turno."
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "\xA1Excelente, Stuffy! No te preocupes es libro comido par m\xED.
+      Jejeje."
+    speakerSprite: {fileID: 2351938916683378888, guid: d95dbadcb41cd59429d120822e293ac4, type: 3}

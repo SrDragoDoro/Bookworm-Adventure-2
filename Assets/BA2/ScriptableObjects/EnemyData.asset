@@ -15,9 +15,9 @@ MonoBehaviour:
   MeleeAttackType: 1
   TileAttackType: 1
   EnemyType: 1
-  EnemyState: 1
+  EnemyState: 2
   nameEntity: Stuffy
   description: Best friend
   xpValue: 0
   baseDamage: 4
-  maxHealth: 4
+  maxHealth: 20
