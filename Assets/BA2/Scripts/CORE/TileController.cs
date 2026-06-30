@@ -16,7 +16,7 @@ public enum TableState
 {
     None,
     Playing,
-    Stopped    
+    Stopped
 }
 
 
@@ -27,9 +27,13 @@ public class TileController : TilesData
 
     [Header("Sprites de la Loseta")]
     [HideInInspector] public Sprite normalSprite;
-    [HideInInspector] public Sprite hoverSprite;
-    [HideInInspector] public UnityEvent AnimationTileGem;
+    // Eliminamos 'hoverSprite' porque ya no es un Sprite, se leerá desde TilesData
+
     [HideInInspector] public int currentDamageMultiplier = 1;
+
+    [Header("Animación y Efectos de Hover (Prefabs)")]
+    private GameObject currentHoverAnimation;     // Guarda la instancia de la animación
+    private GameObject currentHoverSpriteObject;  // Guarda la instancia del prefab hoverSprite
 
     [Header("Configuración del Glow Individual")]
     [SerializeField] private SpriteRenderer glowSpriteRenderer;// El SpriteRenderer hijo para el resplandor
@@ -45,7 +49,7 @@ public class TileController : TilesData
 
     [Header("Configuración Visual y Tipos")]
     // NOTA: TileType y TileVisualData se leen automáticamente del padre TilesData.cs
-    public TileType currentTileType = TileType.Basic;
+    public TileType currentTileType = TileType.Normal;
     public List<TileVisualData> visualDatabase;             // Aquí van los sprites en el Inspector
 
     [Header("Referencias Hijas")]
@@ -105,8 +109,8 @@ public class TileController : TilesData
     void Update()
     {
         LayerOnTable();
-        if (currentTableState == TableState.Stopped) return;  HandleMouseInput();
-        HandleMovement();        
+        if (currentTableState == TableState.Stopped) return; HandleMouseInput();
+        HandleMovement();
     }
 
     //Para controlor del tablero durante cinemáticas o cambio de enemigo, etc. Evita que el jugador pueda interactuar o mover las losetas.
@@ -153,7 +157,7 @@ public class TileController : TilesData
                 break;
         }
     }
-        
+
     // Apaga por completo el resplandor de esta loseta.   
     public void DisableTileGlow()
     {
@@ -287,39 +291,73 @@ public class TileController : TilesData
         {
             UpdateTextFontSize(currentLetter);
         }
-        // Buscar el diseño correspondiente en a la base de datos
+
+        // Buscar el diseño correspondiente en la base de datos
         foreach (TileVisualData visual in visualDatabase)
         {
             if (visual.type == newType)
             {
-                // Asignamos los sprites correctos para este tipo
+                // Asignamos el sprite base y el multiplicador
                 normalSprite = visual.normalSprite;
-                hoverSprite = visual.hoverSprite;                
                 currentDamageMultiplier = visual.damageMultiplier;
-                
-                // Actualizamos el renderizador inmediatamente
-                spriteRenderer.sprite = isHovered ? hoverSprite : normalSprite;
-                
+
+                // --- 1. LÓGICA DEL PREFAB: HOVER SPRITE ---
+                if (currentHoverSpriteObject != null) Destroy(currentHoverSpriteObject);
+
+                if (visual.hoverSprite != null)
+                {
+                    currentHoverSpriteObject = Instantiate(visual.hoverSprite, transform);
+                    currentHoverSpriteObject.transform.localPosition = Vector3.zero;
+                    currentHoverSpriteObject.SetActive(false); // Lo dejamos apagado por defecto
+                }
+
+                // --- 2. LÓGICA DEL PREFAB: ANIMACIÓN ---
+                if (currentHoverAnimation != null) Destroy(currentHoverAnimation);
+
+                if (visual.hoverAnimationObject != null)
+                {
+                    currentHoverAnimation = Instantiate(visual.hoverAnimationObject, transform);
+                    currentHoverAnimation.transform.localPosition = Vector3.zero;
+                    currentHoverAnimation.SetActive(false); // Lo dejamos apagado por defecto
+                }
+                // ---------------------------------------------------
+
+                // El renderizador de la loseta siempre usará el normalSprite de fondo
+                spriteRenderer.sprite = normalSprite;
+
                 break;
             }
         }
     }
 
-    private void HandleMouseInput() // Maneja la interacción del mouse con la loseta
+    private void HandleMouseInput()
     {
-        
         if (Mouse.current == null) return;
 
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         bool wasHovered = isHovered;
         isHovered = col.OverlapPoint(mousePos);
-        AnimationTileGem?.Invoke();
 
-        // Lógica de Hover
+        // Lógica de Hover con Animación
+        // Lógica de Hover con Animación y Prefab Hover
         if (isHovered && !wasHovered && !isSelected)
-            spriteRenderer.sprite = hoverSprite;
-        else if (!isHovered && wasHovered && !isSelected)
+        {
+            // Encendemos ambos efectos
+            if (currentHoverAnimation != null) currentHoverAnimation.SetActive(true);
+            if (currentHoverSpriteObject != null) currentHoverSpriteObject.SetActive(true);
+
+            // Nos aseguramos de que el fondo se mantenga en normalSprite
             spriteRenderer.sprite = normalSprite;
+        }
+        else if (!isHovered && wasHovered && !isSelected)
+        {
+            // Apagamos ambos efectos
+            if (currentHoverAnimation != null) currentHoverAnimation.SetActive(false);
+            if (currentHoverSpriteObject != null) currentHoverSpriteObject.SetActive(false);
+
+            // Mantenemos normalSprite
+            spriteRenderer.sprite = normalSprite;
+        }
 
         // Clic Izquierdo para Seleccionar/Deseleccionar
         if (isHovered && Mouse.current.leftButton.wasPressedThisFrame)
@@ -327,9 +365,17 @@ public class TileController : TilesData
             onTileInteracted?.Invoke();
 
             if (!isSelected)
+            {
                 WordBuilderManager.Instance.SelectTile(this);
+
+                // Apagamos los efectos al seleccionar la loseta para moverla al tablero
+                if (currentHoverAnimation != null) currentHoverAnimation.SetActive(false);
+                if (currentHoverSpriteObject != null) currentHoverSpriteObject.SetActive(false);
+            }
             else
+            {
                 WordBuilderManager.Instance.DeselectTile(this);
+            }
         }
 
         // Clic Derecho: Regresar TODAS las baldosas al tablero a la vez
@@ -383,7 +429,7 @@ public class TileController : TilesData
             isSelected = false;
             isMovingBack = true;
             spriteRenderer.sprite = normalSprite;
-            rb.bodyType = RigidbodyType2D.Kinematic;          
+            rb.bodyType = RigidbodyType2D.Kinematic;
         }
 
         targetPosition = newPos;

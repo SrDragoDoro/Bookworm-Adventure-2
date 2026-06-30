@@ -34,6 +34,21 @@ public class WordBuilderManager : MonoBehaviour
     public float spawnHeight = 8f;       // Altura en Y (fuera de cámara) desde donde caerán
     public float verticalSpacing = 1.2f; // Espacio vertical al instanciar varias en la misma columna
 
+
+    // ================= NUEVO: SISTEMA DE PROBABILIDADES =================
+    [System.Serializable]
+    public struct TileSpawnWeight
+    {
+        public TileType tileType;
+        [Tooltip("Cuanto mayor sea el número, más probable es que aparezca.")]
+        public float weight;
+    }
+
+    [Header("Probabilidades de Tipos de Loseta")]
+    [Tooltip("Añade aquí los tipos de losetas y su peso para aparecer.")]
+    public List<TileSpawnWeight> spawnWeights = new List<TileSpawnWeight>();
+    // =====================================================================
+
     [Header("Configuración de la zona de palabra")]
     [SerializeField] private Transform wordZoneCenter;
     [SerializeField] private float spacing = 1.2f;
@@ -63,15 +78,17 @@ public class WordBuilderManager : MonoBehaviour
         // 1. Buscamos todas las baldosas pre-colocadas en la escena
         allTiles = FindObjectsOfType<TileController>();
 
-        // 2. ¡Las inicializamos con letras aleatorias!
+        // 2. ¡Las inicializamos respetando su tipo actual!
         foreach (TileController tile in allTiles)
         {
             if (tile != null)
             {
-                //string randomLetter = AlphabetData.GetRandomLetter();
+                // Obtenemos la letra aleatoria normalmente
                 string randomLetter = GameManager.instance.characterDataBase.GetRandomLetter();
 
-                tile.SetupTile(TileType.Basic, randomLetter);
+                // CLAVE: En lugar de usar GetRandomTileType(), le pasamos su propio "currentTileType".
+                // De esta forma, si en el inspector pusiste que era Ruby o Amethyst, mantendrá ese tipo.
+                tile.SetupTile(tile.currentTileType, randomLetter);
             }
         }
     }
@@ -123,9 +140,15 @@ public class WordBuilderManager : MonoBehaviour
                 GameObject newTileObj = Instantiate(tilePrefab, spawnPos, Quaternion.identity);
                 TileController newTile = newTileObj.GetComponent<TileController>();
 
-                //string randomLetter = AlphabetData.GetRandomLetter();
                 string randomLetter = GameManager.instance.characterDataBase.GetRandomLetter();
-                newTile.SetupTile(TileType.Basic, randomLetter);
+
+                // === AQUÍ ESTÁ EL CAMBIO IMPORTANTE ===
+                // Calculamos el tipo aleatorio basado en los pesos
+                TileType randomType = GetRandomTileType();
+
+                // Le asignamos ese tipo aleatorio a la nueva loseta
+                newTile.SetupTile(randomType, randomLetter);
+                // ======================================
             }
         }
 
@@ -133,6 +156,39 @@ public class WordBuilderManager : MonoBehaviour
         FreezeBoard(false);
     }
     #endregion
+
+    // === AQUÍ PONES EL NUEVO MÉTODO, FUERA DE REFILL COLUMNS ===
+    private TileType GetRandomTileType()
+    {
+        // Si no hay pesos configurados, devolvemos Normal por defecto para evitar errores
+        if (spawnWeights == null || spawnWeights.Count == 0)
+            return TileType.Normal;
+
+        float totalWeight = 0;
+
+        // Sumamos todos los pesos
+        foreach (var spawn in spawnWeights)
+        {
+            totalWeight += spawn.weight;
+        }
+
+        // Elegimos un número al azar entre 0 y el peso total
+        float randomValue = UnityEngine.Random.Range(0, totalWeight);
+        float cumulativeWeight = 0;
+
+        // Recorremos la lista para ver en qué rango cayó el número
+        foreach (var spawn in spawnWeights)
+        {
+            cumulativeWeight += spawn.weight;
+            if (randomValue <= cumulativeWeight)
+            {
+                return spawn.tileType; // Encontramos la loseta ganadora
+            }
+        }
+
+        return TileType.Normal; // Respaldo por si algo falla
+    }
+
 
     #region Word Validation and Visual Feedback  
     public void EvaluateCurrentWord()

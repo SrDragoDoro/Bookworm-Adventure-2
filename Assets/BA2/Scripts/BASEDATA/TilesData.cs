@@ -6,12 +6,16 @@ using UnityEngine.Events;
 public enum TileType
 {
     None,
-    Basic,
+    Normal,
     Amethyst,
+    Ruby,
+    Saphire,
+    Topaz,
+    Garnet,
+    Crystal,
+    Emerald,
     Diamond,
-    Cursed,
-    Plagued,
-    Fire
+    Rainbow
 }
 
 [System.Serializable]
@@ -19,8 +23,9 @@ public struct TileVisualData
 {
     public TileType type;
     public Sprite normalSprite;
-    public Sprite hoverSprite;
-    public UnityEvent AnimationTileGem;
+    public GameObject hoverSprite;
+    //public UnityEvent AnimationTileGem;
+    public GameObject hoverAnimationObject; // <--- Reemplaza al UnityEvent
     public int damageMultiplier; // Cálculo del daño de las gemas y tesoros
 }
 #endregion
