@@ -20,6 +20,9 @@ public class WordBuilderManager : MonoBehaviour
     public static WordBuilderManager Instance;
     public InputSystem_Actions inputs;
 
+    [Header("Comentarios de Lex")]
+    public LexCommentaryManager lexCommentaryManager; // <-- AÑADIR AQUÍ
+
     [Header("Configuración del Botón de Ataque")]
     public UnityEngine.UI.Button attackButtonUI;  // El botón de la UI de Unity
     public ParticleSystem validWordParticles;     // Tus partículas de éxito
@@ -33,7 +36,8 @@ public class WordBuilderManager : MonoBehaviour
     //public LetterManager letterManager;  // Referencia al script de probabilidades    
     public float spawnHeight = 8f;       // Altura en Y (fuera de cámara) desde donde caerán
     public float verticalSpacing = 1.2f; // Espacio vertical al instanciar varias en la misma columna
-
+    // Añade esta variable al inicio de tu script WordBuilderManager
+    private string lastSpokenWord = "";
 
     // ================= NUEVO: SISTEMA DE PROBABILIDADES =================
     [System.Serializable]
@@ -225,6 +229,15 @@ public class WordBuilderManager : MonoBehaviour
             if (!validWordParticles.isPlaying) validWordParticles.Play();
             if (validWordSound != null && !validWordSound.isPlaying) validWordSound.Play();
 
+            // ================= NUEVO: COMENTARIO DE LEX =================
+            // Verificamos que Lex no haya reaccionado ya a esta misma palabra exacta
+            if (lexCommentaryManager != null && currentWord != lastSpokenWord)
+            {
+                lexCommentaryManager.TriggerCommentary(currentWord.Length);
+                lastSpokenWord = currentWord; // Guardamos la palabra para que no repita
+            }
+            // ============================================================
+
             int totalTiles = selectedTiles.Count;
             int charIndex = 0; // NUEVO: Llevamos el control de qué parte de la palabra estamos leyendo
 
@@ -253,6 +266,11 @@ public class WordBuilderManager : MonoBehaviour
             attackButtonUI.interactable = false;
             if (validWordParticles.isPlaying) validWordParticles.Stop();
             if (validWordSound != null && validWordSound.isPlaying) validWordSound.Stop();
+
+            // ================= NUEVO: RESETEO DE COMENTARIO =================
+            // Si la palabra ya no es válida (ej. borraron una letra), olvidamos la última palabra
+            lastSpokenWord = "";
+            // ================================================================
 
             // Si se volvió inválida, regresamos las letras a su estado base Y apagamos el glow
             foreach (TileController tile in selectedTiles)
@@ -390,14 +408,16 @@ public class WordBuilderManager : MonoBehaviour
     }
     #endregion
 
-    #region Attack Execution   
+    #region Attack Execution      
     public void ExecuteAttack()
     {
         int totalDamage = 0;
+        string finalWord = ""; // <-- AÑADIR AQUÍ para recolectar la palabra completa
 
         foreach (TileController tile in selectedTiles)
         {
-            //int baseLetterDamage = AlphabetData.GetBaseDamage(tile.currentLetter);
+            finalWord += tile.currentLetter; // <-- AÑADIR AQUÍ para saber la longitud real
+
             int baseLetterDamage = GameManager.instance.characterDataBase.GetTotalDamage(tile.currentLetter);
 
             if (tile is IDamageDealer damageDealer)
@@ -411,6 +431,8 @@ public class WordBuilderManager : MonoBehaviour
         }
 
         Debug.Log($"¡Ataque ejecutado! Palabra válida. Daño total calculado: {totalDamage}");
+        
+        // ===============================================================
 
         // ================= CAMBIOS PARA EL TURNO RPG =================
 
@@ -429,5 +451,5 @@ public class WordBuilderManager : MonoBehaviour
 
         ConsumeTilesAndRefill();
     }
-    #endregion
+    #endregion  
 }
