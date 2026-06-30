@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
-using Unity.VectorGraphics;
-using UnityEngine;
+using UnityEngine; // Quité Unity.VectorGraphics si no lo usas para limpiar un poco
 
 public enum typeScene
 {
@@ -11,17 +10,24 @@ public enum typeScene
     Credits
 }
 
-
 public class SceneManager : MonoBehaviour
 {
     [Header("Ajustes de cambio de escenas por tiempo")]
     [SerializeField] typeScene scene = typeScene.MainMenu;
     [SerializeField] private float timeToChangeScene;
+    [SerializeField] private string nextSceneName;
 
+
+    // NUEVO: Parámetro para definir si espera a que otro script lo inicie
+    [SerializeField] private bool esperarLlamadaExterna = false;
 
     void Start()
     {
-        ActivateScene();
+        // Si NO está esperando una llamada externa, inicia normalmente
+        if (!esperarLlamadaExterna)
+        {
+            ActivateScene();
+        }
     }
 
     #region Control de Escenas por botones
@@ -34,7 +40,6 @@ public class SceneManager : MonoBehaviour
     {
         Application.Quit();
     }
-
     #endregion
 
     #region Control de Escenas por tiempo
@@ -46,13 +51,20 @@ public class SceneManager : MonoBehaviour
         }
     }
 
+    // NUEVO: Método público para que LevelController pueda iniciar el contador
+    public void ActivarContador()
+    {
+        if (scene == typeScene.GameScene)
+        {
+            StartCoroutine(ChangeSceneToTutorial());
+        }
+    }
 
     private IEnumerator ChangeSceneToTutorial()
     {
         WaitForSeconds waitForSeconds = new WaitForSeconds(timeToChangeScene);
         yield return waitForSeconds;
-        LoadScene("Tutorial");
+        LoadScene(nextSceneName);
     }
     #endregion
-
 }

@@ -1,0 +1,58 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7f5adf9095a87b45a45cbde235a8720, type: 3}
+  m_Name: EndTutorial
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueSequence
+  lines:
+  - speakerName: Lex
+    isLex: 1
+    textContent: "\xA1Wow! Esos fu\xE9 muy r\xE1pido"
+    speakerSprite: {fileID: -2793957416787663820, guid: e02140972ee107440a764269005b0149, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "\xBFNo m\xE1s por ahora? \xBFVerdad, Stuffy?"
+    speakerSprite: {fileID: 5231503863339311210, guid: 7fa74c00520d5c748bbfc571dee283fc, type: 3}
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: "\xA1Vaya! Parece que te haz divertido much\xEDsimo, Lex."
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Stuffy
+    isLex: 0
+    textContent: "Por Ahora esto es todo lo que sea desarrollado del de la historia.
+      Ten paciencia,  \xA1Pr\xF3ximamente habr\xE1 m\xE1s que jugar!"
+    speakerSprite: {fileID: 236561199900823126, guid: c5356cc12b768b44fab2c14741db012a, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "\xA1Eeeh! Eso suena genial, Stuffy."
+    speakerSprite: {fileID: 2351938916683378888, guid: d95dbadcb41cd59429d120822e293ac4, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "Esperar\xE9 con muchas ansias que hasta que hayan m\xE1s niveles
+      de la historia."
+    speakerSprite: {fileID: -654299915282157565, guid: 0f748d512793ee94ea3bf3162e5d6824, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "Y t\xFA jugador, espero te haya gustado esta peque\xF1a muestra
+      de lo que se planea para el futuro del proyecto. Ten por seguro que lo terminar\xE9mos."
+    speakerSprite: {fileID: 1807796243776642811, guid: 19d644c2432439343b5de43b7e037a3c, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "\xA1As\xED nos tome di\xE1s, meses, a\xF1os, d\xE9cadas!"
+    speakerSprite: {fileID: -3462183827335494902, guid: cd249919a4dc82a4a880bfa02c686a31, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: O mil y dos noches (si es que entiendes la referencia jejeje).
+    speakerSprite: {fileID: 1807796243776642811, guid: 19d644c2432439343b5de43b7e037a3c, type: 3}
+  - speakerName: Lex
+    isLex: 1
+    textContent: "\xA1MUCHAS GRACIAS POR JUGAR!"
+    speakerSprite: {fileID: -654299915282157565, guid: 0f748d512793ee94ea3bf3162e5d6824, type: 3}

@@ -20,4 +20,4 @@ MonoBehaviour:
   description: Best friend
   xpValue: 0
   baseDamage: 4
-  maxHealth: 4
+  maxHealth: 20

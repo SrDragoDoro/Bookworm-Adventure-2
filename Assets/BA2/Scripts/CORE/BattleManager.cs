@@ -33,7 +33,15 @@ public class BattleManager : MonoBehaviour, IDamageDealer
 
     void Start()
     {
-        ChangeState(BattleState.PlayerTurn);      
+        IEnumerator Start()
+        {
+            // Esperamos a que termine el primer frame. 
+            // Esto garantiza que TODOS los scripts ya ejecutaron sus métodos Start().
+            yield return null;
+
+            // Ahora sí, con todo cargado, iniciamos el combate.
+            ChangeState(BattleState.PlayerTurn);
+        }
     }
 
     #region Suscripción a eventos de salud

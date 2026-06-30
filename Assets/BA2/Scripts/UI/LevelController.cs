@@ -15,6 +15,10 @@ public class LevelController : MonoBehaviour
     [SerializeField] private DialogueManager dialogueManager;
     [SerializeField] private DialogueSequence prologueSequence;
 
+    // NUEVO: Referencia a tu SceneManager
+    [Header("Controlador de Escenas")]
+    [SerializeField] private SceneManager miSceneManager;
+
     // NUEVO: Referencias para la cinemática del Boss
     [Header("Configuración de Cinemática")]
     [SerializeField] private CinematicPresentationController bossCinematic;
@@ -43,27 +47,29 @@ public class LevelController : MonoBehaviour
 
     void Update()
     {
-        // 3. Revisas si estás en la intro y aún no se ha jugado
         if (!introPlayed && currentState == GameState.Intro)
         {
             introPlayed = true;
             dialogueManager.StartDialogue(prologueSequence);
         }
 
-        // 4. Cambiar de fase cuando el diálogo termine (y comprobamos que no estemos ya esperando)
+        // Aquí es donde detectas que el diálogo acaba de terminar
         if (introPlayed && !dialogueManager.IsDialogueActive && currentState == GameState.Intro && !isWaitingToPlay)
         {
+            // NUEVO: Le decimos al SceneManager que inicie su contador
+            if (miSceneManager != null)
+            {
+                miSceneManager.ActivarContador();
+            }
+
             // Iniciamos la cuenta regresiva antes de jugar
             StartCoroutine(TransitionToPlayerTurn());
         }
 
-        // 5. Bloqueo de Gameplay (durante el diálogo O durante los segundos de espera)
         if (dialogueManager.IsDialogueActive || isWaitingToPlay)
         {
-            return; // Bloquea inputs y mecánicas
+            return;
         }
-
-        // --- A partir de aquí va la lógica normal de turnos (cuando ya se está jugando) ---
     }
 
     // Corrutina para manejar la pausa de tiempo y la cinemática

@@ -21,7 +21,15 @@ public class CharacterCombat : MonoBehaviour
             // El daño de Lex ya fue calculado e inyectado desde WordBuilderManager antes de llamar este método
             if (unitAnimator != null)
             {
-                unitAnimator.SetTrigger("OnAttack");
+                // Si el valor es mayor a 0.5 (50% de probabilidad)
+                if (UnityEngine.Random.value > 0.5f)
+                {
+                    unitAnimator.SetTrigger("OnAttack");
+                }
+                else
+                {
+                    unitAnimator.SetTrigger("OnWreckingBall");
+                }
             }
         }
         else

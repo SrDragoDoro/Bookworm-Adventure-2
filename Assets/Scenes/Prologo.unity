@@ -330,7 +330,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneManager
   scene: 1
-  timeToChangeScene: 15.5
+  timeToChangeScene: 15
+  nextSceneName: Tutorial
+  esperarLlamadaExterna: 0
 --- !u!4 &219949008
 Transform:
   m_ObjectHideFlags: 0

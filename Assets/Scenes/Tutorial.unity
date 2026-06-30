@@ -603,7 +603,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &78987514
 Animator:
   serializedVersion: 7
@@ -1125,7 +1125,7 @@ MonoBehaviour:
   treasureCinematicDuration: 3.5
   delayBeforeSceneChange: 4
   customSceneManager: {fileID: 1003052678}
-  nextSceneName: Menu
+  nextSceneName: Libro4
 --- !u!4 &171277406
 Transform:
   m_ObjectHideFlags: 0
@@ -1747,7 +1747,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 256043801}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 23f0f9266db17e449a62d82fba895ca5, type: 2}
   m_CullingMode: 0
@@ -3094,6 +3094,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8995140420820349065, guid: 76af78e7320272a4f91b7ae5fa73e645, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.095997
+      objectReference: {fileID: 0}
+    - target: {fileID: -8995140420820349065, guid: 76af78e7320272a4f91b7ae5fa73e645, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.384751
       objectReference: {fileID: 0}
@@ -3239,7 +3243,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2834163160663901397, guid: 76af78e7320272a4f91b7ae5fa73e645, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.3662581
+      value: 1.366258
       objectReference: {fileID: 0}
     - target: {fileID: 2834163160663901397, guid: 76af78e7320272a4f91b7ae5fa73e645, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5056,13 +5060,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 869708082}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -1.22, y: 1.78, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0.8905566, w: 0.45487258}
+  m_LocalPosition: {x: 4.1, y: 0.37, z: 0}
   m_LocalScale: {x: 3.122, y: 3.122, z: 3.122}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 578521063}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -125.887}
 --- !u!212 &869708084
 SpriteRenderer:
   serializedVersion: 2
@@ -5113,7 +5117,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 6773264620611337768, guid: 6b28757dcbee2f045b95f56dd15dd779, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5526,6 +5530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneManager
   scene: 0
   timeToChangeScene: 0
+  esperarLlamadaExterna: 0
 --- !u!114 &1003052679
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5555,7 +5560,7 @@ MonoBehaviour:
   battleManager: {fileID: 485577077}
   uiManager: {fileID: 0}
   tileController: {fileID: 0}
-  wordBuilderManager: {fileID: 0}
+  wordBuilderManager: {fileID: 2045025687}
   stageTransition: {fileID: 0}
   characterData: {fileID: 0}
   enemyData: {fileID: 0}
@@ -5575,6 +5580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelController
   dialogueManager: {fileID: 1527432585}
   prologueSequence: {fileID: 11400000, guid: b9828cacc9b4de84591b809e3e4c6884, type: 2}
+  miSceneManager: {fileID: 0}
   bossCinematic: {fileID: 647230144}
   bossCinematicClip: {fileID: 8300000, guid: f3ba38a1735fd3b42a439b9f00225a86, type: 3}
   cinematicWaitTime: 3.5
@@ -6271,6 +6277,143 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &1210620212
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1210620213}
+  - component: {fileID: 1210620215}
+  - component: {fileID: 1210620214}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1210620213
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210620212}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1722068652}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 17, y: 501}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1210620214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210620212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.TextMeshPro::TMPro.TextMeshProUGUI
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "Pr\xF3logo: \xBFEst\xE1s aqu\xED Costur\xEDn? "
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 75d9477286b232c4c9613f5450d37a76, type: 2}
+  m_sharedMaterial: {fileID: -7061279881156358229, guid: 75d9477286b232c4c9613f5450d37a76, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_characterHorizontalScale: 1
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: -291.94153, y: 0, z: -256.62717, w: 5.0590916}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1210620215
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1210620212}
+  m_CullTransparentMesh: 1
 --- !u!1 &1220849973
 GameObject:
   m_ObjectHideFlags: 0
@@ -7744,6 +7887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SceneManager
   scene: 0
   timeToChangeScene: 4
+  esperarLlamadaExterna: 0
 --- !u!4 &1559652055
 Transform:
   m_ObjectHideFlags: 0
@@ -8458,6 +8602,7 @@ RectTransform:
   - {fileID: 621346328}
   - {fileID: 852740591}
   - {fileID: 1866035891}
+  - {fileID: 1210620213}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -10469,6 +10614,7 @@ GameObject:
   - component: {fileID: 2045025687}
   - component: {fileID: 2045025688}
   - component: {fileID: 2045025689}
+  - component: {fileID: 2045025690}
   m_Layer: 0
   m_Name: ZonaCentroDePalabras
   m_TagString: Untagged
@@ -10611,15 +10757,15 @@ MonoBehaviour:
   verticalSpacing: 1.2
   spawnWeights:
   - tileType: 1
-    weight: 50
+    weight: 70
   - tileType: 2
-    weight: 20
-  - tileType: 3
     weight: 15
-  - tileType: 9
+  - tileType: 3
     weight: 10
-  - tileType: 10
+  - tileType: 9
     weight: 5
+  - tileType: 10
+    weight: 2.15
   wordZoneCenter: {fileID: 2045025684}
   spacing: 0.75
   dictionaryManager: {fileID: 1220849974}
@@ -10775,6 +10921,26 @@ MonoBehaviour:
     maxLength: 16
     phrase: "\xA1Alucinante!"
     audioClip: {fileID: 8300000, guid: 360b610e403b44d468f58a94c1c3c2e2, type: 3}
+--- !u!114 &2045025690
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2045025683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3654e0e2f209d1c419a86b277c7352bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LexAttackAnimationManager
+  lexAnimator: {fileID: 578521064}
+  attackTiers:
+  - minLength: 1
+    maxLength: 4
+    animationTriggerName: OnShotTile
+  - minLength: 5
+    maxLength: 16
+    animationTriggerName: OnWreckingBall
 --- !u!1 &2075476514
 GameObject:
   m_ObjectHideFlags: 0
