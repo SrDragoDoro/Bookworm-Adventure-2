@@ -4956,7 +4956,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelController
   dialogueManager: {fileID: 1527432585}
   prologueSequence: {fileID: 11400000, guid: b9828cacc9b4de84591b809e3e4c6884, type: 2}
+  bossCinematic: {fileID: 647230144}
+  bossCinematicClip: {fileID: 8300000, guid: f3ba38a1735fd3b42a439b9f00225a86, type: 3}
+  cinematicWaitTime: 3.5
+  delayBeforePlaying: 2
   currentState: 0
+  TableState: 2
 --- !u!1001 &1022613419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5470,7 +5475,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1172452076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8891,7 +8896,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -475.9, y: -272.6}
+  m_AnchoredPosition: {x: -475.90002, y: -272.72015}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1979694694

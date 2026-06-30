@@ -24,7 +24,7 @@ public class StageTransition : MonoBehaviour
     [Tooltip("Añade aquí funciones que deben ocurrir cuando termine de moverse.")]
     public UnityEvent onTransitionComplete;
 
-    public EnemyData currentEnemy;
+    public EnemyData currentEnemy; //Es un ScriptableObject que contiene la información del enemigo actual, incluyendo su vida.
 
     private bool isMoving = false;
     private bool isFinished = false;
