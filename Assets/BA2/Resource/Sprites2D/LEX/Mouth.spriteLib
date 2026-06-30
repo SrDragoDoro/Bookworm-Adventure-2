@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5e6fedc2472449cead18ef23b5cb30d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Unity.2D.Animation.Runtime::UnityEngine.U2D.Animation.SpriteLibrarySourceAsset
   m_Library:
   - m_Name: ShotTile
     m_Hash: 81464168
@@ -39,6 +39,22 @@ MonoBehaviour:
       m_SpriteOverride: {fileID: 4293526856437419250, guid: 3df395336d6ce8544b9c65f184e61be2, type: 3}
     m_FromMain: 0
     m_EntryOverrideCount: 4
+  - m_Name: topknot
+    m_Hash: 509092451
+    m_CategoryList: []
+    m_OverrideEntries:
+    - m_Name: lextie_bowglow_0
+      m_Hash: 249453756
+      m_Sprite: {fileID: 5013740174139905388, guid: 298752c90b9528241866f30ba4405140, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: 5013740174139905388, guid: 298752c90b9528241866f30ba4405140, type: 3}
+    - m_Name: lextie_bow_0
+      m_Hash: 517874755
+      m_Sprite: {fileID: -3037684088447082714, guid: ac6f5c059301bec43b66604a75acce93, type: 3}
+      m_FromMain: 0
+      m_SpriteOverride: {fileID: -3037684088447082714, guid: ac6f5c059301bec43b66604a75acce93, type: 3}
+    m_FromMain: 0
+    m_EntryOverrideCount: 2
   m_PrimaryLibraryGUID: 
-  m_ModificationHash: 639153534304818987
+  m_ModificationHash: 639183872265343647
   m_Version: 1
