@@ -291,42 +291,48 @@ public class TileController : TilesData
         {
             UpdateTextFontSize(currentLetter);
         }
-
         // Buscar el diseño correspondiente en la base de datos
-        foreach (TileVisualData visual in visualDatabase)
+        try
         {
-            if (visual.type == newType)
+            foreach (TileVisualData visual in visualDatabase)
             {
-                // Asignamos el sprite base y el multiplicador
-                normalSprite = visual.normalSprite;
-                currentDamageMultiplier = visual.damageMultiplier;
-
-                // --- 1. LÓGICA DEL PREFAB: HOVER SPRITE ---
-                if (currentHoverSpriteObject != null) Destroy(currentHoverSpriteObject);
-
-                if (visual.hoverSprite != null)
+                if (visual.type == newType)
                 {
-                    currentHoverSpriteObject = Instantiate(visual.hoverSprite, transform);
-                    currentHoverSpriteObject.transform.localPosition = Vector3.zero;
-                    currentHoverSpriteObject.SetActive(false); // Lo dejamos apagado por defecto
+                    // Asignamos el sprite base y el multiplicador
+                    normalSprite = visual.normalSprite;
+                    currentDamageMultiplier = visual.damageMultiplier;
+
+                    // --- 1. LÓGICA DEL PREFAB: HOVER SPRITE ---
+                    if (currentHoverSpriteObject != null) Destroy(currentHoverSpriteObject);
+
+                    if (visual.hoverSprite != null)
+                    {
+                        currentHoverSpriteObject = Instantiate(visual.hoverSprite, transform);
+                        currentHoverSpriteObject.transform.localPosition = Vector3.zero;
+                        currentHoverSpriteObject.SetActive(false); // Lo dejamos apagado por defecto
+                    }
+
+                    // --- 2. LÓGICA DEL PREFAB: ANIMACIÓN ---
+                    if (currentHoverAnimation != null) Destroy(currentHoverAnimation);
+
+                    if (visual.hoverAnimationObject != null)
+                    {
+                        currentHoverAnimation = Instantiate(visual.hoverAnimationObject, transform);
+                        currentHoverAnimation.transform.localPosition = Vector3.zero;
+                        currentHoverAnimation.SetActive(false); // Lo dejamos apagado por defecto
+                    }
+                    // ---------------------------------------------------
+
+                    // El renderizador de la loseta siempre usará el normalSprite de fondo
+                    spriteRenderer.sprite = normalSprite;
+
+                    break;
                 }
-
-                // --- 2. LÓGICA DEL PREFAB: ANIMACIÓN ---
-                if (currentHoverAnimation != null) Destroy(currentHoverAnimation);
-
-                if (visual.hoverAnimationObject != null)
-                {
-                    currentHoverAnimation = Instantiate(visual.hoverAnimationObject, transform);
-                    currentHoverAnimation.transform.localPosition = Vector3.zero;
-                    currentHoverAnimation.SetActive(false); // Lo dejamos apagado por defecto
-                }
-                // ---------------------------------------------------
-
-                // El renderizador de la loseta siempre usará el normalSprite de fondo
-                spriteRenderer.sprite = normalSprite;
-
-                break;
             }
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"[TileController.SetupTile] Error al configurar la loseta '{gameObject.name}': {ex}");
         }
     }
 
@@ -410,7 +416,7 @@ public class TileController : TilesData
         }
     }
 
-    public void MoveTo(Vector3 newPos, bool selecting)
+    public void MoveTo(Vector3 newPos, bool selecting)// Mueve la loseta a una posición específica (ya sea al tablero o de regreso a su posición original)
     {
         isMovingToTarget = true; // Activamos el movimiento por código para que vaya al destino
 

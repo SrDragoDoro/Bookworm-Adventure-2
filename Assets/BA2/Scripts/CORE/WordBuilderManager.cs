@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.U2D.Animation;
+//using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -21,12 +21,12 @@ public class WordBuilderManager : MonoBehaviour
     public InputSystem_Actions inputs;
 
     [Header("Comentarios de Lex")]
-    public LexCommentaryManager lexCommentaryManager; // <-- AÑADIR AQUÍ
+    public LexCommentaryManager lexCommentaryManager;
 
     [Header("Configuración del Botón de Ataque")]
     public UnityEngine.UI.Button attackButtonUI;  // El botón de la UI de Unity
     public ParticleSystem validWordParticles;     // Tus partículas de éxito
-    public AudioSource validWordSound;            // <-- CAMBIO: Ahora es un AudioSource
+    public AudioSource validWordSound;            
 
     [Header("Referencias de Animación")]
     public Animator lexAnimator;                  // El Animator asignado al GameObject de Lex
@@ -36,10 +36,9 @@ public class WordBuilderManager : MonoBehaviour
     //public LetterManager letterManager;  // Referencia al script de probabilidades    
     public float spawnHeight = 8f;       // Altura en Y (fuera de cámara) desde donde caerán
     public float verticalSpacing = 1.2f; // Espacio vertical al instanciar varias en la misma columna
-    // Añade esta variable al inicio de tu script WordBuilderManager
     private string lastSpokenWord = "";
 
-    // ================= NUEVO: SISTEMA DE PROBABILIDADES =================
+    // ================= SISTEMA DE PROBABILIDADES =================
     [System.Serializable]
     public struct TileSpawnWeight
     {

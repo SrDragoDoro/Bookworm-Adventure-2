@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyData
   MeleeAttackType: 1
   TileAttackType: 1
+  EnemyType: 0
+  EnemyState: 0
   nameEntity: Lex
   description: The bookworm
   xpValue: 0
   baseDamage: 5
-  maxHealth: 12
+  maxHealth: 16

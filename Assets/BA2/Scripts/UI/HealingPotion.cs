@@ -29,7 +29,6 @@ public class HealingPotion : MonoBehaviour, IHealer
                 healthObj.Data.Heal(GetHealAmount());
 
                 soundAction?.Invoke();
-                // TODO: Puedes agregar un AudioSource.PlayClipAtPoint o instanciar partículas aquí antes de destruir
 
                 // 4. Destruimos la poción
                 Destroy(gameObject, 1);
