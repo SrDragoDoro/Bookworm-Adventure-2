@@ -26,6 +26,8 @@ public class DialogueManager : MonoBehaviour
     private int currentLineIndex = 0;
     private bool isTyping = false;
     private Coroutine typingCoroutine;
+    private InputSystem_Actions inputActions; //Se debe usar para que la tecla Escape, espacio, enter e intro hagan lo mismo que el click del mouse, o sea, avanzar el diálogo.
+
 
     // Propiedad pública para que otros scripts consulten o controlen la activación activa
     public bool IsDialogueActive { get; private set; }
@@ -50,9 +52,8 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Activa e inicia una secuencia de diálogos desde cualquier script externo.
-    /// </summary>
+    
+    // Activa e inicia una secuencia de diálogos desde cualquier script externo. 
     public void StartDialogue(DialogueSequence sequence)
     {
         if (sequence == null || sequence.lines.Length == 0) return;

@@ -93,9 +93,8 @@ public class StageTransition : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Comprueba si el enemigo actual está muerto y, si es así, lanza la transición de escena.
-    /// </summary>
+    #region Manejo de Enemigos
+    // Comprueba si el enemigo actual está muerto y, si es así, lanza la transición de escena.
     public void DeadEnemy()
     {
         if (currentEnemy == null) return;
@@ -121,8 +120,9 @@ public class StageTransition : MonoBehaviour
             StartCoroutine(MoveSceneCoutine());
         }
     }
+    #endregion
 
-    // NUEVO: Corrutina que maneja los tiempos del Panel de Tesoros y el SceneManager
+    #region Corutinas
     // Corrutina que maneja los tiempos del Panel de Tesoros y el SceneManager
     private IEnumerator VictorySequenceRoutine()
     {
@@ -221,4 +221,5 @@ public class StageTransition : MonoBehaviour
         isMoving = false;
         onTransitionComplete?.Invoke();
     }
+    #endregion
 }
