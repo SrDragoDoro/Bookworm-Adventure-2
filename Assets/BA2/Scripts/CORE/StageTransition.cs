@@ -7,219 +7,265 @@ public class StageTransition : MonoBehaviour
 {
     [Header("Referencias")]
     [Tooltip("Arrastra aquí el ParallaxManager para pausarlo durante la transición y evitar teletransportes.")]
-    public ParallaxManager parallaxManager;
+    public ParallaxManager parallaxManager;   
 
     [Header("Configuración de Objetos del Canvas")]
     [Tooltip("Arrastra aquí los elementos específicos del Canvas que quieres mover.")]
-    public List<RectTransform> SpecificObjects = new List<RectTransform>();
+    public List<RectTransform> SpecificObjects = new List<RectTransform>();   
 
     [Header("Parámetros de Movimiento")]
     [Tooltip("Distancia en el eje X. Valores negativos mueven a la izquierda.")]
-    public float distanceDisplacementX = -1800f;
+    public float distanceDisplacementX = -1800f;   
 
     [Tooltip("Tiempo en segundos que durará la animación de movimiento.")]
-    public float transitionDuration = 5f;
+    public float transitionDuration = 5f;   
 
     [Header("Eventos")]
     [Tooltip("Añade aquí funciones que deben ocurrir cuando termine de moverse.")]
-    public UnityEvent onTransitionComplete;
+    public UnityEvent onTransitionComplete;   
 
-    public EnemyData currentEnemy; //Es un ScriptableObject que contiene la información del enemigo actual, incluyendo su vida.
+    public EnemyData currentEnemy; //Es un ScriptableObject que contiene la información del enemigo actual, incluyendo su vida.[cite: 2]
+    public EnemyData currentEnemy2; //Es un ScriptableObject que contiene la información del enemigo actual, incluyendo su vida.[cite: 2]
 
     // ==========================================
     // NUEVO: Variables para la Secuencia de Tesoros y Escena
     // ==========================================
     [Header("Secuencia de Victoria (Tesoros)")]
     [Tooltip("El CinematicPresentationController de tu PanelDeTesoros.")]
-    public CinematicPresentationController treasurePanelCinematic;
+    public CinematicPresentationController treasurePanelCinematic;   
 
     // NUEVO: Agregamos el campo para el sonido del tesoro
     [Tooltip("El clip de audio que se reproducirá al mostrar el tesoro.")]
-    public AudioClip treasureAudioClip;
+    public AudioClip treasureAudioClip;   
 
     [Tooltip("Segundos a esperar DESPUÉS de que el enemigo muere para mostrar el tesoro.")]
-    public float delayBeforeTreasure = 2.0f;
+    public float delayBeforeTreasure = 2.0f;   
 
     [Tooltip("Tiempo total que dura la cinemática del tesoro (Display Duration + Fade Out Duration).")]
-    public float treasureCinematicDuration = 3.5f;
+    public float treasureCinematicDuration = 3.5f;   
 
     [Header("Cambio de Escena")]
     [Tooltip("Tiempo a esperar DESPUÉS de que desaparece el panel de tesoros antes de cambiar de escena.")]
-    public float delayBeforeSceneChange = 2.0f;
+    public float delayBeforeSceneChange = 2.0f;   
 
     [Tooltip("Referencia a tu script SceneManager (arrastra el objeto que lo contiene).")]
-    public SceneManager customSceneManager;
+    public SceneManager customSceneManager;   
 
     [Tooltip("El nombre exacto de la escena a la que quieres ir (Ej: GameScene2, Map, etc).")]
-    public string nextSceneName = "MainMenu";
+    public string nextSceneName = "MainMenu";   
     // ==========================================
 
-    private bool isMoving = false;
-    private bool isFinished = false;
+    private bool isMoving = false;   
+    private bool isFinished = false;   
 
     #region CÓDIGOS DE PRUEBA
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T))   
         {
-            Debug.Log("[Test] Forzando movimiento del escenario...");
-            OnEnemyDefeated();
+            Debug.Log("[Test] Forzando movimiento del escenario...");   
+            OnEnemyDefeated();   
         }
     }
     #endregion
 
     void OnEnable()
     {
-        if (currentEnemy != null)
+        if (currentEnemy != null)   
         {
-            currentEnemy.OnHealthChanged += OnEnemyHealthChanged;
+            currentEnemy.OnHealthChanged += OnEnemyHealthChanged;   
+        }
+
+        // NUEVO: Suscribimos el evento para el segundo enemigo
+        if (currentEnemy2 != null)
+        {
+            currentEnemy2.OnHealthChanged += OnEnemy2HealthChanged;
         }
     }
 
     void OnDisable()
     {
-        if (currentEnemy != null)
+        if (currentEnemy != null)   
         {
-            currentEnemy.OnHealthChanged -= OnEnemyHealthChanged;
+            currentEnemy.OnHealthChanged -= OnEnemyHealthChanged;   
+        }
+
+        // NUEVO: Desuscribimos el evento para el segundo enemigo
+        if (currentEnemy2 != null)
+        {
+            currentEnemy2.OnHealthChanged -= OnEnemy2HealthChanged;
         }
     }
 
-    private void OnEnemyHealthChanged(int currentHealth, int maxHealth)
+    private void OnEnemyHealthChanged(int currentHealth, int maxHealth)   
     {
         // Si la vida llega a cero, disparamos la transición
+        if (currentHealth <= 0)   
+        {
+            DeadEnemy();   
+        }
+    }
+
+    // NUEVO: Método que escucha la vida del segundo enemigo
+    private void OnEnemy2HealthChanged(int currentHealth, int maxHealth)
+    {
         if (currentHealth <= 0)
         {
-            DeadEnemy();
+            DeadEnemy2();
         }
     }
 
     #region Manejo de Enemigos
     // Comprueba si el enemigo actual está muerto y, si es así, lanza la transición de escena.
-    public void DeadEnemy()
+    public void DeadEnemy()   
     {
-        if (currentEnemy == null) return;
+        if (currentEnemy == null) return;   
 
         // Usamos la propiedad Health del EnemyData si está disponible
-        int currentHealth = currentEnemy.Health;
+        int currentHealth = currentEnemy.Health;   
 
-        if (currentHealth <= 0 && !isMoving && !isFinished)
+        if (currentHealth <= 0 && !isMoving && !isFinished)   
+        {
+            isFinished = true;   
+            StartCoroutine(MoveSceneCoutine()); // Sigue moviendo el fondo como lo tenías planeado[cite: 2]
+
+            // Iniciamos la secuencia del tesoro de forma paralela
+            StartCoroutine(VictorySequenceRoutine());   
+        }
+    }
+
+    // NUEVO: Método exclusivo para cuando muere currentEnemy2 (cambio directo)
+    public void DeadEnemy2()
+    {
+        if (currentEnemy2 == null) return;
+
+        int currentHealth = currentEnemy2.Health;
+
+        // Comprobamos si la vida es 0 o menor
+        if (currentHealth <= 0 && !isFinished)
         {
             isFinished = true;
-            StartCoroutine(MoveSceneCoutine()); // Sigue moviendo el fondo como lo tenías planeado
 
-            // NUEVO: Iniciamos la secuencia del tesoro de forma paralela
-            StartCoroutine(VictorySequenceRoutine());
+            // Cambiamos de escena INMEDIATAMENTE
+            if (customSceneManager != null)
+            {
+                customSceneManager.LoadScene(nextSceneName);
+            }
+            else
+            {
+                Debug.LogError("¡Falta asignar el SceneManager en el StageTransition!");
+            }
         }
     }
 
     [ContextMenu("Ejecutar Transición de Prueba")]
-    public void OnEnemyDefeated()
+    public void OnEnemyDefeated()   
     {
-        if (!isMoving || !isFinished)
+        if (!isMoving || !isFinished)   
         {
-            StartCoroutine(MoveSceneCoutine());
+            StartCoroutine(MoveSceneCoutine());   
         }
     }
     #endregion
 
     #region Corutinas
     // Corrutina que maneja los tiempos del Panel de Tesoros y el SceneManager
-    private IEnumerator VictorySequenceRoutine()
+    private IEnumerator VictorySequenceRoutine()   
     {
         // 1. Esperamos unos segundos inmediatamente después de que la vida llega a 0
-        yield return new WaitForSeconds(delayBeforeTreasure);
+        yield return new WaitForSeconds(delayBeforeTreasure);   
 
         // 2. Activamos el panel de tesoros
-        if (treasurePanelCinematic != null)
+        if (treasurePanelCinematic != null)   
         {
             // NUEVO: Le pasamos el clip de audio a la función
-            treasurePanelCinematic.StartPresentationSequence(treasureAudioClip);
+            treasurePanelCinematic.StartPresentationSequence(treasureAudioClip);   
 
             // 3. Esperamos a que la presentación del tesoro termine completamente
-            yield return new WaitForSeconds(treasureCinematicDuration);
+            yield return new WaitForSeconds(treasureCinematicDuration);   
         }
         else
         {
-            Debug.LogWarning("¡Falta asignar el Panel de Tesoros en el StageTransition!");
+            Debug.LogWarning("¡Falta asignar el Panel de Tesoros en el StageTransition!");   
         }
 
         // 4. Esperamos los últimos segundos de gracia antes de cambiar la pantalla
-        yield return new WaitForSeconds(delayBeforeSceneChange);
+        yield return new WaitForSeconds(delayBeforeSceneChange);   
 
         // 5. ¡Cambiamos de escena usando tu script SceneManager!
-        if (customSceneManager != null)
+        if (customSceneManager != null)   
         {
-            customSceneManager.LoadScene(nextSceneName);
+            customSceneManager.LoadScene(nextSceneName);   
         }
         else
         {
-            Debug.LogError("¡Falta asignar el SceneManager en el StageTransition!");
+            Debug.LogError("¡Falta asignar el SceneManager en el StageTransition!");   
         }
     }
 
-    private IEnumerator MoveSceneCoutine()
+    private IEnumerator MoveSceneCoutine()   
     {
-        isMoving = true;
+        isMoving = true;   
 
         // 1. Pausamos el Parallax antes de empezar a mover
-        if (parallaxManager != null)
+        if (parallaxManager != null)   
         {
-            parallaxManager.PauseParallax();
+            parallaxManager.PauseParallax();   
         }
 
-        List<Vector2> initialPositions = new List<Vector2>();
-        List<Vector2> finalPositions = new List<Vector2>();
+        List<Vector2> initialPositions = new List<Vector2>();   
+        List<Vector2> finalPositions = new List<Vector2>();   
 
-        foreach (RectTransform obj in SpecificObjects)
+        foreach (RectTransform obj in SpecificObjects)   
         {
-            if (obj != null)
+            if (obj != null)   
             {
-                initialPositions.Add(obj.anchoredPosition);
-                Vector2 destino = new Vector2(obj.anchoredPosition.x + distanceDisplacementX, obj.anchoredPosition.y);
-                finalPositions.Add(destino);
+                initialPositions.Add(obj.anchoredPosition);   
+                Vector2 destino = new Vector2(obj.anchoredPosition.x + distanceDisplacementX, obj.anchoredPosition.y);   
+                finalPositions.Add(destino);   
             }
             else
             {
-                initialPositions.Add(Vector2.zero);
-                finalPositions.Add(Vector2.zero);
+                initialPositions.Add(Vector2.zero);   
+                finalPositions.Add(Vector2.zero);   
             }
         }
 
-        float elapsedTime = 0f;
+        float elapsedTime = 0f;   
 
-        while (elapsedTime < transitionDuration)
+        while (elapsedTime < transitionDuration)   
         {
-            elapsedTime += Time.deltaTime;
-            float percentage = elapsedTime / transitionDuration;
-            float smoothCurve = Mathf.SmoothStep(0f, 1f, percentage);
+            elapsedTime += Time.deltaTime;   
+            float percentage = elapsedTime / transitionDuration;   
+            float smoothCurve = Mathf.SmoothStep(0f, 1f, percentage);   
 
-            for (int i = 0; i < SpecificObjects.Count; i++)
+            for (int i = 0; i < SpecificObjects.Count; i++)   
             {
-                if (SpecificObjects[i] != null)
+                if (SpecificObjects[i] != null)   
                 {
-                    SpecificObjects[i].anchoredPosition = Vector2.Lerp(initialPositions[i], finalPositions[i], smoothCurve);
+                    SpecificObjects[i].anchoredPosition = Vector2.Lerp(initialPositions[i], finalPositions[i], smoothCurve);   
                 }
             }
 
-            yield return null;
+            yield return null;   
         }
 
-        for (int i = 0; i < SpecificObjects.Count; i++)
+        for (int i = 0; i < SpecificObjects.Count; i++)   
         {
-            if (SpecificObjects[i] != null)
+            if (SpecificObjects[i] != null)   
             {
-                SpecificObjects[i].anchoredPosition = finalPositions[i];
+                SpecificObjects[i].anchoredPosition = finalPositions[i];   
             }
         }
 
         // 2. Reactivamos y recalibramos el Parallax en su nueva ubicación
-        if (parallaxManager != null)
+        if (parallaxManager != null)   
         {
-            parallaxManager.ResumeAndRecalibrate();
+            parallaxManager.ResumeAndRecalibrate();   
         }
 
-        isMoving = false;
-        onTransitionComplete?.Invoke();
+        isMoving = false;   
+        onTransitionComplete?.Invoke();   
     }
     #endregion
 }
