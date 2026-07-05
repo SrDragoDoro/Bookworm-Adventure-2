@@ -28,7 +28,8 @@ public class CharacterCombat : MonoBehaviour
                 }
                 else
                 {
-                    unitAnimator.SetTrigger("OnWreckingBall");
+                    unitAnimator.SetTrigger("OnAttack");
+                    //unitAnimator.SetTrigger("OnWreckingBall");
                 }
             }
         }
